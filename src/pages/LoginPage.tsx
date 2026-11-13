@@ -1,0 +1,43 @@
+import { motion } from 'framer-motion';
+import { useNavigate, Link } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
+import { MinecraftCard } from '../components/ui/MinecraftCard';
+import { AuthPanel } from '../components/auth/AuthPanel';
+
+/** Página de acesso (mesmo conteúdo do modal da tela inicial). */
+export function LoginPage() {
+  const navigate = useNavigate();
+
+  return (
+    <div className="min-h-screen relative overflow-hidden flex items-center justify-center py-8">
+      {/* Background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-minecraft-sky via-blue-300 to-green-500" />
+
+      {/* Decorative blocks */}
+      <div className="absolute bottom-0 left-0 right-0 h-32">
+        <div className="h-4 bg-minecraft-green w-full" />
+        <div className="h-28 bg-minecraft-brown w-full" />
+      </div>
+
+      <motion.div
+        initial={{ y: -30, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ type: 'spring', damping: 14 }}
+        className="relative z-10 w-full max-w-md px-4"
+      >
+        <MinecraftCard>
+          <AuthPanel onSuccess={() => navigate('/inicio')} />
+          <div className="pb-6 text-center">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-1 font-body text-sm text-gray-700 hover:text-minecraft-green min-h-[44px]"
+            >
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
+              Voltar ao início
+            </Link>
+          </div>
+        </MinecraftCard>
+      </motion.div>
+    </div>
+  );
+}

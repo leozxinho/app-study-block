@@ -1,0 +1,406 @@
+================================================================================
+AUDITORIA COMPLETA — MINECRAFT EDUCATION WEBAPP
+Data: 2026-07-25
+================================================================================
+
+================================================================================
+CATEGORIA 1: ROTAS E NAVEGAÇÃO
+================================================================================
+
+[P001]
+Descrição: Link "Atividades" navega para rota inexistente /activities
+Arquivo: src/components/layout/MinecraftHeader.tsx
+Problema: O nav item { path: '/activities' } aponta para /activities sem parâmetro :category. A rota em App.tsx é /activities/:category. Resultado: página em branco.
+Ação: Alterar path para '/activities/matematica' como default ou criar rota /activities que redireciona para seleção de categoria.
+Prioridade: ALTA
+
+[P002]
+Descrição: Link "Conquistas" navega para rota inexistente /achievements
+Arquivo: src/components/layout/MinecraftHeader.tsx
+Problema: O nav item { path: '/achievements' } não possui rota correspondente em App.tsx. Resultado: página em branco.
+Ação: Criar página AchievementsPage.tsx e adicionar rota, ou remover o link do header.
+Prioridade: ALTA
+
+[P003]
+Descrição: StudentDashboardPage navega para /world-map (rota inexistente)
+Arquivo: src/pages/StudentDashboardPage.tsx
+Problema: Botões e biome cards usam navigate('/world-map') mas a rota correta é /world. Botões ficam sem funcionamento.
+Ação: Substituir navigate('/world-map') por navigate('/world').
+Prioridade: ALTA
+
+[P004]
+Descrição: Sem rota catch-all 404
+Arquivo: src/App.tsx
+Problema: Acessar URL inválida mostra tela completamente em branco sem feedback.
+Ação: Adicionar <Route path="*" element={<NotFoundPage />} /> com link de volta ao início.
+Prioridade: MÉDIA
+
+[P005]
+Descrição: ActivityPlayerPage usa navigate(-1) que pode sair do app
+Arquivo: src/pages/ActivityPlayerPage.tsx
+Problema: Se o usuário entrou direto pela URL (deeplink), navigate(-1) pode levar fora do app.
+Ação: Substituir por navigate('/world') ou navigate('/adventure') como fallback.
+Prioridade: MÉDIA
+
+================================================================================
+CATEGORIA 2: COMPONENTES COM PROPS INCORRETAS / CRASH
+================================================================================
+
+[P006]
+Descrição: AchievementCard renderizado sem props obrigatórias
+Arquivo: src/pages/StudentDashboardPage.tsx
+Problema: <AchievementCard key={id} /> é usado sem passar props achievement e unlocked. Causa crash em runtime.
+Ação: Passar props corretas: <AchievementCard achievement={...} unlocked={true} />.
+Prioridade: ALTA
+
+[P007]
+Descrição: ProgressBar renderizado sem value e max
+Arquivo: src/pages/StudentDashboardPage.tsx
+Problema: <ProgressBar /> sem value/max resulta em NaN no cálculo (undefined/undefined*100).
+Ação: Passar props: <ProgressBar value={progress} max={100} />.
+Prioridade: ALTA
+
+[P008]
+Descrição: PLACEHOLDER_ACHIEVEMENTS tem formato incompatível com tipo Achievement
+Arquivo: src/pages/StudentDashboardPage.tsx
+Problema: Objetos usam campo icon mas o tipo espera icon_url. Faltam campos required_xp e created_at.
+Ação: Ajustar formato dos objetos para corresponder à interface Achievement.
+Prioridade: MÉDIA
+
+[P009]
+Descrição: ProgressBar divide por zero quando max é 0
+Arquivo: src/components/ui/ProgressBar.tsx
+Problema: (value / max) * 100 produz NaN ou Infinity quando max === 0. Sem guard clause.
+Ação: Adicionar: if (max === 0) return 0 antes do cálculo.
+Prioridade: MÉDIA
+
+================================================================================
+CATEGORIA 3: PERSISTÊNCIA EM LOCALSTORAGE
+================================================================================
+
+[P010]
+Descrição: Atividades criadas pelo professor não persistem
+Arquivo: src/pages/TeacherDashboardPage.tsx + src/services/activityService.ts
+Problema: createActivity() no modo offline retorna objeto mas não salva em localStorage. Dados perdidos ao reload.
+Ação: Implementar localStorage para atividades criadas/editadas pelo professor.
+Prioridade: ALTA
+
+[P011]
+Descrição: Exclusão de atividades não persiste
+Arquivo: src/pages/TeacherDashboardPage.tsx + src/services/activityService.ts
+Problema: deleteActivity() no modo offline é no-op. Exclusão só existe no state React e é perdida ao reload.
+Ação: Implementar localStorage para tracking de atividades removidas.
+Prioridade: ALTA
+
+[P012]
+Descrição: completeActivity pode registrar mesma atividade múltiplas vezes
+Arquivo: src/services/progressService.ts
+Problema: push() no array completedActivities sem checar duplicatas. Infla XP e estrelas.
+Ação: Verificar se activity_id já existe antes de adicionar. Se existir, atualizar score se melhor.
+Prioridade: MÉDIA
+
+================================================================================
+CATEGORIA 4: BUGS DE LÓGICA
+================================================================================
+
+[P013]
+Descrição: WorldSection double-reverse anula efeito zig-zag
+Arquivo: src/components/adventure/WorldSection.tsx
+Problema: const displayRow = isReversed ? [...row].reverse() : row combinado com flex-row-reverse causa double-reversal, mostrando items na ordem original.
+Ação: Remover .reverse() do displayRow OU remover flex-row-reverse. Usar apenas um método.
+Prioridade: ALTA
+
+[P014]
+Descrição: MemoryActivity usa useMemo com setState (violação de regras React)
+Arquivo: src/components/activities/MemoryActivity.tsx
+Problema: useMemo() contém setCards() — side-effect dentro de memo. Pode causar loop infinito em StrictMode e warnings.
+Ação: Mover inicialização para useState(initialValue) ou useEffect.
+Prioridade: ALTA
+
+[P015]
+Descrição: MemoryActivity onCorrect chamado múltiplas vezes por dependency loop
+Arquivo: src/components/activities/MemoryActivity.tsx
+Problema: useEffect depende de [matchedPairs, pairs, onCorrect]. Se onCorrect é arrow function inline, effect re-executa cada render.
+Ação: Remover onCorrect das dependências ou usar useCallback no parent.
+Prioridade: ALTA
+
+[P016]
+Descrição: OrderingActivity reset gera exercício diferente
+Arquivo: src/components/activities/OrderingActivity.tsx
+Problema: Ao errar, setAvailable([...items].sort(random)) — mas getOrderItems pode ter usado random internamente, gerando novos valores diferentes no próximo render.
+Ação: Armazenar items iniciais em state e reutilizar no reset.
+Prioridade: ALTA
+
+[P017]
+Descrição: ColorIdentificationActivity não detecta roxo/laranja
+Arquivo: src/components/activities/ColorIdentificationActivity.tsx
+Problema: targetColor só detecta vermelho, azul, verde, amarelo. Questões com "roxo" ou "laranja" caem no fallback aleatório.
+Ação: Adicionar detecção para roxo e laranja no useMemo.
+Prioridade: ALTA
+
+[P018]
+Descrição: LetterIdentificationActivity muta arrays globais
+Arquivo: src/components/activities/LetterIdentificationActivity.tsx
+Problema: CONSONANTS.sort() e VOWELS.sort() mutam os arrays const do módulo permanentemente.
+Ação: Usar [...CONSONANTS].sort() e [...VOWELS].sort() para criar cópias.
+Prioridade: ALTA
+
+[P019]
+Descrição: MatchingActivity ignora question — sempre mostra matching de animais fixos
+Arquivo: src/components/activities/MatchingActivity.tsx
+Problema: Componente renderiza sempre ovelha/vaca/galinha/porco independente do que a atividade pede.
+Ação: Tornar dinâmico baseado em activity.question e activity.category.
+Prioridade: ALTA
+
+[P020]
+Descrição: RewardAnimation timer nunca completa por dependency instável
+Arquivo: src/components/ui/RewardAnimation.tsx
+Problema: useEffect([show, onComplete]) — se onComplete é arrow inline, referência muda a cada render, resetando o setTimeout.
+Ação: Remover onComplete das dependências do useEffect ou usar ref.
+Prioridade: ALTA
+
+[P021]
+Descrição: WorldUnlockAnimation mesma issue de dependency instável
+Arquivo: src/components/adventure/WorldUnlockAnimation.tsx
+Problema: Mesmo padrão do P020 — onComplete como dep do useEffect.
+Ação: Remover onComplete das dependências ou usar useRef.
+Prioridade: ALTA
+
+[P022]
+Descrição: adventureService.getAdventureStats() pega maior nível disponível em vez do menor
+Arquivo: src/services/adventureService.ts
+Problema: Loop sobrescreve currentLevel toda vez que encontra available/in_progress. Se múltiplos existem, retorna o maior.
+Ação: Usar break após encontrar o primeiro, ou usar Math.min.
+Prioridade: MÉDIA
+
+[P023]
+Descrição: WorldMapPage handleBiomeClick lógica de unlock inconsistente
+Arquivo: src/pages/WorldMapPage.tsx
+Problema: Verifica !biome.unlocked && stats.xp < 100 mas biome.unlocked já é recalculado por XP. Condição redundante/incorreta para biomas com threshold > 100.
+Ação: Simplificar para: if (!biome.unlocked) return.
+Prioridade: MÉDIA
+
+[P024]
+Descrição: WorldSection path completion check verifica nível errado
+Arquivo: src/components/adventure/WorldSection.tsx
+Problema: isPathCompleted(rows[rowIndex][0]) verifica primeiro nível da row atual. Deveria verificar último nível da row anterior.
+Ação: Corrigir para verificar último nível da row anterior para path entre rows.
+Prioridade: MÉDIA
+
+================================================================================
+CATEGORIA 5: MEMORY LEAKS E CLEANUP
+================================================================================
+
+[P025]
+Descrição: Todos os activity components não limpam timeouts ao desmontar
+Arquivo: src/components/activities/*.tsx (11 componentes)
+Problema: setTimeout(onCorrect, 800) e setTimeout(onWrong, 1000) nunca são limpos. Se usuário navega durante timeout: memory leak + state update em componente desmontado.
+Ação: Usar useRef para armazenar timeout IDs e clearTimeout no return do useEffect cleanup.
+Prioridade: ALTA
+
+================================================================================
+CATEGORIA 6: UX / INTERFACE
+================================================================================
+
+[P026]
+Descrição: TeacherDashboard sem validação no formulário de criação de atividade
+Arquivo: src/pages/TeacherDashboardPage.tsx
+Problema: Permite criar atividade com título e questão vazios.
+Ação: Adicionar validação: if (!title.trim() || !question.trim()) return com mensagem de erro.
+Prioridade: MÉDIA
+
+[P027]
+Descrição: TeacherDashboard sem confirmação antes de deletar
+Arquivo: src/pages/TeacherDashboardPage.tsx
+Problema: Clique no ícone de lixeira exclui imediatamente sem confirmação. Risco de exclusão acidental.
+Ação: Adicionar modal/confirm antes de executar exclusão.
+Prioridade: MÉDIA
+
+[P028]
+Descrição: TeacherDashboard sem proteção de rota (auth guard)
+Arquivo: src/pages/TeacherDashboardPage.tsx + src/App.tsx
+Problema: Qualquer usuário pode acessar /teacher diretamente sem login.
+Ação: Criar wrapper PrivateRoute que verifica authService.getCurrentUser().
+Prioridade: MÉDIA
+
+[P029]
+Descrição: HomePage não detecta progresso existente para oferecer "Continuar"
+Arquivo: src/pages/HomePage.tsx
+Problema: Sempre exibe tela de início. Não verifica se já existe age_group no localStorage.
+Ação: Verificar localStorage e mostrar botão "Continuar Aventura" se existir progresso.
+Prioridade: BAIXA
+
+[P030]
+Descrição: studentName "Explorador" hardcoded em todas as páginas
+Arquivo: src/pages/StudentDashboardPage.tsx, WorldMapPage.tsx, ActivityListPage.tsx
+Problema: Nome fixo, não reflete nome real do aluno.
+Ação: Ler nome do localStorage (ex: minecraft_edu_student_name) ou permitir configuração.
+Prioridade: BAIXA
+
+================================================================================
+CATEGORIA 7: ACESSIBILIDADE
+================================================================================
+
+[P031]
+Descrição: Botões de navegação no header sem aria-label
+Arquivo: src/components/layout/MinecraftHeader.tsx
+Problema: Em mobile o texto fica hidden (hidden sm:inline), leitores de tela só veem ícone SVG sem descrição.
+Ação: Adicionar aria-label={item.label} em cada botão de nav.
+Prioridade: MÉDIA
+
+[P032]
+Descrição: LevelNode sem role="button", tabIndex, ou aria-label
+Arquivo: src/components/adventure/LevelNode.tsx
+Problema: Div com onClick mas sem indicação semântica de interatividade. Inacessível via teclado.
+Ação: Adicionar role="button", tabIndex={0}, onKeyDown handler, e aria-label.
+Prioridade: MÉDIA
+
+[P033]
+Descrição: MinecraftCard clicável sem indicação semântica
+Arquivo: src/components/ui/MinecraftCard.tsx
+Problema: div com onClick mas sem role, tabIndex, ou aria-label quando hoverable/onClick está definido.
+Ação: Quando onClick é passado, adicionar role="button" e tabIndex={0}.
+Prioridade: MÉDIA
+
+[P034]
+Descrição: AchievementCard com contraste insuficiente quando bloqueado
+Arquivo: src/components/ui/AchievementCard.tsx
+Problema: grayscale + opacity-60 torna texto praticamente ilegível. Não atende WCAG AA.
+Ação: Usar opacity-70 ou adicionar texto alternativo legível.
+Prioridade: BAIXA
+
+[P035]
+Descrição: MinecraftButton sem type prop e sem aria-disabled
+Arquivo: src/components/ui/MinecraftButton.tsx
+Problema: Não aceita prop type (submit/button/reset). Sem aria-disabled quando disabled. Botões com apenas ícone não têm aria-label.
+Ação: Adicionar prop type e aria-disabled={disabled}.
+Prioridade: MÉDIA
+
+================================================================================
+CATEGORIA 8: RESPONSIVIDADE
+================================================================================
+
+[P036]
+Descrição: LevelNode usa classes Tailwind inexistentes (w-18, h-18)
+Arquivo: src/components/adventure/LevelNode.tsx
+Problema: Classes w-18 e h-18 não existem no Tailwind padrão nem no tailwind.config.js. Não terão efeito.
+Ação: Substituir por w-[72px] h-[72px] ou adicionar custom spacing no config.
+Prioridade: MÉDIA
+
+[P037]
+Descrição: TeacherDashboard tabela pode ter layout shift em mobile estreito
+Arquivo: src/pages/TeacherDashboardPage.tsx
+Problema: Tabela de alunos em container sem overflow-hidden pode causar scroll horizontal.
+Ação: Adicionar overflow-hidden no card wrapper da tabela.
+Prioridade: BAIXA
+
+================================================================================
+CATEGORIA 9: INSTABILIDADE DE RENDERIZAÇÃO
+================================================================================
+
+[P038]
+Descrição: MultipleChoiceActivity options reshuffled em re-render
+Arquivo: src/components/activities/MultipleChoiceActivity.tsx
+Problema: useMemo depende de [activity] (referência). Se parent recria o objeto activity, options mudam durante interação.
+Ação: Usar [activity.id] como dependência para estabilizar.
+Prioridade: MÉDIA
+
+[P039]
+Descrição: CountingActivity correctCount instável com Math.random
+Arquivo: src/components/activities/CountingActivity.tsx
+Problema: getCorrectCount usa random. Em React StrictMode (double render), pode gerar valor diferente.
+Ação: Usar useState(() => getCorrectCount(activity)) para gerar uma vez apenas.
+Prioridade: MÉDIA
+
+[P040]
+Descrição: SequenceActivity default pattern instável
+Arquivo: src/components/activities/SequenceActivity.tsx
+Problema: Fallback usa Math.random dentro de useMemo que pode ser recalculado.
+Ação: Usar useState para estabilizar pattern gerado.
+Prioridade: MÉDIA
+
+================================================================================
+CATEGORIA 10: DADOS E BACKEND
+================================================================================
+
+[P041]
+Descrição: Supabase client instanciado com placeholder URL
+Arquivo: src/lib/supabase.ts
+Problema: createClient chamado com URL/key placeholder gerando client real que pode tentar conexões.
+Ação: Apenas criar client quando isSupabaseConfigured() é true, ou usar lazy initialization.
+Prioridade: MÉDIA
+
+[P042]
+Descrição: progressService.getStudentXP crash para novo estudante (Supabase)
+Arquivo: src/services/progressService.ts
+Problema: .single() lança erro se não há registro. Novo estudante sem XP causará crash.
+Ação: Adicionar .maybeSingle() ou try/catch com fallback para criar registro default.
+Prioridade: ALTA
+
+[P043]
+Descrição: adventureService fire-and-forget async (Supabase mode)
+Arquivo: src/services/adventureService.ts
+Problema: startLevel, completeLevel usam .then() sem await. Erros silenciosos. Race condition entre update level e unlock next.
+Ação: Tornar funções async e usar await. Retornar Promise para o caller tratar erros.
+Prioridade: ALTA
+
+[P044]
+Descrição: TeacherDashboard dados mock hardcoded (12 alunos, 78% taxa)
+Arquivo: src/pages/TeacherDashboardPage.tsx
+Problema: Dados fixos não refletem realidade. Sem indicação visual de que são dados demo.
+Ação: Adicionar badge "Dados de demonstração" ou calcular baseado em localStorage.
+Prioridade: BAIXA
+
+================================================================================
+CATEGORIA 11: FUNCIONALIDADE PENDENTE / INCOMPLETA
+================================================================================
+
+[P045]
+Descrição: MemoryActivity.onWrong nunca é chamado
+Arquivo: src/components/activities/MemoryActivity.tsx
+Problema: Componente recebe onWrong como prop mas nunca o utiliza. Jogador pode tentar infinitamente.
+Ação: Chamar onWrong() após N tentativas incorretas ou quando não acerta o par.
+Prioridade: MÉDIA
+
+[P046]
+Descrição: Faltam atividades de "linguagem" para berçário e maternal
+Arquivo: src/data/adventureActivities.ts
+Problema: Atividades de aventura para berçário/maternal não incluem categoria "linguagem". Página /activities/linguagem fica vazia para essas faixas (usa fallback de todas as faixas).
+Ação: Adicionar atividades de linguagem adaptadas (sons, primeiros fonemas) para berçário e maternal.
+Prioridade: MÉDIA
+
+[P047]
+Descrição: Página de Conquistas não existe
+Arquivo: N/A (não criada)
+Problema: Header referencia /achievements mas a página não foi implementada.
+Ação: Criar AchievementsPage.tsx com lista de conquistas do aluno.
+Prioridade: MÉDIA
+
+================================================================================
+================================================================================
+RESUMO
+================================================================================
+
+Total de pendências: 47
+
+Por prioridade:
+- ALTA:    17
+- MÉDIA:   21
+- BAIXA:    9
+
+Por categoria:
+- Rotas e Navegação:           5
+- Props/Crash:                 4
+- Persistência localStorage:   3
+- Bugs de Lógica:             12
+- Memory Leaks:                1
+- UX/Interface:                5
+- Acessibilidade:              5
+- Responsividade:              2
+- Instabilidade de render:     3
+- Dados/Backend:               4
+- Funcionalidade Pendente:     3
+
+================================================================================
+FIM DO RELATÓRIO
+================================================================================

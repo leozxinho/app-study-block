@@ -1,0 +1,182 @@
+[
+ {
+  "file": "voz/mascote/acerto-01.mp3",
+  "text": "Isso aí!"
+ },
+ {
+  "file": "voz/mascote/acerto-02.mp3",
+  "text": "Mandou bem!"
+ },
+ {
+  "file": "voz/mascote/acerto-03.mp3",
+  "text": "Você é demais!"
+ },
+ {
+  "file": "voz/mascote/acerto-04.mp3",
+  "text": "Uhuu! Acertou!"
+ },
+ {
+  "file": "voz/mascote/acerto-05.mp3",
+  "text": "Que craque!"
+ },
+ {
+  "file": "voz/mascote/acerto-06.mp3",
+  "text": "Show de bola!"
+ },
+ {
+  "file": "voz/mascote/acerto-07.mp3",
+  "text": "Arrasou!"
+ },
+ {
+  "file": "voz/mascote/acerto-08.mp3",
+  "text": "Boa! Continua assim!"
+ },
+ {
+  "file": "voz/mascote/acerto-09.mp3",
+  "text": "Acertou em cheio!"
+ },
+ {
+  "file": "voz/mascote/acerto-10.mp3",
+  "text": "Que inteligente!"
+ },
+ {
+  "file": "voz/mascote/acerto-11.mp3",
+  "text": "É isso mesmo!"
+ },
+ {
+  "file": "voz/mascote/acerto-12.mp3",
+  "text": "Você aprende rápido!"
+ },
+ {
+  "file": "voz/mascote/erro-01.mp3",
+  "text": "Quase! Tenta de novo"
+ },
+ {
+  "file": "voz/mascote/erro-02.mp3",
+  "text": "Calma, você consegue!"
+ },
+ {
+  "file": "voz/mascote/erro-03.mp3",
+  "text": "Olha a dica!"
+ },
+ {
+  "file": "voz/mascote/erro-04.mp3",
+  "text": "Não desiste!"
+ },
+ {
+  "file": "voz/mascote/erro-05.mp3",
+  "text": "Hum... vamos olhar de novo?"
+ },
+ {
+  "file": "voz/mascote/erro-06.mp3",
+  "text": "Tá pertinho!"
+ },
+ {
+  "file": "voz/mascote/erro-07.mp3",
+  "text": "Errar faz parte. Bora de novo!"
+ },
+ {
+  "file": "voz/mascote/erro-08.mp3",
+  "text": "Vamos juntos? Olha com calma."
+ },
+ {
+  "file": "voz/mascote/voz-ligada.mp3",
+  "text": "Voz ligada!"
+ },
+ {
+  "file": "voz/mascote/minijogo.mp3",
+  "text": "Minijogo! Pegue os diamantes!"
+ },
+ {
+  "file": "voz/numeros/sao-01.mp3",
+  "text": "São 1!"
+ },
+ {
+  "file": "voz/numeros/sao-02.mp3",
+  "text": "São 2!"
+ },
+ {
+  "file": "voz/numeros/sao-03.mp3",
+  "text": "São 3!"
+ },
+ {
+  "file": "voz/numeros/sao-04.mp3",
+  "text": "São 4!"
+ },
+ {
+  "file": "voz/numeros/sao-05.mp3",
+  "text": "São 5!"
+ },
+ {
+  "file": "voz/numeros/sao-06.mp3",
+  "text": "São 6!"
+ },
+ {
+  "file": "voz/numeros/sao-07.mp3",
+  "text": "São 7!"
+ },
+ {
+  "file": "voz/numeros/sao-08.mp3",
+  "text": "São 8!"
+ },
+ {
+  "file": "voz/numeros/sao-09.mp3",
+  "text": "São 9!"
+ },
+ {
+  "file": "voz/numeros/sao-10.mp3",
+  "text": "São 10!"
+ },
+ {
+  "file": "voz/numeros/sao-11.mp3",
+  "text": "São 11!"
+ },
+ {
+  "file": "voz/numeros/sao-12.mp3",
+  "text": "São 12!"
+ },
+ {
+  "file": "voz/numeros/sao-13.mp3",
+  "text": "São 13!"
+ },
+ {
+  "file": "voz/numeros/sao-14.mp3",
+  "text": "São 14!"
+ },
+ {
+  "file": "voz/numeros/sao-15.mp3",
+  "text": "São 15!"
+ },
+ {
+  "file": "voz/numeros/sao-16.mp3",
+  "text": "São 16!"
+ },
+ {
+  "file": "voz/numeros/sao-17.mp3",
+  "text": "São 17!"
+ },
+ {
+  "file": "voz/numeros/sao-18.mp3",
+  "text": "São 18!"
+ },
+ {
+  "file": "voz/numeros/sao-19.mp3",
+  "text": "São 19!"
+ },
+ {
+  "file": "voz/numeros/sao-20.mp3",
+  "text": "São 20!"
+ },
+ {
+  "file": "voz/chefes/revanche.mp3",
+  "text": "O chefe venceu desta vez. Vamos tentar de novo?"
+ },
+ {
+  "file": "voz/chefes/empate.mp3",
+  "text": "Empate! Vamos de revanche?"
+ },
+ {
+  "file": "voz/frases/quanto-da-conta.mp3",
+  "text": "Quanto dá a conta?"
+ }
+]

@@ -1,0 +1,550 @@
+=====================================================================
+MINELEARN — ROTEIRO DE ÁUDIO, PARTE 2
+Efeitos no ChipTone + falas com voz suave
+=====================================================================
+Versão 1 — 13/11/2026
+Complementa o "ROTEIRO DE ÁUDIO" v1 (mesmos nomes de arquivo, pastas,
+volumes e regras). Aqui está o COMO fazer.
+
+Arquivos que acompanham:
+  docs/audio/falas-voz-suave.csv      → 1.031 falas: a seção 7 inteira
+                                        (mascote, conquistas, mundos,
+                                        números, contas, 10 chefes, pais)
+                                        + as 673 perguntas, revisadas
+                                        para voz sintética, com SSML.
+  scripts/gerar_vozes_azure.py        → gera os MP3 das falas.
+  scripts/converter_chiptone.sh       → converte os WAV do ChipTone.
+
+SUMÁRIO
+ A. O que o ChipTone faz e o que não faz
+ B. Como trabalhar no ChipTone (fluxo)
+ C. Receitas de cada efeito
+ D. A voz suave — escolha da voz
+ E. Direção da voz suave (por faixa de idade)
+ F. O CSV de falas — colunas e correções feitas no texto
+ G. Gerando as falas (passo a passo)
+ H. Checklist
+
+
+=====================================================================
+A. O QUE O CHIPTONE FAZ E O QUE NÃO FAZ
+=====================================================================
+ChipTone (SFB Games — https://sfbgames.itch.io/chiptone) é um gerador
+gratuito de EFEITOS SONOROS para jogos. Roda no navegador, no Windows e
+no macOS.
+
+Licença: todo som criado no ChipTone é CC0, ou seja, livre para qualquer
+uso, inclusive comercial. Mesmo assim, guarde um print da página do
+ChipTone com a licença junto dos masters (checklist do v1).
+
+  FAZ BEM (seção 3 do v1):  cliques, acertos, erros, plim, contagem,
+     estrelas, XP/moedas, nível, conquista, combo, diamantes, minijogo,
+     tique de relógio, chefe (ponto/bonk), "pow", portal, brilhos.
+  FAZ MAIS OU MENOS (ruído filtrado imitando som real): quebrar e
+     colocar bloco, fumaça, whoosh, virar carta, passos, explosão de
+     desenho, chama. Ficam com cara de 8-bit. Para o estilo do v1
+     ("chiptune quente"), dá para misturar o ChipTone com uma camada de
+     som real gravado ou de um banco CC0 (madeira, papel).
+  NÃO FAZ:  vozes e falas (seções 6 e 7 do v1), sons dos mobs
+     (seção 4 do v1) e músicas (seção 5 do v1). O sequenciador
+     do ChipTone ainda está em desenvolvimento. Para as músicas use outra
+     ferramenta ou um músico. As falas estão nas seções D a G daqui.
+
+
+=====================================================================
+B. COMO TRABALHAR NO CHIPTONE (FLUXO)
+=====================================================================
+  1. Abra o ChipTone (versão do navegador ou baixada).
+  2. Para cada efeito da seção C, comece pelo modelo indicado em
+     "Começo" (os modelos/presets ou o botão de aleatório do ChipTone) e
+     ajuste os controles conforme a receita. Os nomes dos controles
+     abaixo são genéricos (onda, frequência, deslize, envelope, arpejo,
+     vibrato, filtro). Na tela do ChipTone eles podem ter outro nome ou
+     estar em outra ordem; procure o controle que faz a mesma coisa.
+  3. Ouça no volume em que a criança joga (celular, perto do rosto).
+     Se incomodar no 10º toque, está agudo ou longo demais: abaixe a
+     frequência ou encurte o fim (release).
+  4. Exporte em WAV com o NOME FINAL do arquivo (ex.: acerto-1.wav).
+     No macOS, confira se o arquivo saiu com a extensão .wav.
+  5. Se o ChipTone deixar salvar a configuração do som, salve com o
+     mesmo nome. Assim dá para refazer variações depois.
+  6. Coloque todos os WAV numa pasta e rode:
+        bash scripts/converter_chiptone.sh pasta-dos-wavs/
+     Isso tira o silêncio do começo, põe fade de 50 ms no fim, limita o
+     pico, converte para MP3 mono 128 kbps em public/audio/sfx/ e
+     guarda o WAV em audio-masters/sfx/.
+  7. npm run audio  → o jogo passa a usar os arquivos.
+
+Regras de ouro para crianças (valem para todas as receitas):
+  - Onda: prefira TRIÂNGULO e SENOIDE (macias). QUADRADA só com
+    duty 25–50% e volume baixo. Evite DENTE DE SERRA puro (áspera).
+  - Frequência principal entre 300 e 1.500 Hz. Agudos acima de 2.000 Hz
+    só em brilhos curtos, e com volume baixo.
+  - Ataque nunca zero absoluto (2–5 ms) para não estalar.
+  - Ligue o filtro passa-baixa (corte por volta de 4–6 kHz) para tirar
+    o "chiado digital".
+  - Variações -1/-2/-3: mesma receita, mude a frequência em +/-2
+    semitons (ou ~6%). Nada mais.
+  - Nos efeitos de "eco"/"reverb": pouquinho. Eco longo embola com a fala.
+
+
+=====================================================================
+C. RECEITAS DE CADA EFEITO
+=====================================================================
+Formato:
+  ARQUIVO (duração-alvo)
+    Começo:     modelo/preset de partida
+    Onda:       ...
+    Frequência: nota/Hz inicial → final (deslize)
+    Envelope:   ataque / sustentação / fim (release)
+    Extra:      arpejo, vibrato, duty, filtro, camadas
+    Ouvido:     como deve soar / o que evitar
+
+Notas e Hz de referência: Dó4=262  Mi4=330  Sol4=392  Dó5=523
+Mi5=659  Sol5=784  Dó6=1047  Mi6=1319  Sol6=1568
+
+--- C.1 Interface ---------------------------------------------------
+
+sfx/clique-1..3 (60–120 ms)   ← o som mais repetido do jogo
+  Começo: "blip"/seleção
+  Onda: triângulo
+  Frequência: 700 Hz → 600 Hz (deslize curto para baixo)
+  Envelope: 2 ms / 15 ms / 60 ms
+  Extra: 2ª camada de ruído bem baixa (10%), 20 ms, filtro passa-baixa
+         1,5 kHz (dá o "tec" de madeira). Variações: 650 / 700 / 760 Hz.
+  Ouvido: "tec" macio. Se parecer bipe de micro-ondas, está agudo demais.
+
+sfx/abrir-janela (300 ms)
+  Começo: "powerup" curto
+  Onda: senoide
+  Frequência: 300 → 900 Hz (deslize para cima, curva suave)
+  Envelope: 10 / 120 / 170 ms
+  Extra: camada de ruído com filtro passa-baixa subindo de 800 Hz para
+         3 kHz (whoosh). No fim, plim: triângulo 1.319 Hz, 80 ms.
+  Ouvido: algo abrindo, leve.
+
+sfx/fechar-janela (250 ms)
+  O mesmo de abrir-janela ao contrário: 900 → 300 Hz, sem o plim.
+
+sfx/som-ligado (300 ms)
+  Onda: triângulo. Arpejo de 2 notas: Sol5 → Dó6 (cada uma 120 ms).
+  Envelope: 3 / 100 / 120 ms. Ouvido: "tu-dlim" simpático.
+
+sfx/transicao-pergunta (300 ms)
+  Onda: ruído. Filtro passa-banda/passa-baixa 1–2 kHz.
+  Envelope: 60 / 80 / 160 ms (sobe e desce: "fsssh").
+  Volume: 40% dos outros. Ouvido: papel deslizando, quase sem notar.
+
+--- C.2 Respostas ---------------------------------------------------
+
+sfx/acerto-1..3 (500–700 ms)   ← precisa dar alegria
+  Começo: "coin"/moeda ou "powerup"
+  Onda: triângulo (camada 1) + quadrada duty 25% bem baixa (camada 2)
+  Frequência / arpejo: Dó5 – Mi5 – Sol5 – Dó6, 90 ms cada nota
+  Envelope: 3 / 300 / 250 ms
+  Extra: vibrato leve só na última nota (5 Hz, profundidade pequena).
+         Variações: -1 em Dó5, -2 em Ré5 (587-740-880-1175),
+         -3 em Mi5 (659-831-988-1319).
+  Ouvido: "ti-ri-ri-rim!" brilhante e curto, sem ficar estridente.
+
+sfx/erro-1..2 (400–500 ms)   ← nunca buzina
+  Começo: "jump" invertido
+  Onda: senoide ou triângulo (NUNCA quadrada ou serra)
+  Frequência: 2 notas descendo, Mi4 (330) → Dó4 (262), com deslize
+              curvo dentro de cada nota (efeito "boing")
+  Envelope: 5 / 150 / 200 ms
+  Extra: vibrato rápido (12 Hz) e raso, dá a sensação de borracha.
+         Variação -2: Ré4 → Si3 (294 → 247).
+  Ouvido: "bôin-bôin" fofo. Se soar triste ou de "erro de sistema",
+          suba meio tom e encurte.
+
+sfx/dica (500 ms)
+  Onda: triângulo. Frequência: 1.047 Hz com deslize para cima até
+  1.175 Hz. Envelope 3 / 80 / 400 ms. Extra: eco curto (2 repetições,
+  100 ms, -10 dB). Ouvido: "plim?" curioso, lâmpada acendendo.
+
+sfx/resposta-brilha (700 ms)
+  Onda: senoide. Arpejo rápido subindo: Dó6 Ré6 Mi6 Sol6 Lá6 Dó7
+  (40 ms cada) e depois a nota final segurando. Envelope 2 / 300 / 350 ms.
+  Volume 70%. Ouvido: glissando de sininhos.
+
+--- C.3 Contagem e contas -------------------------------------------
+
+sfx/conta-01 ... conta-20 (100–150 ms) ← ESCALA (o ideal do v1)
+  Começo: "blip"
+  Onda: triângulo
+  Frequência: conta-01 = Dó4 (262 Hz) e cada número sobe MEIO TOM
+              (multiplique por 1,0595). conta-13 = Dó5 (523 Hz),
+              conta-20 = Sol5 (784 Hz).
+  Envelope: 2 / 30 / 80 ms. Extra: deslize mínimo para cima (+3%)
+            dá o "pop" de bolha.
+  Como fazer rápido: monte o conta-01, salve, e para cada número só
+  mude a frequência e exporte com o novo nome.
+  Tabela (Hz): 01 262 · 02 277 · 03 294 · 04 311 · 05 330 · 06 349 ·
+    07 370 · 08 392 · 09 415 · 10 440 · 11 466 · 12 494 · 13 523 ·
+    14 554 · 15 587 · 16 622 · 17 659 · 18 698 · 19 740 · 20 784
+  Ouvido: "pop-pop-pop" subindo, toca a cada 0,28 s.
+
+sfx/conta-final (600 ms)
+  Onda: triângulo + senoide uma oitava acima (camada a 40%).
+  Arpejo bem rápido (acorde): Dó5-Mi5-Sol5 (30 ms cada) segurando Dó6.
+  Envelope 3 / 250 / 300 ms. Ouvido: "chegou!".
+
+sfx/fileira-completa (300 ms)
+  Onda: triângulo. Frequência Sol5 (784) com 2ª nota Dó6 (1047).
+  Envelope 2 / 60 / 200 ms. Volume 10% acima da contagem.
+  Ouvido: "ding" de estrela.
+
+sfx/fumaca (600 ms)
+  Onda: ruído. Filtro passa-baixa descendo de 2 kHz para 400 Hz.
+  Envelope 20 / 100 / 480 ms. Volume 60%.
+  Ouvido: "puf" macio de nuvem. Sem estouro no começo (ataque ≥ 15 ms).
+
+sfx/entrar-cercado (200 ms)
+  Camada 1: senoide 400 → 700 Hz em 80 ms (pulinho).
+  Camada 2 (a partir de 90 ms): ruído com passa-baixa 1 kHz, 40 ms (tóc).
+  Ouvido: "uip-tóc".
+
+sfx/grupos-juntam (500 ms)
+  Onda: senoide. Frequência 300 → 1.000 Hz (deslize acelerando).
+  Envelope 30 / 350 / 120 ms. Extra: no fim, clique igual ao clique-1.
+  Ouvido: "zuuum-tec".
+
+--- C.4 Blocos e ferramentas ---------------------------------------
+
+sfx/quebrar-bloco-1..3 (250–400 ms)
+  Começo: "explosion"/"hit" curto
+  Camada 1: ruído, passa-baixa 2,5 kHz, envelope 2 / 40 / 200 ms.
+  Camada 2: quadrada duty 50%, 160 → 80 Hz, 60 ms, volume 40% (corpo).
+  Extra: "pedrinhas": 3 a 4 cliques curtos de ruído (15 ms) depois.
+  Ouvido: satisfatório. Variações mudando o corte do filtro
+          (2 / 2,5 / 3 kHz).
+
+sfx/colocar-bloco-1..3 (150 ms)
+  Onda: senoide 180 → 110 Hz + ruído passa-baixa 800 Hz (20 ms).
+  Envelope 2 / 30 / 100 ms. Ouvido: "tump" macio.
+
+sfx/virar-carta (200 ms)
+  Onda: ruído, passa-banda ~3 kHz. Envelope 5 / 40 / 120 ms.
+  Extra: 2 pulsos rápidos (tremolo 25 Hz) para o "flip".
+
+sfx/crafting-pronto (700 ms)
+  Duas batidas de "tin": triângulo 1.568 Hz, 50 ms cada, com 120 ms
+  entre elas. Depois brilho igual ao resposta-brilha, mais curto.
+
+--- C.5 Recompensas -------------------------------------------------
+
+sfx/estrela-1..3 (300 ms)
+  Onda: triângulo + senoide uma oitava acima (30%).
+  Frequência: estrela-1 = Mi5 (659), estrela-2 = Sol5 (784),
+              estrela-3 = Dó6 (1047). Deslize mínimo para cima.
+  Envelope 2 / 60 / 230 ms. Extra: eco 1 repetição, 80 ms.
+  Ouvido: "ping" que sobe a cada estrela.
+
+sfx/xp-somando (800 ms)
+  Começo: "coin"
+  Faça UMA moedinha: quadrada duty 25%, Si5 → Mi6 (988 → 1319), 70 ms.
+  Repita 6 vezes (repetição / "repeat" do ChipTone, ou cole no editor),
+  cada vez um pouco mais aguda e mais baixa.
+  Ouvido: tilintar rápido. Volume 80%.
+
+sfx/subiu-nivel (1,5 s)
+  Arpejo rápido de escala subindo Dó5→Dó6 (8 notas, 60 ms cada),
+  depois acorde Dó-Mi-Sol (arpejo 25 ms) segurando 600 ms com vibrato
+  leve. Onda: quadrada 50% (camada 1, 50%) + triângulo (camada 2).
+
+sfx/conquista (1,2 s)
+  "Fanfarra" 8-bit: Sol4 (curta) – Sol4 (curta) – Dó5 (longa).
+  Quadrada duty 25% com passa-baixa 3 kHz (fica "metal leve").
+  Fim: sininho igual a estrela-3.
+
+sfx/trofeu-grande (2,5 s)
+  A conquista uma quarta acima + rufar: ruído com tremolo 18 Hz e
+  passa-baixa 1 kHz, 500 ms crescendo antes da fanfarra.
+
+sfx/bau-treme (700 ms)
+  Ruído passa-baixa 900 Hz com tremolo 14 Hz (chacoalhar) + senoide
+  baixa 200 Hz subindo devagar para 260 Hz (suspense).
+
+sfx/bau-abre (1,2 s)
+  Dobradiça: quadrada duty 12%, 220 → 330 Hz com vibrato 30 Hz, 250 ms,
+  volume 40%. Depois "aaah": senoide com acorde Dó-Mi-Sol (arpejo lento
+  120 ms) e por último o xp-somando curto.
+
+sfx/figurinha (600 ms)
+  "shhk": ruído passa-alta 2 kHz, 80 ms. Depois plim: triângulo
+  1.319 Hz, 300 ms.
+
+sfx/recorde (1,2 s)
+  Arpejo "torcida": Dó5 Mi5 Sol5 Mi5 Sol5 Dó6 (80 ms cada), quadrada
+  50% + triângulo. Mais saltitante que a conquista.
+
+sfx/ofensiva (900 ms)
+  "fuuush": ruído com passa-baixa subindo de 300 Hz para 2,5 kHz,
+  ataque 200 ms. Depois acorde caloroso: triângulo Fá4-Lá4-Dó5.
+
+sfx/mundo-desbloqueado (3 s)
+  Senoide 200 → 800 Hz bem lento (2 s) com vibrato que acelera
+  (portal) + ruído baixinho. No fim, acorde grande Dó-Mi-Sol-Dó
+  (arpejo 40 ms) segurando 800 ms.
+
+--- C.6 Chefe, minijogo e relâmpago --------------------------------
+
+sfx/chefe-entra (1,5 s)
+  Tambores: ruído passa-baixa 400 Hz + senoide 90 Hz, 3 batidas
+  (tum-tum-TUM). Depois acorde "dramático de desenho": quadrada Ré4-Fá4-Lá4
+  com deslize para baixo no fim (wah-wah cômico). Sem grave forte.
+
+sfx/ponto-crianca (400 ms)
+  "pow": ruído 30 ms + quadrada 600 → 200 Hz em 80 ms. Depois plim
+  igual à estrela-2.
+
+sfx/ponto-chefe (400 ms)
+  "bonk": senoide 500 → 250 Hz com deslize curvo + vibrato 10 Hz.
+  Engraçado, não triste.
+
+sfx/chefe-derrotado (1,5 s)
+  3 quebrar-bloco seguidos (100 ms entre eles) + subiu-nivel curto.
+
+sfx/minijogo-comeca (1 s)
+  Sirene fofa: senoide alternando 600/800 Hz (vibrato lento e fundo,
+  4 Hz) por 600 ms + apito: triângulo 1.568 Hz, 200 ms.
+
+sfx/diamante-pego-1..3 (150 ms)
+  Triângulo 1.568 → 2.093 Hz (deslize rápido para cima), 2/30/110 ms.
+  Variações: começo em 1.480 / 1.568 / 1.661 Hz.
+
+sfx/estrela-pega (300 ms)
+  O diamante + 2ª nota uma quinta acima + eco 1 repetição.
+
+sfx/tempo-acabando (150 ms)
+  Ruído passa-banda 2 kHz, 10 ms + senoide 1.000 Hz, 30 ms.
+  Ouvido: tique de relógio de madeira, discreto.
+
+sfx/fim-de-tempo (800 ms)
+  Apito: triângulo 1.175 Hz, 250 ms, vibrato leve. Depois "tcharam":
+  Sol4 curto + Dó5 longo.
+
+sfx/combo (300 ms)
+  Quadrada duty 25%, 500 → 1.500 Hz (deslize rápido), vibrato 20 Hz.
+  "zing" elétrico. Volume 80%.
+
+--- C.7 Abertura (creeper) — com cuidado ----------------------------
+
+sfx/creeper-passos (loop 1 s)
+  4 passos: ruído passa-baixa 600 Hz, 40 ms cada, intervalo 250 ms,
+  volumes alternando 100/70%.
+
+sfx/creeper-chiado (1,2 s)
+  Pavio de fogos: ruído passa-alta 3 kHz com tremolo rápido (30 Hz)
+  ficando mais forte + senoide 300 Hz subindo para 450 Hz ("hmmmm").
+  IMPORTANTE: tem de ser ORIGINAL. Não tente imitar o chiado do jogo
+  de blocos famoso. O nosso é cômico, de pavio de festa junina.
+
+sfx/creeper-explosao (1,5 s)
+  "BUM" de desenho: ruído passa-baixa 1,5 kHz, ataque 5 ms, fim 700 ms
+  + senoide 150 → 60 Hz baixinha (30%). Depois "confete": 6 cliques
+  agudos aleatórios (triângulo 1.500–2.500 Hz, 20 ms) e brilho final
+  igual ao resposta-brilha. Sem grave forte.
+
+--- C.8 Ficam fora do ChipTone --------------------------------------
+  Mobs (seção 4 do v1): precisam de voz humana ou animal tratada.
+  Músicas (seção 5 do v1): use outra ferramenta ou um músico.
+
+
+=====================================================================
+D. A VOZ SUAVE — ESCOLHA DA VOZ
+=====================================================================
+O que a voz precisa ter: feminina ou masculina adulta, calorosa, sem
+pressa, que pareça uma professora querida contando história. Nada de
+voz de comercial nem de voz infantil caricata para as perguntas.
+
+Opções de voz neural pt-BR (geradas UMA vez e salvas em MP3):
+
+ 1) Microsoft Azure Speech (RECOMENDADO para o CSV pronto)
+    - Vozes pt-BR que vale ouvir para a NARRADORA (voz A):
+        pt-BR-FranciscaNeural  ← já configurada no CSV, estilo "calm"
+                                 (calmo); é a mais testada em pt-BR
+        pt-BR-ThalitaMultilingualNeural, pt-BR-LeticiaNeural,
+        pt-BR-GiovannaNeural, pt-BR-ElzaNeural
+    - MASCOTE (voz B): pt-BR-ThalitaMultilingualNeural (configurada).
+      Teste também LeticiaNeural.
+    - CHEFES (voz C): pt-BR-AntonioNeural (configurada). Para chefes,
+      ator humano fica muito melhor, como o v1 já diz.
+    - Aceita SSML completo: velocidade, pausas, pronúncia e estilo. O CSV
+      já vem com isso pronto. Ouça as vozes no "Voice Gallery" do Azure
+      Speech Studio antes de decidir. A Microsoft atualiza os modelos
+      (a voz pode mudar com o tempo), então gere tudo de uma vez e
+      guarde os masters.
+    - Licença: confira nos termos do Azure o uso comercial em app
+      infantil e guarde a cópia junto dos contratos.
+
+ 2) ElevenLabs
+    - Muito natural, tem vozes pt-BR na biblioteca.
+    - O plano GRÁTIS NÃO permite uso comercial. Os planos pagos
+      (a partir do Starter) incluem licença comercial. O áudio gerado
+      enquanto a assinatura estava ativa continua licenciado.
+    - Vozes da biblioteca podem ter termos extras do criador da voz;
+      leia antes.
+    - Não usa o SSML do Azure: use a coluna "texto_para_voz" do CSV e
+      ajuste velocidade/estabilidade na própria ferramenta.
+
+ 3) Google Cloud Text-to-Speech (vozes Chirp 3 HD, há pt-BR)
+    - Natural. O SSML do Chirp 3 HD é limitado (sem controle de
+      velocidade por <prosody>), então use "texto_para_voz" e o
+      controle de ritmo da API.
+
+ 4) Locutora humana (a melhor para mascote e chefes)
+    - O CSV serve como roteiro de estúdio: ordene pela coluna "voz".
+
+Sugestão: Azure para narradora + perguntas (centenas de falas, custo
+baixo, SSML pronto); atores para mascote e chefes quando der. Até lá,
+o CSV gera tudo com voz sintética para o jogo já sair do "robô".
+
+
+=====================================================================
+E. DIREÇÃO DA VOZ SUAVE (por faixa de idade)
+=====================================================================
+Tom geral: sorriso na voz, volume baixo-médio, sem picos. Perguntas
+terminam subindo de leve (convite), nunca em tom de prova.
+"!" = animação suave, não grito.
+
+  Faixa           Velocidade   Como soa
+  berçário        -22%         bem devagar, palavras bem separadas,
+                               como quem mostra um livro de figuras
+  maternal        -18%         devagar, com pausa antes do objeto
+  pré-escola 1    -12%         calmo
+  pré-escola 2    -10%         calmo, um pouco mais fluido
+  fundamental 1   -6%          normal tranquilo
+  fundamental 2   -4%          normal
+  Pergunta que vale para várias faixas → usa a velocidade da mais nova.
+  Tom (pitch) da narradora: -2% em todas (fica mais aconchegante).
+
+Outras vozes: mascote -6% (animado mas sem correria), chefes -4%,
+pais -8%, números/contagem -8% a -10%.
+
+Pronúncia já marcada no SSML (troca só o som, não o texto):
+  creeper → "críper"   enderman → "énderman"   endermen → "éndermen"
+  Nether → "Néder"   End → "Énd"   Steve → "Stív"   Blaze → "Blêiz"
+  ghasts → "gésts"   mob(s) → "móbi(s)"   crafting → "cráfting"
+  Se a voz escolhida falar alguma ainda estranha, ajuste o "alias" no
+  dicionário PRONUNCIA do script e gere o CSV de novo.
+
+
+=====================================================================
+F. O CSV DE FALAS — COLUNAS E CORREÇÕES FEITAS NO TEXTO
+=====================================================================
+docs/audio/falas-voz-suave.csv  (separador ";", UTF-8)
+
+  arquivo         nome final (igual ao v1, ex.: voz/perguntas/q-0001.mp3)
+  secao           seção do roteiro v1 (7.1-7.3 mascote, 7.8 perguntas...)
+  voz             A-narradora / B-mascote / C-chefes / D-pais
+  faixas          idade (só nas perguntas)
+  texto_original  o texto que o JOGO usa (não mexa: é por ele que o
+                  manifest liga a pergunta ao arquivo)
+  texto_para_voz  o que a voz deve FALAR (revisado)
+  mudancas        o que foi mudado e por quê
+  velocidade      ajuste de ritmo usado no SSML
+  voz_azure       nome da voz Azure
+  ssml_azure      SSML pronto para enviar ao Azure
+
+Totais: 1.031 falas = 673 perguntas + 141 números (contando, 0–100,
+"São N!") + 120 falas de chefes (10 × 12) + 40 mascote + 15 conquistas
++ 12 frases + 11 mundos + 10 palavras das contas + 7 pais + 2 da
+narradora da prova.
+
+Correções feitas em 153 perguntas (o texto do jogo continua igual; só
+o que é falado muda):
+  - Respostas entre parênteses tiradas: "Que figura é essa? Monte o
+    nome! (PATO)" falava a resposta. Agora para em "Monte o nome!"
+    (q-0400, q-0503, q-0513 e outras).
+  - Perguntas que eram só um sinal: "Complete a sequência: ?",
+    "Complete: ?" e "Complete o padrão: ?" viraram frases inteiras.
+    "▲●▲●?" virou "triângulo, círculo, triângulo, círculo... e agora?".
+    ATENÇÃO, para o jogo: q-0217, q-0236 e q-0239 servem para várias
+    atividades com sequências diferentes, então a voz não diz quais são
+    os itens. Vale a pena o jogo emendar a sequência com as peças da
+    seção 7.6.
+  - "Árvore, flor, árvore, ...?" → "Árvore, flor, árvore... e depois?"
+  - "=" falado como "igual" ficava estranho: "2 esmeraldas mais 3 rubis
+    = quantas gemas?" → "... são quantas gemas?"
+  - Construção em grade: "Copie a casa 3 vezes 3!" → "3 por 3" (vezes
+    soa como conta de multiplicar).
+  - Concordância: "da Deserto/da Castelo/da Grande Desafio" → "do ...";
+    "da Neve" → "das Montanhas de Neve". (Vale corrigir também no texto
+    das atividades.)
+  - "villagers" → "moradores" (o resto do jogo diz "moradores").
+  - Palavras em MAIÚSCULAS → minúsculas ("Qual a primeira letra de
+    SOL?"): vozes sintéticas tendem a soletrar siglas como "S-O-L".
+  - Sílabas: "PEI-XE" → "pei, xe" com pausa; "Forme a palavra: PI mais
+    RÂ mais MI mais DE" ganhou pausas antes e depois de cada "mais".
+
+
+=====================================================================
+G. GERANDO AS FALAS (PASSO A PASSO, AZURE)
+=====================================================================
+  1. Crie no Azure um recurso "Speech" (Serviço de Fala). Copie a
+     CHAVE e a REGIÃO.
+  2. Coloque os arquivos no projeto:
+        docs/audio/falas-voz-suave.csv
+        scripts/gerar_vozes_azure.py
+     Precisa de Python 3 e ffmpeg instalados.
+  3. Teste primeiro (8 falas variadas, em public/audio/_teste/):
+        export AZURE_SPEECH_KEY="..."; export AZURE_SPEECH_REGION="eastus"
+        python3 scripts/gerar_vozes_azure.py docs/audio/falas-voz-suave.csv --teste
+     Ouça no celular. Se quiser outra voz, troque em VOZES no
+     gerar_falas.py (ou direto na coluna ssml_azure) e teste de novo.
+     Apague a pasta _teste depois.
+  4. Gere por lotes, na ordem do v1:
+        --secao 7.1     (mascote)     --secao 7.6  (números e contas)
+        --secao 7.8 --faixa bercario  → maternal → pre-escola-1 → ...
+        --secao 7.5, 7.4, 7.7, 7.9
+     O script pula o que já existe (use --refazer para gerar de novo),
+     normaliza para -16 LUFS / pico -1 dBTP, converte para MP3 mono
+     128 kbps e guarda os WAV em audio-masters/.
+  5. npm run audio  → o jogo passa a tocar os arquivos. O que não foi
+     gerado continua com a voz do aparelho.
+  6. Ao mudar perguntas: rode o exportVoiceLines.ts (v1) e depois
+        python3 gerar_falas.py docs/audio/ROTEIRO.txt docs/audio/falas-perguntas.csv docs/audio/falas-voz-suave.csv
+     e gere só as novas (o script pula as que já existem).
+
+
+=====================================================================
+G2. GERANDO AS FALAS NA ELEVENLABS (VOZ ESCOLHIDA)
+=====================================================================
+Voz única para TODAS as falas: "MineLearn – Narradora", criada no
+Voice Design da conta (mulher jovem, pt-BR neutro, alegre e suave).
+Plano Starter: 40.000 créditos disponíveis em 13/11/2026.
+
+  Custo (Multilingual v2, 1 crédito/caractere):
+    tudo ........................ ~30.557 créditos
+    teste (8 falas) ............. ~298
+    perguntas do berçário ....... ~2.193
+  Com Flash v2.5: metade (~15.278), menos expressivo.
+
+  1. ElevenLabs > Configurações > API Keys > criar chave.
+  2. export ELEVENLABS_API_KEY="..."
+  3. python3 scripts/gerar_vozes_elevenlabs.py docs/audio/falas-voz-suave.csv --teste
+     Ouça no celular (public/audio/_teste/) e apague a pasta depois.
+  4. Por lotes, com limite de créditos:
+       --secao 7.1 --limite 2000          (mascote)
+       --secao 7.8 --faixa bercario       (depois maternal, pre-escola...)
+       --limite 30000                     (o resto)
+     --simular mostra o custo antes, sem gastar nada.
+  5. npm run audio
+
+
+=====================================================================
+H. CHECKLIST
+=====================================================================
+[ ] Efeitos exportados do ChipTone com nome final e convertidos pelo
+    converter_chiptone.sh
+[ ] conta-01..20 em escala (meio tom por número)
+[ ] Variações -1/-2/-3 nos efeitos repetidos
+[ ] Print da licença CC0 do ChipTone guardado com os masters
+[ ] Voz escolhida depois do --teste, ouvida no celular
+[ ] Licença comercial da voz sintética conferida e guardada
+[ ] Pronúncias conferidas (creeper, enderman, Nether, End, Steve,
+    nomes dos mundos e dos chefes)
+[ ] Perguntas q-0217, q-0236, q-0239 revisadas no jogo
+[ ] npm run audio rodado depois de cada lote

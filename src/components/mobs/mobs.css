@@ -1,0 +1,449 @@
+/* =============================================
+   Mobs: animações só com CSS
+   --mob-iter  = quantas vezes repete (infinite por padrão)
+   --mob-delay = atraso inicial
+   ============================================= */
+
+.mob {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+  flex-shrink: 0;
+  image-rendering: pixelated;
+}
+
+.mob-rig {
+  display: block;
+  overflow: visible;
+  transform-origin: 50% 100%;
+}
+
+.mob-part {
+  transform-box: view-box;
+}
+
+/* A picareta só aparece minerando */
+.mob-tool {
+  display: none;
+}
+.mob--mine .mob-tool {
+  display: inline;
+}
+
+/* ---------- idle: respira e balança de leve ---------- */
+.mob--idle .mob-rig {
+  animation: mob-breathe 2.4s ease-in-out var(--mob-delay, 0s) var(--mob-iter, infinite);
+}
+.mob--idle .mob-head {
+  animation: mob-head-tilt 3.2s ease-in-out var(--mob-delay, 0s) var(--mob-iter, infinite);
+}
+.mob--idle .mob-tail,
+.mob--walk .mob-tail {
+  animation: mob-wag 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes mob-breathe {
+  0%, 100% { transform: scale(1, 1); }
+  50% { transform: scale(0.99, 1.025); }
+}
+@keyframes mob-head-tilt {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-4deg); }
+  75% { transform: rotate(4deg); }
+}
+@keyframes mob-wag {
+  from { transform: rotate(-12deg); }
+  to { transform: rotate(14deg); }
+}
+
+/* ---------- walk: pernas alternando ---------- */
+.mob--walk .mob-rig {
+  animation: mob-bob 0.5s ease-in-out var(--mob-delay, 0s) infinite;
+}
+.mob--walk .mob-leg-a,
+.mob--walk .mob-arm-b {
+  animation: mob-swing 0.5s ease-in-out var(--mob-delay, 0s) infinite alternate;
+}
+.mob--walk .mob-leg-b,
+.mob--walk .mob-arm-a {
+  animation: mob-swing 0.5s ease-in-out var(--mob-delay, 0s) infinite alternate-reverse;
+}
+.mob--walk .mob-wing {
+  animation: mob-flap-small 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes mob-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3%); }
+}
+@keyframes mob-swing {
+  from { transform: rotate(22deg); }
+  to { transform: rotate(-22deg); }
+}
+@keyframes mob-flap-small {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-15deg); }
+}
+
+/* ---------- jump ---------- */
+.mob--jump .mob-rig {
+  animation: mob-jump 0.7s ease-in-out var(--mob-delay, 0s) var(--mob-iter, infinite);
+}
+.mob--jump .mob-wing {
+  animation: mob-flap 0.15s ease-in-out infinite alternate;
+}
+
+@keyframes mob-jump {
+  0%, 100% { transform: translateY(0) scale(1, 1); }
+  15% { transform: translateY(0) scale(1.12, 0.86); }
+  45% { transform: translateY(-45%) scale(0.92, 1.1); }
+  72% { transform: translateY(0) scale(1.1, 0.9); }
+  86% { transform: translateY(0) scale(1, 1); }
+}
+
+/* ---------- celebrate: pula e gira ---------- */
+.mob--celebrate .mob-rig {
+  animation: mob-celebrate 1.1s ease-in-out var(--mob-delay, 0s) var(--mob-iter, infinite);
+}
+.mob--celebrate .mob-arm-a {
+  animation: mob-wave-a 0.3s ease-in-out infinite alternate;
+}
+.mob--celebrate .mob-arm-b {
+  animation: mob-wave-b 0.3s ease-in-out infinite alternate;
+}
+.mob--celebrate .mob-wing {
+  animation: mob-flap 0.15s ease-in-out infinite alternate;
+}
+.mob--celebrate .mob-tail {
+  animation: mob-wag 0.2s ease-in-out infinite alternate;
+}
+
+@keyframes mob-celebrate {
+  0% { transform: translateY(0) rotateY(0deg) scale(1, 1); }
+  15% { transform: translateY(0) rotateY(0deg) scale(1.1, 0.88); }
+  50% { transform: translateY(-50%) rotateY(180deg) scale(1, 1.05); }
+  80% { transform: translateY(0) rotateY(360deg) scale(1.06, 0.94); }
+  100% { transform: translateY(0) rotateY(360deg) scale(1, 1); }
+}
+@keyframes mob-wave-a {
+  from { transform: rotate(140deg); }
+  to { transform: rotate(170deg); }
+}
+@keyframes mob-wave-b {
+  from { transform: rotate(-140deg); }
+  to { transform: rotate(-170deg); }
+}
+@keyframes mob-flap {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-55deg); }
+}
+
+/* ---------- sad: abaixa a cabeça ---------- */
+.mob--sad .mob-rig {
+  animation: mob-sad 1.2s ease-out var(--mob-delay, 0s) 1 forwards;
+}
+.mob--sad.mob-front .mob-head {
+  animation: mob-droop-front 1.2s ease-out var(--mob-delay, 0s) 1 forwards;
+}
+.mob--sad.mob-side .mob-head {
+  animation: mob-droop-side 1.2s ease-out var(--mob-delay, 0s) 1 forwards;
+}
+.mob--sad .mob-arm-a {
+  animation: mob-arm-in-a 1.2s ease-out var(--mob-delay, 0s) 1 forwards;
+}
+.mob--sad .mob-arm-b {
+  animation: mob-arm-in-b 1.2s ease-out var(--mob-delay, 0s) 1 forwards;
+}
+
+@keyframes mob-sad {
+  to { transform: translateY(3%) scale(1.02, 0.97); filter: saturate(0.6) brightness(0.9); }
+}
+@keyframes mob-droop-front {
+  to { transform: translateY(1.5px) scaleY(0.88) rotate(-5deg); }
+}
+@keyframes mob-droop-side {
+  to { transform: rotate(24deg) translateY(1px); }
+}
+@keyframes mob-arm-in-a {
+  to { transform: rotate(-6deg); }
+}
+@keyframes mob-arm-in-b {
+  to { transform: rotate(6deg); }
+}
+
+/* ---------- creeper: fuse (pisca, incha e some) ---------- */
+.mob--fuse .mob-rig {
+  transform-origin: 50% 60%;
+  animation: mob-fuse 2.2s linear var(--mob-delay, 0s) var(--mob-iter, infinite) both;
+}
+.mob--fuse .mob-particle {
+  animation: mob-fuse-particle 2.2s ease-out var(--mob-delay, 0s) var(--mob-iter, infinite) both;
+}
+
+@keyframes mob-fuse {
+  0% { transform: scale(1); filter: brightness(1) saturate(1); opacity: 1; }
+  8% { filter: brightness(3) saturate(0); }
+  16% { filter: brightness(1) saturate(1); }
+  28% { transform: scale(1.05); filter: brightness(3) saturate(0); }
+  36% { filter: brightness(1) saturate(1); }
+  46% { transform: scale(1.12); filter: brightness(3) saturate(0); }
+  52% { filter: brightness(1) saturate(1); }
+  58% { transform: scale(1.18); filter: brightness(3) saturate(0); }
+  63% { filter: brightness(1) saturate(1); }
+  68% { transform: scale(1.25, 1.2); filter: brightness(3) saturate(0); opacity: 1; }
+  74% { transform: scale(1.45); filter: brightness(3) saturate(0); opacity: 0; }
+  100% { transform: scale(1.45); opacity: 0; }
+}
+@keyframes mob-fuse-particle {
+  0%, 70% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+  72% { opacity: 1; transform: translate(-50%, -50%) scale(1.3); }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.4);
+  }
+}
+
+/* ---------- enderman: teleport (some e reaparece) ---------- */
+.mob--teleport .mob-rig {
+  transform-origin: 50% 50%;
+  animation: mob-teleport 2.4s ease-in-out var(--mob-delay, 0s) var(--mob-iter, infinite) both;
+}
+.mob--teleport .mob-particle {
+  animation: mob-tp-particle 2.4s ease-out calc(var(--mob-delay, 0s) + var(--pd, 0s)) var(--mob-iter, infinite) both;
+}
+
+@keyframes mob-teleport {
+  0%, 22% { transform: scale(1, 1); opacity: 1; filter: brightness(1); }
+  30% { transform: scale(0.15, 1.25); opacity: 0.8; filter: brightness(1.8); }
+  34%, 62% { transform: scale(0, 1.3); opacity: 0; }
+  70% { transform: scale(0.2, 1.2); opacity: 0.9; filter: brightness(1.8); }
+  78% { transform: scale(1.08, 0.95); opacity: 1; filter: brightness(1); }
+  86%, 100% { transform: scale(1, 1); opacity: 1; }
+}
+@keyframes mob-tp-particle {
+  0%, 24% { opacity: 0; transform: translate(-50%, -50%); }
+  28% { opacity: 1; transform: translate(-50%, -50%); }
+  48% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))); }
+  60% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))); }
+  63% { opacity: 1; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))); }
+  80%, 100% { opacity: 0; transform: translate(-50%, -50%); }
+}
+
+/* ---------- steve/alex: mine (picareta batendo) ---------- */
+.mob--mine .mob-rig {
+  animation: mob-mine-lean 0.6s ease-in-out var(--mob-delay, 0s) var(--mob-iter, infinite);
+}
+.mob--mine .mob-arm-b {
+  animation: mob-mine-swing 0.6s cubic-bezier(0.5, 0, 0.3, 1) var(--mob-delay, 0s) var(--mob-iter, infinite);
+}
+.mob--mine .mob-particle {
+  left: 85%;
+  top: 70%;
+  animation: mob-mine-chip 0.6s ease-out var(--mob-delay, 0s) var(--mob-iter, infinite);
+}
+
+@keyframes mob-mine-lean {
+  0%, 100% { transform: rotate(0deg); }
+  55% { transform: rotate(2deg); }
+}
+@keyframes mob-mine-swing {
+  0%, 100% { transform: rotate(-150deg); }
+  55% { transform: rotate(-35deg); }
+  65% { transform: rotate(-45deg); }
+}
+@keyframes mob-mine-chip {
+  0%, 52% { opacity: 0; transform: translate(-50%, -50%); }
+  58% { opacity: 1; transform: translate(-50%, -50%); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy) - 6px)); }
+}
+
+/* ---------- partículas ---------- */
+.mob-particle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--ps, 4px);
+  height: var(--ps, 4px);
+  background: var(--pc, #fff);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------- andando pelo chão (MobWalker) ---------- */
+.mob-walker {
+  position: absolute;
+  bottom: 0;
+  left: var(--walk-start, 0);
+  animation: mob-walk-across var(--walk-duration, 20s) linear var(--walk-delay, 0s) infinite;
+}
+
+@keyframes mob-walk-across {
+  0% { left: 0; transform: scaleX(1); }
+  49.99% { left: calc(100% - var(--mob-w)); transform: scaleX(1); }
+  50% { left: calc(100% - var(--mob-w)); transform: scaleX(-1); }
+  100% { left: 0; transform: scaleX(-1); }
+}
+
+/* ---------- movimento reduzido ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-motion="on"]) .mob *, html:not([data-motion="on"]) .mob-walker {
+    animation: none !important;
+  }
+}
+
+/* =============================================
+   Faísca (herói original de capa)
+   ============================================= */
+
+/* capa balança devagar parado */
+.mob--idle .mob-cape {
+  animation: mob-cape-sway 2.4s ease-in-out infinite;
+}
+@keyframes mob-cape-sway {
+  0%, 100% { transform: skewX(0deg); }
+  50% { transform: skewX(4deg) scaleY(0.98); }
+}
+
+/* VOAR: levita, inclina, capa tremula, braço para cima, rastro de faíscas */
+.mob--fly .mob-rig {
+  animation: mob-fly 1.6s ease-in-out var(--mob-delay, 0s) var(--mob-iter, infinite);
+}
+.mob--fly .mob-cape {
+  animation: mob-cape-flutter 0.3s ease-in-out infinite alternate;
+}
+.mob--fly .mob-arm-a {
+  animation: mob-fly-arm 1.6s ease-in-out infinite;
+}
+.mob--fly .mob-leg-a,
+.mob--fly .mob-leg-b {
+  animation: mob-fly-legs 1.6s ease-in-out infinite;
+}
+.mob--fly .mob-particle {
+  top: 98%;
+  animation: mob-fly-trail 0.8s ease-out calc(var(--mob-delay, 0s) + var(--pd, 0s)) infinite;
+}
+@keyframes mob-fly {
+  0%, 100% { transform: translateY(-10%) rotate(-6deg); }
+  50% { transform: translateY(-18%) rotate(-3deg); }
+}
+@keyframes mob-cape-flutter {
+  from { transform: skewX(-10deg) scaleY(1); }
+  to { transform: skewX(10deg) scaleY(0.92); }
+}
+@keyframes mob-fly-arm {
+  0%, 100% { transform: rotate(165deg); }
+  50% { transform: rotate(175deg); }
+}
+@keyframes mob-fly-legs {
+  0%, 100% { transform: rotate(6deg); }
+  50% { transform: rotate(-4deg); }
+}
+@keyframes mob-fly-trail {
+  0% { opacity: 1; transform: translate(calc(-50% + var(--dx) * 0.15), -50%) scale(1); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--dx) * 0.3), 60px) scale(0.3); }
+}
+
+/* PODER: agacha juntando energia (brilha), depois abre os braços e solta a rajada */
+.mob--power .mob-rig {
+  animation: mob-power 1.8s ease-in-out var(--mob-delay, 0s) var(--mob-iter, infinite);
+}
+.mob--power .mob-arm-a {
+  animation: mob-power-arm-a 1.8s ease-in-out var(--mob-delay, 0s) var(--mob-iter, infinite);
+}
+.mob--power .mob-arm-b {
+  animation: mob-power-arm-b 1.8s ease-in-out var(--mob-delay, 0s) var(--mob-iter, infinite);
+}
+.mob--power .mob-cape {
+  animation: mob-cape-flutter 0.2s ease-in-out infinite alternate;
+}
+.mob--power .mob-particle {
+  top: 45%;
+  animation: mob-power-burst 1.8s ease-out var(--mob-delay, 0s) var(--mob-iter, infinite);
+}
+@keyframes mob-power {
+  0%, 100% { transform: scale(1, 1); filter: drop-shadow(0 0 0 rgba(125, 249, 255, 0)); }
+  40% { transform: scale(1.05, 0.94); filter: drop-shadow(0 0 6px rgba(125, 249, 255, 0.9)); }
+  50% { transform: translateY(-4%) scale(0.97, 1.05); filter: drop-shadow(0 0 14px rgba(255, 255, 255, 1)); }
+  70% { transform: scale(1, 1); filter: drop-shadow(0 0 4px rgba(125, 249, 255, 0.6)); }
+}
+@keyframes mob-power-arm-a {
+  0%, 100% { transform: rotate(0deg); }
+  40% { transform: rotate(-25deg); }
+  52%, 75% { transform: rotate(95deg); }
+}
+@keyframes mob-power-arm-b {
+  0%, 100% { transform: rotate(0deg); }
+  40% { transform: rotate(25deg); }
+  52%, 75% { transform: rotate(-95deg); }
+}
+/* partículas: primeiro vêm de fora para o peito (carregando), depois explodem para fora */
+@keyframes mob-power-burst {
+  0% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.6); }
+  10% { opacity: 1; }
+  45% { opacity: 1; transform: translate(-50%, -50%) scale(0.5); }
+  52% { opacity: 1; transform: translate(-50%, -50%) scale(1.6); }
+  85% { opacity: 0; transform: translate(calc(-50% + var(--dx) * 1.8), calc(-50% + var(--dy) * 1.8)) scale(1); }
+  100% { opacity: 0; }
+}
+
+/* Faísca voando pelo céu da tela inicial */
+@keyframes hero-fly-across {
+  0% { left: -15%; top: 18%; }
+  50% { top: 10%; }
+  100% { left: 110%; top: 16%; }
+}
+.hero-fly-across {
+  position: absolute;
+  animation: hero-fly-across 14s linear 3s infinite;
+  left: -15%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-motion="on"]) .hero-fly-across {
+    animation: none;
+    left: 72%;
+    top: 14%;
+  }
+}
+
+
+/* Animações reduzidas escolhidas no app (mesmo com o sistema normal) */
+  html[data-motion="reduced"] .mob *, html[data-motion="reduced"] .mob-walker {
+    animation: none !important;
+  }
+
+  html[data-motion="reduced"] .hero-fly-across {
+    animation: none;
+    left: 72%;
+    top: 14%;
+  }
+
+/* Aura de energia do poder: brilha enquanto carrega e explode na rajada */
+.mob-aura {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  width: 140%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(125, 249, 255, 0.7) 30%, rgba(58, 214, 255, 0.25) 55%, rgba(58, 214, 255, 0) 70%);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.2);
+  animation: mob-aura 1.8s ease-out var(--mob-delay, 0s) var(--mob-iter, infinite);
+}
+@keyframes mob-aura {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
+  40% { opacity: 0.7; transform: translate(-50%, -50%) scale(0.45); }
+  52% { opacity: 1; transform: translate(-50%, -50%) scale(0.6); }
+  80% { opacity: 0; transform: translate(-50%, -50%) scale(1.6); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.6); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-motion="on"]) .mob-aura {
+    animation: none;
+  }
+}
+html[data-motion="reduced"] .mob-aura {
+  animation: none;
+}
