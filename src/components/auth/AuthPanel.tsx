@@ -2,6 +2,8 @@ import { useState, type FormEvent } from 'react';
 import { Lock, Mail, User as UserIcon } from 'lucide-react';
 import { MinecraftButton } from '../ui/MinecraftButton';
 import { authService } from '../../services/authService';
+import { forgetProfile, listSavedProfiles } from '../../services/savedProfiles';
+import { DEFAULT_SKIN, Mob, type PlayerSkin } from '../mobs';
 import { isSupabaseConfigured } from '../../lib/supabase';
 
 type Tab = 'entrar' | 'criar' | 'crianca';
@@ -40,7 +42,8 @@ const input =
 
 /** Responsável: Google, e-mail ou criar conta. Criança: login e senha criados pelo responsável. */
 export function AuthPanel({ onSuccess, initialTab = 'entrar' }: AuthPanelProps) {
-  const [tab, setTab] = useState<Tab>(initialTab);
+  // Se há crianças lembradas neste aparelho, abre direto na aba "Sou criança"
+  const [tab, setTab] = useState<Tab>(() => (initialTab === 'entrar' && listSavedProfiles().length > 0 ? 'crianca' : initialTab));
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -49,6 +52,7 @@ export function AuthPanel({ onSuccess, initialTab = 'entrar' }: AuthPanelProps) 
   const [loading, setLoading] = useState(false);
   const demo = !isSupabaseConfigured();
   const child = tab === 'crianca';
+  const [saved, setSaved] = useState(() => listSavedProfiles());
 
   const run = async (fn: () => Promise<void>) => {
     setError('');
@@ -147,6 +151,46 @@ export function AuthPanel({ onSuccess, initialTab = 'entrar' }: AuthPanelProps) 
 
       {error && <p role="alert" className="bg-red-100 border border-red-300 text-red-800 px-4 py-2 rounded-md mb-4 text-sm font-body">{error}</p>}
       {info && <p role="status" className="bg-green-100 border border-green-300 text-green-900 px-4 py-2 rounded-md mb-4 text-sm font-body">{info}</p>}
+
+      {/* Crianças lembradas neste aparelho: toca no personagem e entra */}
+      {child && saved.length > 0 && (
+        <div className="mb-5">
+          <p className="font-body text-sm font-bold text-gray-800 mb-2 text-center">Quem vai jogar?</p>
+          <ul className="grid grid-cols-3 gap-2">
+            {saved.map((p) => (
+              <li key={p.id} className="relative">
+                <button
+                  type="button"
+                  disabled={loading}
+                  onClick={() =>
+                    run(async () => {
+                      await authService.signInSaved(p);
+                      onSuccess();
+                    })
+                  }
+                  className="w-full rounded-lg pixel-border bg-gradient-to-b from-sky-100 to-green-100 hover:from-sky-200 p-2 flex flex-col items-center gap-1 focus:outline-none focus-visible:ring-4 focus-visible:ring-minecraft-gold"
+                >
+                  <Mob type={(p.skin?.character as PlayerSkin['character']) ?? 'steve'} skin={{ ...DEFAULT_SKIN, ...p.skin } as PlayerSkin} size={40} animation="idle" />
+                  <span className="font-body text-sm font-bold text-gray-900 truncate max-w-full">{p.name}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    forgetProfile(p.id);
+                    setSaved(listSavedProfiles());
+                  }}
+                  aria-label={`Esquecer ${p.name} neste aparelho`}
+                  title="Esquecer neste aparelho"
+                  className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-white border border-gray-300 text-xs text-gray-600 hover:bg-red-50"
+                >
+                  ✕
+                </button>
+              </li>
+            ))}
+          </ul>
+          <p className="font-body text-xs text-gray-600 text-center mt-3">Ou entre com login e senha:</p>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-4" role="tabpanel">
         {tab === 'criar' && (

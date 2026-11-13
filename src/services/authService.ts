@@ -4,6 +4,21 @@ import { normalizeUsername } from '../lib/family';
 import { User, AgeGroup } from '../types';
 import { readJSON, writeJSON } from '../lib/storage';
 import { findOrCreateGuardian, hashPassword, readFamily } from './familyDemo';
+import { forgetProfile, listSavedProfiles, saveProfile, updateProfileSkin, type SavedProfile } from './savedProfiles';
+import type { Session } from '@supabase/supabase-js';
+
+/** Lembra a criança neste aparelho (e a sessão dela, no Supabase). */
+function rememberChild(user: User, session?: Session | null): void {
+  const game = progressStore.read<{ skin?: Record<string, string> }>('game', {});
+  saveProfile({
+    id: user.id,
+    name: user.name,
+    username: user.username ?? '',
+    ageGroup: user.age_group,
+    skin: game?.skin,
+    session: session ? { access_token: session.access_token, refresh_token: session.refresh_token } : undefined,
+  });
+}
 import type { User as SupabaseUser } from '@supabase/supabase-js';
 
 // Contas: o responsável entra com e-mail ou Google; a criança entra com login e senha
@@ -127,6 +142,7 @@ export const authService = {
         age_group: child.ageGroup as AgeGroup,
       };
       await switchAccount(saveDemoSession(user));
+      rememberChild(user);
       return user;
     }
 
@@ -141,11 +157,60 @@ export const authService = {
       throw new Error('Invalid login credentials');
     }
     await switchAccount(user);
+    rememberChild(user, data.session);
     return user;
+  },
+
+  /** Entra num perfil de criança lembrado neste aparelho (sem senha). */
+  async signInSaved(profile: SavedProfile): Promise<User> {
+    const user: User = {
+      id: profile.id,
+      name: profile.name,
+      email: '',
+      role: 'student',
+      created_at: '',
+      username: profile.username,
+      age_group: profile.ageGroup as AgeGroup | undefined,
+    };
+    if (!isSupabaseConfigured()) {
+      // a criança precisa existir ainda na família deste aparelho
+      if (!readFamily().children.some((c) => c.id === profile.id)) {
+        forgetProfile(profile.id);
+        throw new Error('Esse perfil não existe mais.');
+      }
+      await switchAccount(saveDemoSession(user));
+      saveProfile({ ...profile });
+      return user;
+    }
+    if (!profile.session) throw new Error('Entre com o login e a senha uma vez.');
+    const { data, error } = await supabase.auth.setSession(profile.session);
+    if (error || !data.user) {
+      saveProfile({ ...profile, session: undefined });
+      throw new Error('Esse acesso venceu. Entre com o login e a senha de novo.');
+    }
+    const real = fromSupabase(data.user);
+    await switchAccount(real);
+    rememberChild(real, data.session);
+    return real;
   },
 
   async signOut() {
     await progressStore.flush();
+    const current = await this.getCurrentUser();
+    if (current?.role === 'student') {
+      // guarda a roupa atual para o botão do perfil
+      const game = progressStore.read<{ skin?: Record<string, string> }>('game', {});
+      if (game?.skin) updateProfileSkin(current.id, game.skin);
+    }
+    if (isSupabaseConfigured() && current?.role === 'student' && listSavedProfiles().some((p) => p.id === current.id)) {
+      // Perfil lembrado: guarda a sessão atual e limpa só este aparelho (sem invalidar no servidor),
+      // para a criança entrar de novo tocando no personagem.
+      const { data } = await supabase.auth.getSession();
+      if (data.session) rememberChild(current, data.session);
+      Object.keys(localStorage).filter((k) => k.startsWith('sb-')).forEach((k) => localStorage.removeItem(k));
+      window.location.assign('/');
+      return;
+    }
     if (!isSupabaseConfigured()) {
       localStorage.removeItem(LOCAL_AUTH_KEY);
     } else {
