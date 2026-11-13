@@ -1440,6 +1440,7 @@
   "voz/rodadas/r-8feb852b.mp3",
   "voz/rodadas/r-8ff61287.mp3",
   "voz/rodadas/r-8ff8511e.mp3",
+  "voz/rodadas/r-90a24242.mp3",
   "voz/rodadas/r-9112ab82.mp3",
   "voz/rodadas/r-9144402f.mp3",
   "voz/rodadas/r-93069e19.mp3",
@@ -1659,6 +1660,7 @@
   "voz/rodadas/r-dfcc72c4.mp3",
   "voz/rodadas/r-e131c7bd.mp3",
   "voz/rodadas/r-e20382b5.mp3",
+  "voz/rodadas/r-e2864a83.mp3",
   "voz/rodadas/r-e312ef28.mp3",
   "voz/rodadas/r-e336c342.mp3",
   "voz/rodadas/r-e39df92b.mp3",
@@ -3179,6 +3181,8 @@
   "Monte com sílabas: TA-TU": "voz/rodadas/r-a7119a37.mp3",
   "Monte com sílabas: CA-ME-LO": "voz/rodadas/r-107a6597.mp3",
   "Monte a palavra MAPA!": "voz/rodadas/r-ebba8202.mp3",
-  "Que animal é esse? Monte o nome!": "voz/rodadas/r-4b7c9db4.mp3"
+  "Que animal é esse? Monte o nome!": "voz/rodadas/r-4b7c9db4.mp3",
+  "Que horas são no relógio?": "voz/rodadas/r-e2864a83.mp3",
+  "Leia a palavra e toque na figura certa!": "voz/rodadas/r-90a24242.mp3"
  }
 }
