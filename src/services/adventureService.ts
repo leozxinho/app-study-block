@@ -28,6 +28,8 @@ interface Settings {
   unlockAll?: boolean;
   /** Fases por dia para abrir o baú (escolhida pelo responsável). */
   dailyGoal?: number;
+  /** Tempo de tela por dia, em minutos (0 ou ausente = sem limite). */
+  screenTimeMin?: number;
 }
 
 export const DEFAULT_DAILY_GOAL = 3;
@@ -259,6 +261,12 @@ export const adventureService = {
   getDailyGoal(): number {
     const goal = progressStore.read<Settings>(SETTINGS, {}).dailyGoal;
     return typeof goal === 'number' && goal >= 1 && goal <= 10 ? Math.round(goal) : DEFAULT_DAILY_GOAL;
+  },
+
+  /** Limite diário de tempo de tela em minutos (0 = sem limite). */
+  getScreenTimeLimit(): number {
+    const v = progressStore.read<Settings>(SETTINGS, {}).screenTimeMin;
+    return typeof v === 'number' && v > 0 && v <= 600 ? Math.round(v) : 0;
   },
 
   /** Todos os mundos e fases liberados pelo responsável. */

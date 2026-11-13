@@ -113,6 +113,7 @@ function AddChildForm({ onCreated }: { onCreated: () => void }) {
             ))}
           </select>
         </label>
+
         <label className="block">
           <span className="font-body text-sm font-bold text-gray-800 block mb-1">Login da criança</span>
           <input
@@ -166,11 +167,11 @@ function ChildCard({
       : `Nesta semana, ${child.name} fez ${weekTotal} ${weekTotal === 1 ? 'atividade' : 'atividades'} em ${weekDays} ${weekDays === 1 ? 'dia' : 'dias'}.`;
   const types = byType(s.results);
 
-  const changeGoal = async (dailyGoal: number) => {
+  const changeSetting = async (patch: { dailyGoal?: number; screenTimeMin?: number }) => {
     setBusy(true);
     setError('');
     try {
-      await familyService.setChildSettings(child.id, { dailyGoal });
+      await familyService.setChildSettings(child.id, patch);
       onChanged();
     } catch (err) {
       setError((err as Error).message || 'Não deu certo.');
@@ -260,12 +261,27 @@ function ChildCard({
           <select
             value={s.dailyGoal}
             disabled={busy}
-            onChange={(e) => void changeGoal(Number(e.target.value))}
+            onChange={(e) => void changeSetting({ dailyGoal: Number(e.target.value) })}
             className="min-h-[36px] px-2 border border-gray-300 rounded-md bg-white text-sm"
           >
             {[1, 2, 3, 4, 5, 7, 10].map((n) => (
               <option key={n} value={n}>
                 {n} {n === 1 ? 'fase' : 'fases'}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="flex items-center gap-2 mt-2 font-body text-sm text-gray-800">
+          <span>⏱️ Tempo de tela por dia:</span>
+          <select
+            value={s.screenTimeMin}
+            disabled={busy}
+            onChange={(e) => void changeSetting({ screenTimeMin: Number(e.target.value) })}
+            className="min-h-[36px] px-2 border border-gray-300 rounded-md bg-white text-sm"
+          >
+            {[0, 15, 30, 45, 60, 90, 120].map((n) => (
+              <option key={n} value={n}>
+                {n === 0 ? 'sem limite' : `${n} minutos`}
               </option>
             ))}
           </select>

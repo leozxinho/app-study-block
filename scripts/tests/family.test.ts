@@ -86,3 +86,16 @@ test('ponto forte e onde precisa de ajuda', () => {
   assert.equal(strengths([r('counting', 3)]), null, 'pouca informação');
   assert.equal(strengths([r('a', 2), r('a', 2), r('b', 2), r('b', 2)]), null, 'tudo igual');
 });
+
+import { adultChallenge, secondsLeft } from '../../src/lib/screenTime.ts';
+
+test('tempo de tela: quanto falta, dia novo zera e minutos extras somam', () => {
+  assert.equal(secondsLeft(0, { day: '2026-11-13', seconds: 9999, extraMin: 0 }, '2026-11-13'), null, 'sem limite');
+  assert.equal(secondsLeft(30, { day: '2026-11-13', seconds: 600, extraMin: 0 }, '2026-11-13'), 1200);
+  assert.equal(secondsLeft(30, { day: '2026-11-13', seconds: 1900, extraMin: 0 }, '2026-11-13'), 0);
+  assert.equal(secondsLeft(30, { day: '2026-11-13', seconds: 1900, extraMin: 15 }, '2026-11-13'), 800);
+  assert.equal(secondsLeft(30, { day: '2026-11-12', seconds: 5000, extraMin: 15 }, '2026-11-13'), 1800, 'outro dia não conta');
+  const c = adultChallenge(123);
+  assert.match(c.question, /× \d/);
+  assert.ok(c.answer >= 42 && c.answer <= 81);
+});

@@ -14,6 +14,8 @@ import { hashPassword, readFamily, writeFamily, type DemoChild } from './familyD
 export interface ChildSettings {
   unlockAll?: boolean;
   dailyGoal?: number;
+  /** Tempo de tela por dia em minutos (0 = sem limite) */
+  screenTimeMin?: number;
 }
 
 export interface ChildAccount {
@@ -137,6 +139,7 @@ export const familyService = {
   async setChildSettings(id: string, patch: ChildSettings): Promise<void> {
     const guardianId = await requireGuardian();
     if (patch.dailyGoal !== undefined && !(patch.dailyGoal >= 1 && patch.dailyGoal <= 10)) throw new Error('Meta inválida.');
+    if (patch.screenTimeMin !== undefined && !(patch.screenTimeMin >= 0 && patch.screenTimeMin <= 600)) throw new Error('Tempo inválido.');
 
     if (!isSupabaseConfigured()) {
       if (!readFamily().children.some((c) => c.id === id && c.guardianId === guardianId)) throw new Error('Criança não encontrada.');

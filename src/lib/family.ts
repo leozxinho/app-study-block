@@ -62,6 +62,8 @@ export interface ChildSummary {
   achievements: number;
   unlockAll: boolean;
   dailyGoal: number;
+  /** Tempo de tela por dia em minutos (0 = sem limite) */
+  screenTimeMin: number;
   /** Roupa do personagem da criança (campos da loja; vazio = padrão) */
   skin: Record<string, string>;
 }
@@ -103,6 +105,7 @@ export function summarizeDoc(doc: AccountDoc | null | undefined, today = new Dat
     achievements: Object.keys(asObject(game.unlocked)).length,
     unlockAll: Boolean(settings.unlockAll),
     dailyGoal: asNumber(settings.dailyGoal, 3),
+    screenTimeMin: asNumber(settings.screenTimeMin, 0),
     skin: Object.fromEntries(Object.entries(asObject(game.skin)).filter(([, v]) => typeof v === 'string')) as Record<string, string>,
   };
 }

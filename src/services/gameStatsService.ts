@@ -41,6 +41,8 @@ interface GameStats {
   house: string[];
   /** Recorde do Desafio Relâmpago */
   bestLightning: number;
+  /** Tempo jogado hoje (segundos) e minutos extras liberados pelo adulto hoje */
+  playTime: { day: string; seconds: number; extraMin: number };
 }
 
 const EMPTY: GameStats = {
@@ -55,6 +57,7 @@ const EMPTY: GameStats = {
   daily: { day: '', levels: 0, chest: false },
   house: [],
   bestLightning: 0,
+  playTime: { day: '', seconds: 0, extraMin: 0 },
 };
 
 /** XP extra do baú da meta do dia. */
@@ -75,6 +78,7 @@ function normalize(saved: Partial<GameStats> | null | undefined): GameStats {
     owned: Array.isArray(saved.owned) ? saved.owned : [],
     house: Array.isArray(saved.house) ? saved.house : [],
     daily: saved.daily && typeof saved.daily === 'object' ? { ...EMPTY.daily, ...saved.daily } : { ...EMPTY.daily },
+    playTime: saved.playTime && typeof saved.playTime === 'object' ? { ...EMPTY.playTime, ...saved.playTime } : { ...EMPTY.playTime },
     unlocked: saved.unlocked && typeof saved.unlocked === 'object' ? saved.unlocked : {},
     // Skins salvas antes de existir o traje de herói ganham os campos novos
     skin: { ...DEFAULT_SKIN, ...(saved.skin ?? {}) },
@@ -253,6 +257,22 @@ export const gameStatsService = {
     save({ ...state, daily: { day: today, levels, chest: before.chest || chestNow } });
     if (chestNow) progressService.addXP(CHEST_XP);
     return { goal, done: Math.min(levels, goal), chestNow };
+  },
+
+  /** Soma tempo de jogo de hoje (zera quando o dia muda). */
+  addPlayTime(seconds: number): void {
+    const state = current();
+    const today = dayKey(new Date());
+    const pt = state.playTime.day === today ? state.playTime : { day: today, seconds: 0, extraMin: 0 };
+    save({ ...state, playTime: { ...pt, seconds: pt.seconds + seconds } });
+  },
+
+  /** O adulto liberou mais minutos hoje. */
+  addExtraMinutes(minutes: number): void {
+    const state = current();
+    const today = dayKey(new Date());
+    const pt = state.playTime.day === today ? state.playTime : { day: today, seconds: 0, extraMin: 0 };
+    save({ ...state, playTime: { ...pt, extraMin: pt.extraMin + minutes } });
   },
 
   /** Salva a casinha (lista de blocos por célula). */
