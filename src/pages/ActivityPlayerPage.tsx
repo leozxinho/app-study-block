@@ -15,7 +15,7 @@ import { VoiceButton } from '../components/ui/VoiceButton';
 import { MusicButton } from '../components/ui/MusicButton';
 import { ActivityProgress } from '../components/ui/ActivityProgress';
 import { starsForErrors, scoreForErrors } from '../lib/scoring';
-import { gameStatsService, type AchievementDef } from '../services/gameStatsService';
+import { gameStatsService, getAdaptiveLevel, type AchievementDef } from '../services/gameStatsService';
 import { AchievementToast } from '../components/ui/AchievementToast';
 import { buildRounds, baseActivityId } from '../lib/activityParsers';
 import { AgeGroup } from '../types';
@@ -63,7 +63,7 @@ export function ActivityPlayerPage() {
       try {
         const data = await activityService.getActivityById(id);
         setActivity(data);
-        setRounds(data ? buildRounds(data) : []);
+        setRounds(data ? buildRounds(data, getAdaptiveLevel()) : []);
         setStep(0);
         setRoundErrors(0);
         setAttempts(0);

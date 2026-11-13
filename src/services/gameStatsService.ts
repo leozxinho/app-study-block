@@ -6,6 +6,7 @@ import { progressService } from './progressService';
 import { adventureService } from './adventureService';
 import { progressStore } from '../lib/store';
 import { dayKey, dailyStreak, lastWeek } from '../lib/days';
+import { adaptiveLevel, type Adaptive } from '../lib/adaptive';
 
 // Estatísticas do jogo da conta ativa: resultados por atividade, dias jogados,
 // sequência de acertos, conquistas e loja de skins. Ficam no store único (ver src/lib/store).
@@ -121,6 +122,11 @@ export function getDailyStreak(stats: GameStats = current(), today = new Date())
 /** Últimos 7 dias (mais antigo primeiro) com marcação de jogado. */
 export function getLastWeek(stats: GameStats = current(), today = new Date()) {
   return lastWeek(stats.playDays, today);
+}
+
+/** Dificuldade das próximas rodadas pelos últimos resultados (ver lib/adaptive). */
+export function getAdaptiveLevel(stats: GameStats = current()): Adaptive {
+  return adaptiveLevel(stats.results);
 }
 
 /** Meta do dia de hoje (zera sozinha quando o dia muda). */

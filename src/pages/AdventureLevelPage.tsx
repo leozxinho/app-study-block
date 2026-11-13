@@ -16,7 +16,7 @@ import { playVoiceSequence } from '../lib/voice';
 import { WorldBackdrop } from '../components/adventure/WorldBackdrop';
 import { isBossLevel, themeForLevel, stickerForLevel } from '../data/worldThemes';
 import { scoreForErrors } from '../lib/scoring';
-import { gameStatsService, getDailyProgress, getDailyStreak, CHEST_XP, type AchievementDef } from '../services/gameStatsService';
+import { gameStatsService, getAdaptiveLevel, getDailyProgress, getDailyStreak, CHEST_XP, type AchievementDef } from '../services/gameStatsService';
 import { AchievementToast } from '../components/ui/AchievementToast';
 import { buildRounds, baseActivityId } from '../lib/activityParsers';
 import { adventureService } from '../services/adventureService';
@@ -152,7 +152,9 @@ function AdventureLevel() {
           // Get activities (async)
           const acts = await Promise.all(level.activityIds.map((id) => activityService.getActivityById(id)));
           // Cada atividade vira suas rodadas (pelo menos 5 tarefas)
-          setActivities(acts.filter((a): a is Activity => a !== null).flatMap(buildRounds));
+          // Dificuldade adaptativa: rodadas mais fáceis ou mais difíceis conforme os últimos resultados
+          const adaptive = getAdaptiveLevel();
+          setActivities(acts.filter((a): a is Activity => a !== null).flatMap((a) => buildRounds(a, adaptive)));
           setStep(0);
         }
       } catch (error) {

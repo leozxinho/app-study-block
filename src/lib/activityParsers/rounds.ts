@@ -10,6 +10,7 @@ import { makeSequenceQuestion, parseOrdering, parseSequence } from './sequenceOr
 import { DELIVER_NOUNS, RECIPES, buildSize, otherWords, parseCrafting, parseDragDrop, parseMiningMath, parseWordBuilder, shadowCount } from './building';
 import { clickSiblings, parseClick, MEMORY_PAIRS } from './picking';
 import { MATH_MOBS_ROUNDS, mathMobsVariant } from './mathMobs';
+import { pickByLevel, type Adaptive } from '../adaptive';
 
 // =============================================================
 // Rodadas: cada atividade tem pelo menos MIN_TASKS tarefas.
@@ -189,9 +190,10 @@ export function variantPool(activity: Activity): string[] {
  * Lista de rodadas da atividade (a 1ª é a original; as outras sorteadas das variações fixas).
  * As extras ganham id "<id>#2", "<id>#3"... (só na tela; o progresso salva o id original).
  */
-export function buildRounds(activity: Activity): Activity[] {
+export function buildRounds(activity: Activity, level: Adaptive = 'normal'): Activity[] {
   const n = roundCount(activity);
-  const picked = shuffle(variantPool(activity)).slice(0, n - 1);
+  // Dificuldade adaptativa: escolhe entre as variações fixas as mais fáceis ou as mais difíceis
+  const picked = pickByLevel(variantPool(activity), n - 1, level, shuffle);
   const rounds: Activity[] = [activity];
   for (let i = 2; i <= n; i++) {
     rounds.push({ ...activity, id: `${activity.id}#${i}`, question: picked[i - 2] ?? activity.question });

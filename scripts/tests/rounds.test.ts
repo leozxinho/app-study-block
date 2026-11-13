@@ -53,3 +53,26 @@ test('todo texto que a voz lê está no CSV de perguntas ou no de rodadas', () =
   }
   assert.deepEqual(missing.slice(0, 5), [], `${missing.length} textos sem linha no CSV (rode npx tsx scripts/exportVoiceLines.ts)`);
 });
+
+import { adaptiveLevel, pickByLevel, questionWeight } from '../../src/lib/adaptive';
+
+test('dificuldade adaptativa: decide pelos últimos resultados', () => {
+  const r = (stars: number) => ({ stars });
+  assert.equal(adaptiveLevel([r(3), r(3)]), 'normal', 'poucos resultados');
+  assert.equal(adaptiveLevel([r(3), r(3), r(3), r(3), r(3), r(2)]), 'harder');
+  assert.equal(adaptiveLevel([r(1), r(1), r(2), r(1), r(1)]), 'easier');
+  assert.equal(adaptiveLevel([r(2), r(2), r(3), r(2), r(1)]), 'normal');
+});
+
+test('dificuldade adaptativa: escolhe só da lista, as mais fáceis ou as mais difíceis', () => {
+  const pool = ['Quanto é 1 + 1?', 'Quanto é 2 + 3?', 'Quanto é 9 + 8?', 'Quanto é 7 + 9?', 'Quanto é 1 + 2?', 'Quanto é 8 + 6?'];
+  const id = <T,>(a: T[]) => a;
+  const hard = pickByLevel(pool, 3, 'harder', id);
+  const easy = pickByLevel(pool, 3, 'easier', id);
+  assert.ok(hard.every((q) => pool.includes(q)) && easy.every((q) => pool.includes(q)));
+  assert.ok(Math.min(...hard.map(questionWeight)) > Math.max(...easy.map(questionWeight)), 'difíceis pesam mais que as fáceis');
+  for (const a of all.slice(0, 100)) {
+    const allowed = new Set([a.question, ...variantPool(a)]);
+    for (const lvl of ['easier', 'harder'] as const) for (const q of buildRounds(a, lvl)) assert.ok(allowed.has(q.question), a.id);
+  }
+});
