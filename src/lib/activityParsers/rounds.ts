@@ -11,6 +11,7 @@ import { DELIVER_NOUNS, RECIPES, buildSize, otherWords, parseCrafting, parseDrag
 import { clickSiblings, parseClick, MEMORY_PAIRS } from './picking';
 import { MATH_MOBS_ROUNDS, mathMobsVariant } from './mathMobs';
 import { pickByLevel, type Adaptive } from '../adaptive';
+import { clockVariant, readingVariant } from './extraContent';
 
 // =============================================================
 // Rodadas: cada atividade tem pelo menos MIN_TASKS tarefas.
@@ -148,6 +149,10 @@ function variantQuestion(a: Activity, i: number): string | null {
     }
     case 'math-mobs':
       return mathMobsVariant(a);
+    case 'clock':
+      return clockVariant(a);
+    case 'reading':
+      return readingVariant(a);
     case 'word-builder': {
       const p = parseWordBuilder(a);
       const w = pickRandom(otherWords(p.word, p.bySyllable ? 8 : Math.max(5, p.word.length)));

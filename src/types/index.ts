@@ -37,7 +37,9 @@ export type ActivityType =
   | 'word-builder'
   | 'shadow-match'
   | 'build-pattern'
-  | 'math-mobs';
+  | 'math-mobs'
+  | 'clock'
+  | 'reading';
 
 export type Difficulty = 'facil' | 'medio' | 'dificil';
 

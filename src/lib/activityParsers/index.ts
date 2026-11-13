@@ -9,3 +9,4 @@ export * from './picking';
 export * from './building';
 export * from './mathMobs';
 export * from './rounds';
+export * from './extraContent';

@@ -21,7 +21,7 @@ import {
   MIN_TASKS, MEMORY_PAIRS, buildRounds, roundCount, tasksPerRound,
   parseMultipleChoice, parseCounting, parseColor, parseShape, parseLetter, parseSequence, parseOrdering,
   parseClick, parseMatching, parseMemory, parseDragDrop, parseCrafting, parseMiningMath, parseWordBuilder,
-  buildSize, parseMathMobs, MATH_MOBS_ROUNDS, type ParseMeta,
+  buildSize, parseMathMobs, parseClock, parseReading, MATH_MOBS_ROUNDS, type ParseMeta,
 } from '../src/lib/activityParsers';
 import { DIFFICULTY_RULES, problemIssue } from '../src/lib/mathGenerator';
 
@@ -31,7 +31,7 @@ import { DIFFICULTY_RULES, problemIssue } from '../src/lib/mathGenerator';
 const RENDERED_TYPES: ActivityType[] = [
   'multiple-choice', 'counting', 'color-identification', 'memory', 'matching', 'ordering',
   'shape-identification', 'letter-identification', 'sequence', 'click-correct', 'drag-drop',
-  'crafting', 'mining-math', 'word-builder', 'shadow-match', 'build-pattern', 'math-mobs',
+  'crafting', 'mining-math', 'word-builder', 'shadow-match', 'build-pattern', 'math-mobs', 'clock', 'reading',
 ];
 const AGE_GROUPS = ['bercario', 'maternal', 'pre-escola-1', 'pre-escola-2', 'fundamental-1', 'fundamental-2'] as const;
 const CATEGORIES = ['matematica', 'linguagem', 'cores', 'formas', 'coordenacao', 'natureza', 'desafios'];
@@ -169,6 +169,18 @@ function inspect(a: Activity): Inspection {
       check(!dupes(p.options).length, 'alternativas repetidas');
       check(p.options.every((n) => n >= 0), 'alternativa negativa');
       return { meta: p, summary: `${x} ${op} ${y} = ${answer} (${p.unit.plural})`, problems };
+    }
+    case 'clock': {
+      const p = parseClock(a);
+      check(p.options.length === 4, `${p.options.length} alternativas (esperado 4)`);
+      check(!dupes(p.options).length, 'alternativas repetidas');
+      return { meta: p, summary: `${p.hour}:${String(p.minute).padStart(2, '0')}`, problems };
+    }
+    case 'reading': {
+      const p = parseReading(a);
+      check(p.options.some((o) => o.word === p.word), 'figura certa não está entre as opções');
+      check(!dupes(p.options.map((o) => o.emoji)).length, 'figuras repetidas');
+      return { meta: p, summary: p.word, problems };
     }
     default:
       return { meta: { recognized: false, note: `tipo "${a.activity_type}" sem parser` }, summary: '—', problems };

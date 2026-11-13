@@ -1,5 +1,6 @@
 import { Activity } from '../types';
 import { NEW_TYPE_ACTIVITIES } from './newTypeActivities';
+import { EXTRA_CONTENT } from './extraContent';
 
 export const MOCK_ACTIVITIES: Activity[] = [
   // =============================================
@@ -724,4 +725,4 @@ export const MOCK_ACTIVITIES: Activity[] = [
 ];
 
 // Novos tipos (crafting, mining-math, word-builder, shadow-match, build-pattern)
-MOCK_ACTIVITIES.push(...NEW_TYPE_ACTIVITIES);
+MOCK_ACTIVITIES.push(...NEW_TYPE_ACTIVITIES, ...EXTRA_CONTENT);

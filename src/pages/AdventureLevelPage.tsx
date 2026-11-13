@@ -43,6 +43,8 @@ import { WordBuilderActivity } from '../components/activities/WordBuilderActivit
 import { ShadowMatchActivity } from '../components/activities/ShadowMatchActivity';
 import { BuildPatternActivity } from '../components/activities/BuildPatternActivity';
 import { MathMobsActivity } from '../components/activities/MathMobsActivity';
+import { ClockActivity } from '../components/activities/ClockActivity';
+import { ReadingActivity } from '../components/activities/ReadingActivity';
 
 /** Ao ir para a próxima fase, a tela começa do zero (estado novo para cada fase). */
 export function AdventureLevelPage() {
@@ -383,6 +385,10 @@ function AdventureLevel() {
         return <BuildPatternActivity {...commonProps} />;
       case 'math-mobs':
         return <MathMobsActivity {...commonProps} />;
+      case 'clock':
+        return <ClockActivity {...commonProps} />;
+      case 'reading':
+        return <ReadingActivity {...commonProps} />;
       default:
         return <MultipleChoiceActivity {...commonProps} />;
     }
