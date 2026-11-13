@@ -8,7 +8,7 @@ import { readFileSync } from 'node:fs';
 import { ADVENTURE_ACTIVITIES } from '../../src/data/adventureActivities';
 import { MOCK_ACTIVITIES } from '../../src/data/mockActivities';
 import { NEW_TYPE_ACTIVITIES } from '../../src/data/newTypeActivities';
-import { buildRounds, parseWordBuilder, roundCount, variantPool } from '../../src/lib/activityParsers';
+import { buildRounds, hideAnswer, parseWordBuilder, roundCount, variantPool } from '../../src/lib/activityParsers';
 import { stripNumberHints } from '../../src/lib/text';
 import { speechText } from '../../src/lib/voice';
 import type { Activity } from '../../src/types';
@@ -42,6 +42,7 @@ test('todo texto que a voz lê está no CSV de perguntas ou no de rodadas', () =
     a.activity_type === 'math-mobs' ? null
     : a.activity_type === 'counting' ? stripNumberHints(a.question)
     : a.activity_type === 'word-builder' ? parseWordBuilder(a).displayQuestion
+    : a.activity_type === 'clock' || a.activity_type === 'reading' ? hideAnswer(a.question)
     : a.question;
   const missing: string[] = [];
   for (const a of all) {

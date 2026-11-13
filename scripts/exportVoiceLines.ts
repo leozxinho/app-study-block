@@ -10,7 +10,7 @@ import { MOCK_ACTIVITIES } from '../src/data/mockActivities';
 import { NEW_TYPE_ACTIVITIES } from '../src/data/newTypeActivities';
 import { stripNumberHints } from '../src/lib/text';
 import { speechText } from '../src/lib/voice';
-import { parseWordBuilder, variantPool } from '../src/lib/activityParsers';
+import { hideAnswer, parseWordBuilder, variantPool } from '../src/lib/activityParsers';
 import type { Activity } from '../src/types';
 
 const all = [...Object.values(ADVENTURE_ACTIVITIES).flat(), ...MOCK_ACTIVITIES, ...NEW_TYPE_ACTIVITIES];
@@ -52,6 +52,7 @@ function shownQuestion(a: Activity): string | null {
   if (a.activity_type === 'math-mobs') return null; // a tela mostra "Quanto dá a conta?" (já gravada)
   if (a.activity_type === 'counting') return stripNumberHints(a.question);
   if (a.activity_type === 'word-builder') return parseWordBuilder(a).displayQuestion;
+  if (a.activity_type === 'clock' || a.activity_type === 'reading') return hideAnswer(a.question); // a resposta não é lida
   return a.question;
 }
 
