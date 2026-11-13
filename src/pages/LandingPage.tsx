@@ -1,0 +1,176 @@
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { MinecraftButton } from '../components/ui/MinecraftButton';
+import { Mob } from '../components/mobs';
+import { ItemArt } from '../components/activities/shared/ItemArt';
+import { AGE_GROUPS } from '../lib/constants';
+import { PRODUCT, formatBRL } from '../config/product';
+
+const STEPS = [
+  { icon: '👨‍👧', title: 'Crie sua conta', text: 'Você cria o login e a senha de cada criança na Área dos Pais.' },
+  { icon: '🗺️', title: 'A criança joga', text: '100 fases em 10 mundos, com perguntas para a idade dela, voz e personagem próprio.' },
+  { icon: '📊', title: 'Você acompanha', text: 'Veja o que ela fez na semana, onde vai bem e o que pode treinar.' },
+];
+
+const FEATURES = [
+  { icon: '🔊', title: 'Tudo falado', text: 'As perguntas são lidas em voz alta — perfeito para quem ainda não lê.' },
+  { icon: '➕', title: 'Contas animadas', text: 'Somar, tirar, multiplicar e dividir com bichinhos que se movem e são contados.' },
+  { icon: '⚔️', title: 'Prova do chefe', text: 'No fim de cada mundo, uma prova divertida com tudo o que a criança aprendeu.' },
+  { icon: '🏆', title: 'Troféus e figurinhas', text: 'XP, estrelas, conquistas, álbum de figurinhas e roupas para o personagem.' },
+  { icon: '🔥', title: 'Hábito de estudo', text: 'Dias seguidos, meta do dia com baú e um treino do que a criança errou.' },
+  { icon: '🎯', title: 'Se adapta à criança', text: 'Acertou tudo? As próximas ficam mais difíceis. Errou muito? Mais fáceis.' },
+];
+
+const FAQ = [
+  { q: 'Para qual idade é?', a: 'Do berçário ao 5º ano (0 a 10 anos). Cada criança joga as atividades da faixa dela.' },
+  { q: 'Tem anúncios?', a: 'Não. Nenhum anúncio e nenhuma compra dentro do jogo: tudo é conquistado jogando.' },
+  { q: 'Posso limitar o tempo de tela?', a: 'Sim. Na Área dos Pais você escolhe quantos minutos por dia cada criança pode jogar.' },
+  { q: 'Funciona no tablet e no celular?', a: 'Sim, no navegador do tablet, celular ou computador. Dá até para instalar como app.' },
+  { q: 'Quantas crianças posso cadastrar?', a: `Até ${PRODUCT.maxChildren} crianças por conta, cada uma com o próprio progresso.` },
+];
+
+/** Página para os pais conhecerem o MineLearn (vendas). */
+export function LandingPage() {
+  const navigate = useNavigate();
+  const price = PRODUCT.monthlyPrice;
+
+  return (
+    <div className="min-h-screen bg-white text-gray-900">
+      {/* Topo */}
+      <header className="bg-gradient-to-b from-minecraft-sky to-sky-200 px-4 pt-6 pb-16 relative overflow-hidden">
+        <nav className="max-w-5xl mx-auto flex items-center justify-between mb-10">
+          <span className="font-minecraft text-sm text-white drop-shadow">⛏️ {PRODUCT.name}</span>
+          <MinecraftButton variant="secondary" size="sm" onClick={() => navigate('/login')}>
+            Entrar
+          </MinecraftButton>
+        </nav>
+        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <h1 className="font-minecraft text-2xl sm:text-3xl text-white drop-shadow-lg leading-snug">Seu filho aprende brincando num mundo de blocos</h1>
+            <p className="font-body text-lg text-gray-900 mt-4">
+              Matemática, letras, cores e formas em uma aventura com voz, personagens e recompensas — feita para crianças de 0 a 10 anos estudarem em casa.
+            </p>
+            <div className="flex flex-wrap gap-3 mt-6">
+              <MinecraftButton variant="gold" size="lg" onClick={() => navigate('/login')}>
+                {PRODUCT.trialDays > 0 ? `Testar ${PRODUCT.trialDays} dias grátis` : 'Começar'}
+              </MinecraftButton>
+              <MinecraftButton variant="secondary" size="lg" onClick={() => navigate('/')}>
+                Ver o jogo
+              </MinecraftButton>
+            </div>
+          </div>
+          <div className="flex justify-center items-end gap-4" aria-hidden="true">
+            <Mob type="alex" size={110} animation="celebrate" />
+            <Mob type="pig" size={70} animation="idle" />
+            <Mob type="creeper" size={80} animation="jump" />
+          </div>
+        </div>
+        <div className="absolute inset-x-0 bottom-0 h-6 bg-minecraft-green" aria-hidden="true" />
+      </header>
+
+      <main>
+        {/* Como funciona */}
+        <section aria-labelledby="como" className="max-w-5xl mx-auto px-4 py-14">
+          <h2 id="como" className="font-minecraft text-lg sm:text-xl text-center mb-8">Como funciona</h2>
+          <ol className="grid md:grid-cols-3 gap-5">
+            {STEPS.map((s, i) => (
+              <motion.li key={s.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="rounded-xl border-2 border-gray-200 p-5 text-center">
+                <div className="text-4xl mb-2" aria-hidden="true">{s.icon}</div>
+                <p className="font-body font-bold text-lg">{i + 1}. {s.title}</p>
+                <p className="font-body text-gray-700 mt-1">{s.text}</p>
+              </motion.li>
+            ))}
+          </ol>
+        </section>
+
+        {/* Recursos */}
+        <section aria-labelledby="recursos" className="bg-amber-50 py-14 px-4">
+          <div className="max-w-5xl mx-auto">
+            <h2 id="recursos" className="font-minecraft text-lg sm:text-xl text-center mb-8">O que tem no jogo</h2>
+            <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {FEATURES.map((f) => (
+                <li key={f.title} className="bg-white rounded-xl pixel-border p-4 flex gap-3">
+                  <span className="text-3xl" aria-hidden="true">{f.icon}</span>
+                  <div>
+                    <p className="font-body font-bold">{f.title}</p>
+                    <p className="font-body text-sm text-gray-700">{f.text}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        {/* Idades */}
+        <section aria-labelledby="idades" className="max-w-5xl mx-auto px-4 py-14">
+          <h2 id="idades" className="font-minecraft text-lg sm:text-xl text-center mb-8">Para cada idade</h2>
+          <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            {AGE_GROUPS.map((g) => (
+              <li key={g.id} className="rounded-xl border-2 border-gray-200 p-3 text-center">
+                <div className="text-3xl" aria-hidden="true">{g.icon}</div>
+                <p className="font-body font-bold">{g.name}</p>
+                <p className="font-body text-xs text-gray-600">{g.ageRange}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* Segurança */}
+        <section aria-labelledby="seguro" className="bg-sky-50 py-14 px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 id="seguro" className="font-minecraft text-lg sm:text-xl mb-6">Seguro para a criança</h2>
+            <ul className="grid sm:grid-cols-3 gap-4 font-body">
+              <li className="bg-white rounded-xl p-4"><span className="text-3xl block" aria-hidden="true">🚫</span>Sem anúncios e sem compras no jogo</li>
+              <li className="bg-white rounded-xl p-4"><span className="text-3xl block" aria-hidden="true">🔐</span>Conta da criança criada por você</li>
+              <li className="bg-white rounded-xl p-4"><span className="text-3xl block" aria-hidden="true">⏱️</span>Tempo de tela que você escolhe</li>
+            </ul>
+          </div>
+        </section>
+
+        {/* Preço */}
+        <section aria-labelledby="preco" className="max-w-md mx-auto px-4 py-14 text-center">
+          <h2 id="preco" className="font-minecraft text-lg sm:text-xl mb-6">Preço</h2>
+          <div className="rounded-2xl pixel-border bg-gradient-to-b from-yellow-100 to-amber-200 p-6">
+            <div className="flex justify-center mb-2" aria-hidden="true">
+              <ItemArt emoji="💰" size={48} />
+            </div>
+            {price ? (
+              <>
+                <p className="font-minecraft text-2xl">{formatBRL(price)}<span className="font-body text-base">/mês</span></p>
+                {PRODUCT.yearlyPrice && <p className="font-body text-sm mt-1">ou {formatBRL(PRODUCT.yearlyPrice)} por ano</p>}
+              </>
+            ) : (
+              <p className="font-body text-lg font-bold">Preço em breve</p>
+            )}
+            <p className="font-body text-sm text-gray-800 mt-2">
+              Até {PRODUCT.maxChildren} crianças na mesma conta{PRODUCT.trialDays > 0 ? ` · ${PRODUCT.trialDays} dias grátis para testar` : ''}.
+            </p>
+            <MinecraftButton variant="gold" size="lg" fullWidth className="mt-5" onClick={() => navigate('/login')}>
+              Criar minha conta
+            </MinecraftButton>
+          </div>
+        </section>
+
+        {/* Perguntas */}
+        <section aria-labelledby="faq" className="bg-gray-50 py-14 px-4">
+          <div className="max-w-3xl mx-auto">
+            <h2 id="faq" className="font-minecraft text-lg sm:text-xl text-center mb-6">Perguntas frequentes</h2>
+            <div className="space-y-3">
+              {FAQ.map((f) => (
+                <details key={f.q} className="bg-white rounded-xl border-2 border-gray-200 p-4">
+                  <summary className="font-body font-bold cursor-pointer">{f.q}</summary>
+                  <p className="font-body text-gray-700 mt-2">{f.a}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer className="bg-minecraft-dark-green text-white/90 font-body text-sm text-center py-6 px-4">
+        <p>{PRODUCT.name} — aprender jogando.</p>
+        {PRODUCT.contactEmail && <p className="mt-1">Contato: {PRODUCT.contactEmail}</p>}
+      </footer>
+    </div>
+  );
+}

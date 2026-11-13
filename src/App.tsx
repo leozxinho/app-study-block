@@ -25,6 +25,7 @@ const StartPage = lazy(() => import('./pages/StartPage').then((m) => ({ default:
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage').then((m) => ({ default: m.NotFoundPage })));
 const AlbumPage = lazy(() => import('./pages/AlbumPage').then((m) => ({ default: m.AlbumPage })));
 const HousePage = lazy(() => import('./pages/HousePage').then((m) => ({ default: m.HousePage })));
+const LandingPage = lazy(() => import('./pages/LandingPage').then((m) => ({ default: m.LandingPage })));
 const TrainingPage = lazy(() => import('./pages/TrainingPage').then((m) => ({ default: m.TrainingPage })));
 const LightningPage = lazy(() => import('./pages/LightningPage').then((m) => ({ default: m.LightningPage })));
 
@@ -73,6 +74,7 @@ function App() {
           <Route path="/casa" element={<HousePage />} />
           <Route path="/relampago" element={<LightningPage />} />
           <Route path="/treino" element={<TrainingPage />} />
+          <Route path="/conheca" element={<LandingPage />} />
           {MobsPage && (
             <Route
               path="/mobs"

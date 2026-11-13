@@ -163,6 +163,14 @@ export function HomePage() {
           </MinecraftButton>
         </motion.div>
 
+        <button
+          type="button"
+          onClick={() => navigate('/conheca')}
+          className="mt-4 font-body text-sm font-bold text-white underline underline-offset-4 drop-shadow hover:text-minecraft-gold"
+        >
+          👨‍👩‍👧 Sou responsável: conheça o MineLearn
+        </button>
+
         <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} onSuccess={() => navigate('/inicio')} />
 
         {/* Vantagens para os pais (informativo, não são botões) */}
