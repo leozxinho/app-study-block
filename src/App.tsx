@@ -25,6 +25,7 @@ const StartPage = lazy(() => import('./pages/StartPage').then((m) => ({ default:
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage').then((m) => ({ default: m.NotFoundPage })));
 const AlbumPage = lazy(() => import('./pages/AlbumPage').then((m) => ({ default: m.AlbumPage })));
 const HousePage = lazy(() => import('./pages/HousePage').then((m) => ({ default: m.HousePage })));
+const TrainingPage = lazy(() => import('./pages/TrainingPage').then((m) => ({ default: m.TrainingPage })));
 const LightningPage = lazy(() => import('./pages/LightningPage').then((m) => ({ default: m.LightningPage })));
 
 // Página de conferência dos mobs: só existe em desenvolvimento (fica fora do build).
@@ -71,6 +72,7 @@ function App() {
           <Route path="/album" element={<AlbumPage />} />
           <Route path="/casa" element={<HousePage />} />
           <Route path="/relampago" element={<LightningPage />} />
+          <Route path="/treino" element={<TrainingPage />} />
           {MobsPage && (
             <Route
               path="/mobs"

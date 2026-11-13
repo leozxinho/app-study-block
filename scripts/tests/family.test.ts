@@ -99,3 +99,19 @@ test('tempo de tela: quanto falta, dia novo zera e minutos extras somam', () => 
   assert.match(c.question, /× \d/);
   assert.ok(c.answer >= 42 && c.answer <= 81);
 });
+
+import { trainingList } from '../../src/lib/training.ts';
+
+test('treino: as mais erradas da semana primeiro, sem as antigas e sem as sem erro', () => {
+  const today = new Date(2026, 10, 13, 12);
+  const at = (daysAgo: number) => new Date(today.getTime() - daysAgo * 86400000).toISOString();
+  const list = trainingList([
+    { activityId: 'a', title: 'Cores', type: 'color', errors: 1, at: at(1) },
+    { activityId: 'b', title: 'Letras', type: 'letter', errors: 3, at: at(2) },
+    { activityId: 'a', title: 'Cores', type: 'color', errors: 1, at: at(3) },
+    { activityId: 'c', title: 'Velha', type: 'x', errors: 5, at: at(9) },
+    { activityId: 'd', title: 'Perfeita', type: 'x', errors: 0, at: at(1) },
+  ], today);
+  assert.deepEqual(list.map((i) => i.activityId), ['b', 'a']);
+  assert.equal(list[1].times, 2);
+});

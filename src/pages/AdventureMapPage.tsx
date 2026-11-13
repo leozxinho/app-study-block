@@ -129,11 +129,8 @@ export function AdventureMapPage() {
           Complete as fases para avançar na sua jornada!
         </p>
         <nav aria-label="Mais diversão" className="mt-4 flex flex-wrap justify-center gap-2">
-          <MinecraftButton variant="gold" size="sm" onClick={() => navigate('/album')}>
-            📒 Álbum
-          </MinecraftButton>
-          <MinecraftButton variant="success" size="sm" onClick={() => navigate('/casa')}>
-            🏠 Minha casa
+          <MinecraftButton variant="success" size="sm" onClick={() => navigate('/treino')}>
+            🎯 Treino
           </MinecraftButton>
           <MinecraftButton variant="primary" size="sm" onClick={() => navigate('/relampago')}>
             ⚡ Desafio relâmpago

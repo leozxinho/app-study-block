@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 /** As 4 abas da criança (embaixo da tela, como nos apps infantis). */
 const TABS = [
-  { path: '/adventure', match: ['/adventure', '/relampago'], icon: '🗺️', label: 'Aventura' },
+  { path: '/adventure', match: ['/adventure', '/relampago', '/treino'], icon: '🗺️', label: 'Aventura' },
   { path: '/album', match: ['/album', '/casa'], icon: '📒', label: 'Coleção' },
   { path: '/loja', match: ['/loja'], icon: '🛍️', label: 'Loja' },
   { path: '/dashboard', match: ['/dashboard'], icon: '🙂', label: 'Eu' },
