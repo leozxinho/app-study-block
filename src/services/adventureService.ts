@@ -1,5 +1,5 @@
 import { StudentLevelProgress, LevelStatus } from '../types';
-import { ADVENTURE_WORLDS } from '../data/adventureWorlds';
+import { ADVENTURE_WORLDS } from '../data/worlds';
 import { progressService } from './progressService';
 import { progressStore } from '../lib/store';
 

@@ -2,25 +2,29 @@ import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { HomePage } from './pages/HomePage';
-import { SelectAgePage } from './pages/SelectAgePage';
-import { WorldMapPage } from './pages/WorldMapPage';
-import { ActivityListPage } from './pages/ActivityListPage';
-import { ActivityPlayerPage } from './pages/ActivityPlayerPage';
-import { LoginPage } from './pages/LoginPage';
-import { StudentDashboardPage } from './pages/StudentDashboardPage';
-import { ParentAreaPage } from './pages/ParentAreaPage';
 import { ProgressGate } from './components/ui/ProgressGate';
+import { BlockLoader } from './components/ui/BlockLoader';
 import { authService } from './services/authService';
 import { MusicRouter } from './components/ui/MusicRouter';
 import { loadAudioIndex } from './lib/audio/library';
-import { AdventureMapPage } from './pages/AdventureMapPage';
-import { AdventureLevelPage } from './pages/AdventureLevelPage';
-import { ShopPage } from './pages/ShopPage';
-import { StartPage } from './pages/StartPage';
-import { NotFoundPage } from './pages/NotFoundPage';
-import { AlbumPage } from './pages/AlbumPage';
-import { HousePage } from './pages/HousePage';
-import { LightningPage } from './pages/LightningPage';
+
+// Telas carregadas só quando abertas (o celular não baixa o jogo inteiro de uma vez).
+// A tela inicial vem junto, para abrir na hora.
+const SelectAgePage = lazy(() => import('./pages/SelectAgePage').then((m) => ({ default: m.SelectAgePage })));
+const WorldMapPage = lazy(() => import('./pages/WorldMapPage').then((m) => ({ default: m.WorldMapPage })));
+const ActivityListPage = lazy(() => import('./pages/ActivityListPage').then((m) => ({ default: m.ActivityListPage })));
+const ActivityPlayerPage = lazy(() => import('./pages/ActivityPlayerPage').then((m) => ({ default: m.ActivityPlayerPage })));
+const LoginPage = lazy(() => import('./pages/LoginPage').then((m) => ({ default: m.LoginPage })));
+const StudentDashboardPage = lazy(() => import('./pages/StudentDashboardPage').then((m) => ({ default: m.StudentDashboardPage })));
+const ParentAreaPage = lazy(() => import('./pages/ParentAreaPage').then((m) => ({ default: m.ParentAreaPage })));
+const AdventureMapPage = lazy(() => import('./pages/AdventureMapPage').then((m) => ({ default: m.AdventureMapPage })));
+const AdventureLevelPage = lazy(() => import('./pages/AdventureLevelPage').then((m) => ({ default: m.AdventureLevelPage })));
+const ShopPage = lazy(() => import('./pages/ShopPage').then((m) => ({ default: m.ShopPage })));
+const StartPage = lazy(() => import('./pages/StartPage').then((m) => ({ default: m.StartPage })));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage').then((m) => ({ default: m.NotFoundPage })));
+const AlbumPage = lazy(() => import('./pages/AlbumPage').then((m) => ({ default: m.AlbumPage })));
+const HousePage = lazy(() => import('./pages/HousePage').then((m) => ({ default: m.HousePage })));
+const LightningPage = lazy(() => import('./pages/LightningPage').then((m) => ({ default: m.LightningPage })));
 
 // Página de conferência dos mobs: só existe em desenvolvimento (fica fora do build).
 const MobsPage = import.meta.env.DEV
@@ -32,12 +36,21 @@ authService.start();
 // Índice dos áudios gravados (sem ele, usa os sons sintetizados e a voz do aparelho)
 void loadAudioIndex();
 
+function RouteLoading() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-minecraft-sky">
+      <BlockLoader dark />
+    </div>
+  );
+}
+
 function App() {
   return (
     <MotionConfig reducedMotion="never">
       <Router>
         <MusicRouter />
         <ProgressGate>
+        <Suspense fallback={<RouteLoading />}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/select-age" element={<SelectAgePage />} />
@@ -68,6 +81,7 @@ function App() {
           )}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
+        </Suspense>
         </ProgressGate>
       </Router>
     </MotionConfig>
