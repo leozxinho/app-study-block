@@ -13,6 +13,8 @@ import { loadAudioIndex } from './lib/audio/library';
 // Telas carregadas só quando abertas (o celular não baixa o jogo inteiro de uma vez).
 // A landing ("/") chega pronta em HTML estático (pré-render); aqui só serve para a navegação dentro do app.
 const LandingPage = lazy(() => import('./pages/LandingPage').then((m) => ({ default: m.LandingPage })));
+const PrivacyPage = lazy(() => import('./pages/LegalPages').then((m) => ({ default: m.PrivacyPage })));
+const TermsPage = lazy(() => import('./pages/LegalPages').then((m) => ({ default: m.TermsPage })));
 const SelectAgePage = lazy(() => import('./pages/SelectAgePage').then((m) => ({ default: m.SelectAgePage })));
 const LoginPage = lazy(() => import('./pages/LoginPage').then((m) => ({ default: m.LoginPage })));
 const StudentDashboardPage = lazy(() => import('./pages/StudentDashboardPage').then((m) => ({ default: m.StudentDashboardPage })));
@@ -65,6 +67,8 @@ function App() {
           <Route path="/" element={<HomeRoute />} />
           <Route path="/select-age" element={<SelectAgePage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/privacidade" element={<PrivacyPage />} />
+          <Route path="/termos" element={<TermsPage />} />
           <Route path="/dashboard" element={<StudentDashboardPage />} />
           <Route path="/responsavel" element={<ParentAreaPage />} />
           <Route path="/adventure" element={<AdventureMapPage />} />

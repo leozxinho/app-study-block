@@ -12,8 +12,15 @@ export const PRODUCT = {
   trialDays: 7,
   /** Máximo de crianças por conta de responsável */
   maxChildren: 10,
-  /** E-mail de contato exibido na página (deixe vazio para não mostrar) */
+  /** E-mail de contato exibido na página e usado para pedidos de privacidade (LGPD). Preencha antes de publicar. */
   contactEmail: '',
+  /** Quem responde pelo MineLearn (nome da empresa ou da pessoa) e CNPJ/CPF: aparecem na política e nos termos. */
+  legalName: '',
+  legalDocument: '',
+  /** Cidade/UF do responsável (foro dos termos) */
+  legalCity: '',
+  /** Data da última atualização da política de privacidade e dos termos (AAAA-MM-DD) */
+  legalUpdatedAt: '2026-11-14',
 };
 
 export function formatBRL(value: number): string {

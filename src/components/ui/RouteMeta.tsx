@@ -1,13 +1,10 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-
-export const SITE_TITLE = 'MineLearn — aprender jogando num mundo de blocos';
-export const SITE_DESCRIPTION =
-  'Matemática, letras, cores e formas em uma aventura com voz, personagens e recompensas, para crianças de 0 a 10 anos estudarem em casa.';
+import { PUBLIC_PAGES, SITE_DESCRIPTION } from '../../config/pages';
 
 /** Título e descrição de cada tela. Só "/" (a landing) é indexada; as telas do jogo e dos pais não. */
 const META: { path: RegExp; title: string; description?: string; index?: boolean }[] = [
-  { path: /^\/$/, title: SITE_TITLE, description: SITE_DESCRIPTION, index: true },
+  ...PUBLIC_PAGES.map((p) => ({ path: new RegExp(`^${p.path}$`), title: p.title, description: p.description, index: true })),
   { path: /^\/login$/, title: 'Entrar — MineLearn' },
   { path: /^\/inicio$/, title: 'Início — MineLearn' },
   { path: /^\/adventure\/\d+$/, title: 'Fase — MineLearn' },

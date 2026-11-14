@@ -27,6 +27,11 @@ export function LoginPage() {
       >
         <MinecraftCard>
           <AuthPanel onSuccess={() => navigate('/inicio')} />
+          <p className="px-6 pb-2 text-center font-body text-xs text-gray-600">
+            Ao entrar ou criar conta, você concorda com os{' '}
+            <Link to="/termos" className="underline">termos de uso</Link> e a{' '}
+            <Link to="/privacidade" className="underline">política de privacidade</Link>.
+          </p>
           <div className="pb-6 text-center">
             <Link
               to="/"

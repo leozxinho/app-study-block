@@ -2,6 +2,7 @@ import { MinecraftButton } from '../components/ui/MinecraftButton';
 import { ItemArt } from '../components/activities/shared/ItemArt';
 import { AGE_GROUPS } from '../lib/constants';
 import { FAQ, PRODUCT, formatBRL } from '../config/product';
+import { LegalFooter } from './LegalPages';
 
 /** Blocos do topo (arte própria: letras e números, como no og-image). */
 const HERO_BLOCKS = [
@@ -169,10 +170,7 @@ export function LandingPage() {
         </section>
       </main>
 
-      <footer className="bg-minecraft-dark-green text-white/90 font-body text-sm text-center py-6 px-4">
-        <p>{PRODUCT.name} — aprender jogando.</p>
-        {PRODUCT.contactEmail && <p className="mt-1">Contato: {PRODUCT.contactEmail}</p>}
-      </footer>
+      <LegalFooter />
     </div>
   );
 }

@@ -11,6 +11,14 @@
   ],
   "rewrites": [
     {
+      "source": "/privacidade",
+      "destination": "/privacidade/index.html"
+    },
+    {
+      "source": "/termos",
+      "destination": "/termos/index.html"
+    },
+    {
       "source": "/((?!audio/|assets/|.*\\..*).+)",
       "destination": "/app.html"
     }
