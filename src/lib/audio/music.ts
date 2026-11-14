@@ -133,5 +133,5 @@ export function useMusicEnabled(): boolean {
 
 /** A música existe? (para mostrar o botão só quando houver faixas gravadas) */
 export function hasAnyMusic(): boolean {
-  return ['tema-principal', 'mapa-aventura', 'mundo-01-vila'].some((t) => hasAudio(`musica/${t}.mp3`));
+  return ['entrada', 'tema-principal', 'mapa-aventura', 'mundo-01-vila'].some((t) => hasAudio(`musica/${t}.mp3`));
 }

@@ -23,7 +23,9 @@ function trackFor(path: string): string | string[] | null {
   if (path.startsWith('/album') || path.startsWith('/casa')) return ['album-casa', 'tema-principal'];
   if (path.startsWith('/relampago')) return ['tema-principal'];
   if (path.startsWith('/responsavel')) return 'area-dos-pais';
-  if (path.startsWith('/activity')) return ['mapa-aventura', 'tema-principal'];
+  if (path.startsWith('/treino')) return ['mapa-aventura', 'tema-principal'];
+  // Telas de entrada (landing, login, início, escolher idade): música de abertura
+  if (path === '/' || path === '/login' || path === '/inicio' || path === '/select-age') return ['entrada', 'tema-principal'];
   return 'tema-principal';
 }
 

@@ -66,6 +66,27 @@ writeFileSync('dist/app.html', html.replace('<!--seo-->', '<meta name="robots" c
 const appScript = /\s*<script type="module"[^>]*src="\/assets\/[^"]+\.js"><\/script>/;
 if (!appScript.test(html)) throw new Error('script do app não encontrado no dist/index.html');
 
+// Landing: sem o app, a música de entrada toca por este script (os navegadores só deixam depois do 1º toque).
+// Respeita as escolhas salvas no app (minelearn_music = off, minelearn_muted = 1).
+const LANDING_MUSIC = `
+    <script>
+      (function () {
+        try {
+          if (localStorage.getItem('minelearn_music') === 'off' || localStorage.getItem('minelearn_muted') === '1') return;
+        } catch (e) {}
+        var music = new Audio('/audio/musica/entrada.mp3');
+        music.loop = true;
+        music.volume = 0.4;
+        var start = function () {
+          music.play().then(function () {
+            ['pointerdown', 'keydown'].forEach(function (t) { document.removeEventListener(t, start); });
+          }, function () {});
+        };
+        start();
+        ['pointerdown', 'keydown'].forEach(function (t) { document.addEventListener(t, start); });
+      })();
+    </script>`;
+
 // O React avisa que useLayoutEffect (do Link do router) não roda no servidor: esperado, a página não é hidratada
 const consoleError = console.error;
 console.error = (msg, ...rest) => (String(msg).includes('useLayoutEffect does nothing on the server') ? undefined : consoleError(msg, ...rest));
@@ -74,7 +95,7 @@ for (const page of ssr.PUBLIC_PAGES) {
   doc = setMeta(doc, 'name', 'description', page.description);
   doc = setMeta(doc, 'property', 'og:title', page.title);
   doc = setMeta(doc, 'property', 'og:description', page.description);
-  doc = doc.replace('<!--seo-->', seoFor(page)).replace('<!--app-->', ssr.renderPage(page.path)).replace(appScript, '');
+  doc = doc.replace('<!--seo-->', seoFor(page)).replace('<!--app-->', ssr.renderPage(page.path)).replace(appScript, page.path === '/' ? LANDING_MUSIC : '');
   const file = page.path === '/' ? 'dist/index.html' : `dist${page.path}/index.html`;
   mkdirSync(dirname(file), { recursive: true });
   writeFileSync(file, doc);
