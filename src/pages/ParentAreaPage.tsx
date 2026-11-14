@@ -4,6 +4,7 @@ import { LogOut, Plus, RefreshCw } from 'lucide-react';
 import { MinecraftButton } from '../components/ui/MinecraftButton';
 import { MinecraftCard } from '../components/ui/MinecraftCard';
 import { Modal } from '../components/ui/Modal';
+import { SubscriptionCard } from '../components/ui/SubscriptionCard';
 import { authService } from '../services/authService';
 import { familyService, type ChildAccount } from '../services/familyService';
 import { AGE_GROUPS } from '../lib/constants';
@@ -440,6 +441,8 @@ export function ParentAreaPage() {
             {message}
           </p>
         )}
+
+        <SubscriptionCard />
 
         <section aria-labelledby="kids-title" className="space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2">

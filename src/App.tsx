@@ -7,6 +7,7 @@ import { BlockLoader } from './components/ui/BlockLoader';
 import { authService } from './services/authService';
 import { MusicRouter } from './components/ui/MusicRouter';
 import { ScreenTimeGuard } from './components/ui/ScreenTimeGuard';
+import { SubscriptionGuard } from './components/ui/SubscriptionGuard';
 import { loadAudioIndex } from './lib/audio/library';
 
 // Telas carregadas só quando abertas (o celular não baixa o jogo inteiro de uma vez).
@@ -53,6 +54,7 @@ function App() {
       <Router>
         <MusicRouter />
         <ScreenTimeGuard />
+        <SubscriptionGuard />
         <ProgressGate>
         <Suspense fallback={<RouteLoading />}>
         <Routes>

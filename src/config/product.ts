@@ -6,7 +6,7 @@ export const PRODUCT = {
   name: 'MineLearn',
   /** Preço mensal em reais (ex.: 19.9). null = ainda não definido */
   monthlyPrice: null as number | null,
-  /** Preço anual em reais (ex.: 179). null = sem plano anual */
+  /** Preço anual em reais (ex.: 179). null = sem plano anual. Com valor, o servidor precisa do segredo STRIPE_PRICE_YEARLY */
   yearlyPrice: null as number | null,
   /** Dias de teste grátis */
   trialDays: 7,

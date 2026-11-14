@@ -8,6 +8,7 @@ import { Mob, MobWalker } from '../components/mobs';
 import { authService } from '../services/authService';
 import { getDailyStreak, useGameStats } from '../services/gameStatsService';
 import { progressService } from '../services/progressService';
+import { useSubscription } from '../services/subscriptionService';
 import type { User } from '../types';
 import { TutorialModal } from '../components/tutorial/TutorialModal';
 import { hasSeenTutorial, markTutorialSeen } from '../lib/tutorial';
@@ -26,6 +27,7 @@ export function StartPage() {
   const [user, setUser] = useState<User | null>(null);
   const [tutorialOpen, setTutorialOpen] = useState(false);
   const isChild = user?.role === 'student';
+  const subscription = useSubscription();
 
   // Sem login, volta para entrar primeiro
   useEffect(() => {
@@ -86,9 +88,17 @@ export function StartPage() {
                   <span className="rounded-lg bg-cyan-100 text-cyan-900 px-3 py-1.5">💎 {xp.xp} XP</span>
                   <span className={`rounded-lg px-3 py-1.5 ${streak ? 'bg-orange-100 text-orange-900' : 'bg-gray-100 text-gray-600'}`}>🔥 {streak}</span>
                 </div>
+                {subscription && !subscription.active ? (
+                  <p role="alert" className="font-body bg-amber-50 border-2 border-amber-300 rounded-lg p-3 text-gray-900">
+                    {subscription.failed
+                      ? '📡 Não deu para conferir a assinatura. Veja a internet e abra o app de novo.'
+                      : '🔒 A assinatura do MineLearn venceu. Peça para o seu responsável renovar na Área dos Pais.'}
+                  </p>
+                ) : (
                 <MinecraftButton variant="gold" size="xl" fullWidth onClick={() => navigate('/adventure')}>
                   ⚔️ COMEÇAR A AVENTURA
                 </MinecraftButton>
+                )}
               </>
             ) : (
               <>
