@@ -1,9 +1,10 @@
 import { CollectionTabs } from '../components/layout/CollectionTabs';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
+import { AchievementToast } from '../components/ui/AchievementToast';
 import { MinecraftHeader } from '../components/layout/MinecraftHeader';
 import { HOUSE_BLOCKS, HOUSE_COLS, HOUSE_ROWS } from '../data/houseBlocks';
 import { adventureService } from '../services/adventureService';
-import { gameStatsService, useGameStats } from '../services/gameStatsService';
+import { gameStatsService, useGameStats, type AchievementDef } from '../services/gameStatsService';
 import { playSound } from '../lib/sounds';
 import { playVoiceFile } from '../lib/voice';
 
@@ -15,6 +16,8 @@ export function HousePage() {
   const stats = useGameStats();
   const stickers = adventureService.countAllLevels().completed;
   const [selected, setSelected] = useState('grama');
+  const [earned, setEarned] = useState<AchievementDef[]>([]);
+  const clearEarned = useCallback(() => setEarned([]), []);
   const house = Array.from({ length: SIZE }, (_, i) => stats.house[i] ?? '');
   const next = HOUSE_BLOCKS.find((b) => b.unlockAt > stickers);
 
@@ -24,6 +27,8 @@ export function HousePage() {
     const updated = [...house];
     updated[index] = updated[index] === selected ? ERASER : selected;
     gameStatsService.saveHouse(updated);
+    const got = gameStatsService.checkNewAchievements();
+    if (got.length) setEarned(got);
     // A cada 10 blocos colocados, o mascote elogia a casa
     const blocks = updated.filter(Boolean).length;
     if (updated[index] && blocks > 0 && blocks % 10 === 0) playVoiceFile('voz/mascote/casa.mp3');
@@ -33,6 +38,7 @@ export function HousePage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-minecraft-sky to-blue-200">
       <MinecraftHeader showNav />
+      <AchievementToast achievements={earned} onDone={clearEarned} />
       <main className="max-w-4xl mx-auto px-4 py-6">
         <CollectionTabs />
         <div className="flex flex-wrap items-center justify-between gap-3 mb-4">

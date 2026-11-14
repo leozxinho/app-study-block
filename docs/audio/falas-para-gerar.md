@@ -16,3 +16,5 @@ nos arquivos fixos. A voz do aparelho não é mais usada.
 Depois de gerar, rode `npm run audio` e `npm run check:activities` (a linha "frase parecida" deve voltar a 0%).
 
 4. **Nome do app (MineLearn → StudyBlock):** `voz/pais/boas-vindas.mp3` ("Bem-vindo ao StudyBlock!", texto já trocado em `falas-voz-suave.csv`).
+
+5. **Conquistas novas (50):** `voz/conquistas/<id>.mp3` ("Conquista: <nome>!"), linhas acrescentadas no fim de `falas-voz-suave.csv`. Sem o arquivo, o modal só não fala a conquista.

@@ -7,7 +7,8 @@ import { generateProblem, problemOptions, type MathProblem } from '../lib/mathGe
 import { playSfx, playSound } from '../lib/sounds';
 import { setMusicOverride } from '../lib/audio/music';
 import { playVoiceFile, speak } from '../lib/voice';
-import { gameStatsService, useGameStats } from '../services/gameStatsService';
+import { gameStatsService, useGameStats, type AchievementDef } from '../services/gameStatsService';
+import { AchievementToast } from '../components/ui/AchievementToast';
 import { progressService } from '../services/progressService';
 import type { Difficulty } from '../types';
 
@@ -48,6 +49,8 @@ export function LightningPage() {
   const [left, setLeft] = useState(SECONDS);
   const [wrong, setWrong] = useState<number | null>(null);
   const [record, setRecord] = useState(false);
+  const [earned, setEarned] = useState<AchievementDef[]>([]);
+  const clearEarned = useCallback(() => setEarned([]), []);
 
   useEffect(() => {
     if (phase !== 'play') return;
@@ -70,6 +73,7 @@ export function LightningPage() {
       const isRecord = gameStatsService.recordLightning(score);
       setRecord(isRecord);
       if (score > 0) progressService.addXP(Math.min(score, MAX_XP));
+      setEarned(gameStatsService.checkNewAchievements());
       playSfx(isRecord ? 'recorde' : 'fim-de-tempo', 'trophy');
       speak(isRecord ? `Novo recorde! ${score} pontos!` : `Fim! ${score} pontos!`, {
         file: isRecord ? 'voz/mascote/recorde.mp3' : 'voz/mascote/relampago-fim.mp3',
@@ -114,6 +118,7 @@ export function LightningPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-indigo-900 to-purple-900">
       <MinecraftHeader showNav />
+      <AchievementToast achievements={earned} onDone={clearEarned} />
       <main className="max-w-xl mx-auto px-4 py-6 text-center text-white">
         <h1 className="font-minecraft text-xl sm:text-2xl text-minecraft-gold">⚡ Desafio Relâmpago</h1>
 

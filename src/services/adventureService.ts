@@ -248,18 +248,25 @@ export const adventureService = {
   },
 
   /** Fases concluídas e fases com 3 estrelas, somando todas as faixas etárias. */
-  countAllLevels(): { completed: number; perfect: number } {
+  /** Fases concluídas (todas as faixas), com 3 estrelas, provas de chefe (fase 10, 20...) e faixas com alguma fase. */
+  countAllLevels(): { completed: number; perfect: number; bosses: number; ages: number } {
     let completed = 0;
     let perfect = 0;
+    let bosses = 0;
+    let ages = 0;
     for (const age of Object.values(allAges())) {
-      for (const level of Object.values(age?.levels ?? {})) {
+      let any = false;
+      for (const [num, level] of Object.entries(age?.levels ?? {})) {
         if (level?.status === 'completed') {
+          any = true;
           completed++;
           if (level.stars >= 3) perfect++;
+          if (Number(num) % 10 === 0) bosses++;
         }
       }
+      if (any) ages++;
     }
-    return { completed, perfect };
+    return { completed, perfect, bosses, ages };
   },
 
   /** Meta do dia (1 a 10 fases); padrão 3. */

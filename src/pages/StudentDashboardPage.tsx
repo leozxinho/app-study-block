@@ -28,6 +28,9 @@ interface LocalStats {
 }
 
 
+/** Conquistas mostradas antes de "Ver todas". */
+const ACH_PREVIEW = 8;
+
 export function StudentDashboardPage() {
   const navigate = useNavigate();
   const [stats, setStats] = useState<LocalStats>({
@@ -55,6 +58,7 @@ export function StudentDashboardPage() {
   const dailyStreak = getDailyStreak(game);
   const week = getLastWeek(game);
   const playedToday = week[week.length - 1].played;
+  const [showAll, setShowAll] = useState(false);
   // Desbloqueadas primeiro
   const achievements = [...ACHIEVEMENTS].sort(
     (a, b) => Number(Boolean(game.unlocked[b.id])) - Number(Boolean(game.unlocked[a.id]))
@@ -279,7 +283,7 @@ export function StudentDashboardPage() {
             Conquistas ({ACHIEVEMENTS.filter((a) => game.unlocked[a.id]).length}/{ACHIEVEMENTS.length})
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            {achievements.map((achievement) => (
+            {achievements.slice(0, showAll ? achievements.length : ACH_PREVIEW).map((achievement) => (
               <AchievementCard
                 key={achievement.id}
                 achievement={{
@@ -294,6 +298,13 @@ export function StudentDashboardPage() {
               />
             ))}
           </div>
+          {achievements.length > ACH_PREVIEW && (
+            <div className="text-center mt-3">
+              <MinecraftButton variant="secondary" size="sm" onClick={() => setShowAll((v) => !v)}>
+                {showAll ? 'Mostrar menos' : `Ver todas as ${achievements.length} conquistas`}
+              </MinecraftButton>
+            </div>
+          )}
         </motion.div>
 
         {/* Back button */}

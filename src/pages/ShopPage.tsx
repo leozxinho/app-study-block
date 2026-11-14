@@ -1,12 +1,13 @@
 import { playVoiceFile } from '../lib/voice';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
+import { AchievementToast } from '../components/ui/AchievementToast';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { MinecraftHeader } from '../components/layout/MinecraftHeader';
 import { MinecraftButton } from '../components/ui/MinecraftButton';
 import { Mob, Viewer360, SKIN_ITEMS, type PlayerCharacter, type PlayerSkin, type SkinSlot } from '../components/mobs';
 import { Modal } from '../components/ui/Modal';
-import { gameStatsService, useGameStats } from '../services/gameStatsService';
+import { gameStatsService, useGameStats, type AchievementDef } from '../services/gameStatsService';
 import { playSound } from '../lib/sounds';
 
 const SLOTS: { id: SkinSlot; label: string; icon: string }[] = [
@@ -28,6 +29,8 @@ export function ShopPage() {
   const navigate = useNavigate();
   const stats = useGameStats();
   const [slot, setSlot] = useState<SkinSlot>('shirt');
+  const [earned, setEarned] = useState<AchievementDef[]>([]);
+  const clearEarned = useCallback(() => setEarned([]), []);
   const [cheer, setCheer] = useState(0);
   // Boneco em 360°: a roupa atual ou um item que a criança quer provar
   const [preview, setPreview] = useState<{ skin: PlayerSkin; title: string } | null>(null);
@@ -48,12 +51,14 @@ export function ShopPage() {
     if (gameStatsService.buy(itemSlot, id)) {
       celebrate();
       playVoiceFile('voz/mascote/loja-comprou.mp3');
+      setEarned(gameStatsService.checkNewAchievements());
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-minecraft-sky via-blue-100 to-green-50">
       <MinecraftHeader showNav />
+      <AchievementToast achievements={earned} onDone={clearEarned} />
 
       <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
         <h1 className="font-minecraft text-lg sm:text-xl text-gray-900 text-center">🛍️ Loja de Skins</h1>
