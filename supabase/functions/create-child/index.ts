@@ -5,7 +5,7 @@ import { createClient } from 'npm:@supabase/supabase-js@2';
 
 const AGE_GROUPS = ['bercario', 'maternal', 'pre-escola-1', 'pre-escola-2', 'fundamental-1', 'fundamental-2'];
 const USERNAME = /^[a-z0-9._-]{3,20}$/;
-const MAX_CHILDREN = 10;
+const MAX_CHILDREN = 2; // igual a PRODUCT.maxChildren (src/config/product.ts)
 // Mesmo domínio que o app usa no login da criança (VITE_CHILD_EMAIL_DOMAIN). Nenhum e-mail é enviado.
 const CHILD_EMAIL_DOMAIN = Deno.env.get('CHILD_EMAIL_DOMAIN') ?? 'crianca.minelearn.app';
 

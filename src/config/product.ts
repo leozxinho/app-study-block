@@ -11,7 +11,7 @@ export const PRODUCT = {
   /** Dias de teste grátis */
   trialDays: 7,
   /** Máximo de crianças por conta de responsável */
-  maxChildren: 10,
+  maxChildren: 2,
   /** E-mail de contato exibido na página e usado para pedidos de privacidade (LGPD). Preencha antes de publicar. */
   contactEmail: '',
   /** Quem responde pelo MineLearn (nome da empresa ou da pessoa) e CNPJ/CPF: aparecem na política e nos termos. */

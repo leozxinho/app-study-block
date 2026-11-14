@@ -5,10 +5,12 @@
  */
 import type { AccountDoc } from './store/progressStore';
 import { addDays, dailyStreak, dayKey } from './days';
+import { PRODUCT } from '../config/product';
 
 export const AGE_GROUP_IDS = ['bercario', 'maternal', 'pre-escola-1', 'pre-escola-2', 'fundamental-1', 'fundamental-2'] as const;
 export const USERNAME_RULE = /^[a-z0-9._-]{3,20}$/;
-export const MAX_CHILDREN = 10;
+/** Mesmo valor de PRODUCT.maxChildren e da Edge Function create-child. */
+export const MAX_CHILDREN = PRODUCT.maxChildren;
 /** Palavra que o responsável digita para confirmar o "zerar". */
 export const RESET_WORD = 'ZERAR';
 
