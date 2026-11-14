@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "audio": "node scripts/buildAudioManifest.mjs",
+    "check:activities": "npx tsx scripts/check-activities.ts",
     "vozes:rodadas": "python3 scripts/gerar_vozes_elevenlabs.py docs/audio/falas-rodadas.csv",
     "vozes:chefes": "python3 scripts/gerar_vozes_elevenlabs.py docs/audio/falas-voz-suave.csv --secao \"7.7 chefe\" --refazer",
     "vozes:listar": "python3 scripts/gerar_vozes_elevenlabs.py --listar-vozes"

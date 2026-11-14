@@ -50,9 +50,9 @@ const dupes = <T,>(list: T[]) => list.filter((v, i) => list.indexOf(v) !== i);
 // Inspeção de UMA pergunta (original ou rodada extra) usando os parsers
 // ---------------------------------------------------------------------------
 
-interface Inspection { meta: ParseMeta; summary: string; problems: string[] }
+export interface Inspection { meta: ParseMeta; summary: string; problems: string[] }
 
-function inspect(a: Activity): Inspection {
+export function inspect(a: Activity): Inspection {
   const problems: string[] = [];
   const check = (cond: boolean, msg: string) => { if (!cond) problems.push(msg); };
 
@@ -375,4 +375,5 @@ async function main() {
   process.exitCode = count('alta') > 0 || adventure.some((i) => i.sev === 'alta') ? 1 : 0;
 }
 
-main();
+// Só roda quando chamado direto (scripts/check-activities.ts importa o inspect daqui)
+if (/auditActivities\.ts$/.test(process.argv[1] ?? '')) main();

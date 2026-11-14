@@ -93,8 +93,7 @@ export function MathMobsActivity({ activity, onCorrect, onWrong }: ActivityProps
       <AnswerFeedback
         stage={fb.stage}
         hint={mathMobsHint(problem, unit)}
-        answer={String(problem.answer)}
-        revealAction="A resposta certa está brilhando!"
+        revealText={<>A resposta certa está brilhando: <span className="underline">{problem.answer}</span>!</>}
       />
     </ActivityCard>
   );

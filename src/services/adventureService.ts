@@ -78,11 +78,15 @@ function allAges(): AdventureByAge {
   return saved && typeof saved === 'object' ? saved : {};
 }
 
+/** Acima disso o contador veio de uma versão antiga que somava a cada render: volta a 0. */
+const MAX_ATTEMPTS = 999;
+const sane = (n: unknown) => (typeof n === 'number' && Number.isFinite(n) && n >= 0 && n <= MAX_ATTEMPTS ? n : 0);
+
 /** Cópia do progresso salvo da faixa (pode alterar e depois salvar). Valor corrompido conta como ausente. */
 function getSaved(age: string = currentAge()): AdventureProgress {
   const saved = allAges()[age];
   return saved && saved.levels && typeof saved.levels === 'object'
-    ? { levels: Object.fromEntries(Object.entries(saved.levels).map(([k, v]) => [k, { ...v }])) }
+    ? { levels: Object.fromEntries(Object.entries(saved.levels).map(([k, v]) => [k, { ...v, attempts: sane(v?.attempts) }])) }
     : initialProgress();
 }
 
@@ -164,7 +168,8 @@ export const adventureService = {
       status: 'completed',
       stars: Math.max(stars, previous?.stars ?? 0),
       score: Math.max(score, previous?.score ?? 0),
-      attempts: (previous?.attempts || 0) + (previous?.status === 'in_progress' ? 0 : 1),
+      // startLevel já contou esta tentativa ao abrir a fase
+      attempts: Math.max(previous?.attempts ?? 0, 1),
       completed_at: new Date().toISOString(),
     };
 

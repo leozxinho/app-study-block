@@ -88,6 +88,19 @@ export function findCountIcon(question: string): CountIcon | null {
   return null;
 }
 
+/** Quantos números acima da faixa "(1 ou 2)" as opções podem ir (bebês: perto do que foi pedido). */
+const ABOVE_RANGE: Record<string, number> = { bercario: 2, maternal: 3 };
+
+/** Alternativas perto da faixa da pergunta (de 1 até o maior da faixa + folga da idade). */
+function nearRangeOptions(count: number, range: [number, number], age: string): number[] {
+  const above = ABOVE_RANGE[age];
+  if (above === undefined) return numericOptions(count, 4, 1);
+  const max = range[1] + above;
+  const pool = shuffle(Array.from({ length: max }, (_, i) => i + 1).filter((n) => n !== count))
+    .sort((x, y) => Math.abs(x - count) - Math.abs(y - count));
+  return [count, ...pool.slice(0, 3)];
+}
+
 export function parseCounting(activity: Pick<Activity, 'id' | 'question' | 'age_group' | 'difficulty'>): CountingData {
   const hint = parseCountHint(activity.question);
   const range = hint ?? ageCountRange(activity);
@@ -103,7 +116,7 @@ export function parseCounting(activity: Pick<Activity, 'id' | 'question' | 'age_
     count,
     range,
     icon: varied ?? icon ?? { block: 'grama' },
-    options: shuffle(numericOptions(count, 4, 1)),
+    options: shuffle(hint ? nearRangeOptions(count, hint, activity.age_group) : numericOptions(count, 4, 1)),
     displayQuestion: stripNumberHints(activity.question),
   };
 }

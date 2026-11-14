@@ -2,7 +2,7 @@ import { themeForCategory } from '../data/categoryScenes';
 import { SceneProvider } from '../components/activities/shared/SceneContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { Activity } from '../types';
 import { activityService } from '../services/activityService';
 import { progressService } from '../services/progressService';
@@ -58,6 +58,7 @@ export function ActivityPlayerPage() {
   const [midCelebrate, setMidCelebrate] = useState(false);
   const current = rounds[step] ?? null;
   const clearAchievements = useCallback(() => setNewAchievements([]), []);
+  const handledStep = useRef(-1);
 
   useEffect(() => {
     const fetchActivity = async () => {
@@ -67,6 +68,7 @@ export function ActivityPlayerPage() {
         setActivity(data);
         setRounds(data ? buildRounds(data, getAdaptiveLevel()) : []);
         setStep(0);
+        handledStep.current = -1;
         setRoundErrors(0);
         setAttempts(0);
         setIsCorrect(null);
@@ -89,6 +91,9 @@ export function ActivityPlayerPage() {
 
   const handleCorrectAnswer = useCallback(async () => {
     if (!activity || !current) return;
+    // Toques muito rápidos: cada rodada só avança uma vez
+    if (handledStep.current === step) return;
+    handledStep.current = step;
     setIsCorrect(true);
     // Resultado de cada tarefa (painel do professor), dias seguidos e conquistas
     setNewAchievements(gameStatsService.recordResult({ ...current, id: baseActivityId(current.id) }, roundErrors));
@@ -273,7 +278,7 @@ export function ActivityPlayerPage() {
                 key={current?.id ?? activity.id}
                 initial={{ x: 80, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
-                exit={{ x: -80, opacity: 0 }}
+                exit={{ x: -80, opacity: 0, pointerEvents: 'none' }}
                 transition={{ duration: 0.3 }}
               >
                 {renderActivity()}

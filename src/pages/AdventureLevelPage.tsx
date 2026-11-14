@@ -1,6 +1,6 @@
 import { BlockLoader } from '../components/ui/BlockLoader';
 import { SceneProvider } from '../components/activities/shared/SceneContext';
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MinecraftButton } from '../components/ui/MinecraftButton';
@@ -109,6 +109,9 @@ function AdventureLevel() {
     playVoiceSequence([levelNumber % 10 === 1 ? `voz/mundos/mundo-${world}.mp3` : 'voz/mascote/inicio-fase.mp3']);
   }, [levelNumber]);
   const [attempt, setAttempt] = useState(0);
+  const startedRef = useRef<string | null>(null);
+  /** Última pergunta que já chamou o acerto (evita avançar 2 vezes a mesma). */
+  const handledStep = useRef(-1);
   const [bossEvent, setBossEvent] = useState<BossEvent | null>(null);
   // Minijogo de diamantes no meio de algumas fases (de 3 em 3, menos nas de chefe)
   const hasMinigame = !bossLevel && levelNumber % 3 === 0;
@@ -133,8 +136,12 @@ function AdventureLevel() {
           return;
         }
 
-        // Start level
-        adventureService.startLevel(levelNumber, ageGroup);
+        // Conta a tentativa 1 vez por abertura (em StrictMode o efeito roda 2 vezes)
+        const startKey = `${ageGroup}|${levelNumber}|${attempt}`;
+        if (startedRef.current !== startKey) {
+          startedRef.current = startKey;
+          adventureService.startLevel(levelNumber, ageGroup);
+        }
 
         if (isBossLevel(levelNumber)) {
           // Prova do mundo: uma pergunta de cada fase do mundo (fase 1 → 10, do mais fácil ao mais difícil)
@@ -179,10 +186,14 @@ function AdventureLevel() {
     setStepErrors(0);
     setBossEvent(null);
     setStep(0);
+    handledStep.current = -1;
     setAttempt((a) => a + 1);
   }, []);
 
   const handleCorrect = useCallback(() => {
+    // Toques muito rápidos: cada pergunta só avança uma vez
+    if (handledStep.current === step) return;
+    handledStep.current = step;
     const unlocked = activity ? gameStatsService.recordResult({ ...activity, id: baseActivityId(activity.id) }, stepErrors) : [];
     setStepErrors(0);
     // Prova do chefe: acertou de primeira = ponto da criança
@@ -519,7 +530,7 @@ function AdventureLevel() {
                 key={activity?.id ?? 'none'}
                 initial={{ x: 80, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
-                exit={{ x: -80, opacity: 0 }}
+                exit={{ x: -80, opacity: 0, pointerEvents: 'none' }}
                 transition={{ duration: 0.3 }}
               >
                 {renderActivity()}

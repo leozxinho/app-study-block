@@ -51,6 +51,8 @@ export function roundCount(a: Activity): number {
   return Math.max(1, Math.ceil(MIN_TASKS / Math.max(1, tasksPerRound(a))));
 }
 
+const SIZE_ORDERING = ['Ordene os minerais do menor ao maior!', 'Ordene os cavaleiros do mais baixo ao mais alto!'];
+
 /** Pergunta de uma rodada extra (null = repete a original, que já é sorteada a cada vez). */
 function variantQuestion(a: Activity, i: number): string | null {
   const q = a.question;
@@ -110,6 +112,11 @@ function variantQuestion(a: Activity, i: number): string | null {
       }
       if (p.kind === 'letters' && p.word) return `Organize as letras para formar a palavra ${pickRandom(otherWords(p.word, 5)).word}`;
       if (p.kind === 'letters') return `Ordene as letras: ${shuffle(sample('ABCDEFGHIJLMNOPRSTUV'.split(''), p.items.length)).join(', ')}!`;
+      if (p.kind === 'sizes') {
+        // Outra figura para ordenar por tamanho (frases que já têm voz gravada)
+        const other = SIZE_ORDERING.filter((x) => x !== q);
+        return other.length ? pickRandom(other) : null;
+      }
       if (p.kind === 'numbers') {
         const max = Math.max(10, ...p.items.map((x) => +x.text));
         return `Ordene do menor para o maior: ${sample(Array.from({ length: max }, (_, k) => k + 1), p.items.length).join(', ')}`;
@@ -129,7 +136,8 @@ function variantQuestion(a: Activity, i: number): string | null {
         const w = pickRandom(WORDS.filter((x) => x.syllables.length >= 2));
         return `Forme a palavra: ${w.syllables.join(' + ')}`;
       }
-      if (p.mode === 'deliver') {
+      // "sizes" (montar por tamanho) é sempre o mesmo conjunto: a rodada extra vira "entregar" (1 peça)
+      if (p.mode === 'deliver' || p.mode === 'sizes') {
         const pairs: [string, string][] = [['o osso', 'o lobo'], ['a cenoura', 'o coelho'], ['a semente', 'a galinha'], ['a chave', 'o baú'], ['a comida', 'o peixe'], ['a picareta', 'a gema']];
         const [x, y] = pickRandom(pairs);
         return `Arraste ${x} até ${y}!`;
