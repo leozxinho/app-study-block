@@ -95,7 +95,7 @@ export function StartPage() {
                       : '🔒 A assinatura do StudyBlock venceu. Peça para o seu responsável renovar na Área dos Pais.'}
                   </p>
                 ) : (
-                <MinecraftButton variant="gold" size="xl" fullWidth onClick={() => navigate('/adventure')}>
+                <MinecraftButton variant="gold" size="xl" fullWidth className="[@media(max-width:380px)]:text-sm [@media(max-width:380px)]:px-4" onClick={() => navigate('/adventure')}>
                   ⚔️ COMEÇAR A AVENTURA
                 </MinecraftButton>
                 )}

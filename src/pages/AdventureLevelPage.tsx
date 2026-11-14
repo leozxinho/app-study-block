@@ -457,7 +457,7 @@ function AdventureLevel() {
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className={`${themeForLevel(levelNumber).bar} backdrop-blur-sm px-3 py-2 sticky top-0 z-30`}
+        className={`${themeForLevel(levelNumber).bar} backdrop-blur-sm px-3 py-2 land:py-1 sticky top-0 z-30`}
       >
         <div className="max-w-5xl mx-auto flex items-center gap-2 sm:gap-3">
           <button
@@ -465,7 +465,7 @@ function AdventureLevel() {
             onClick={() => navigate(exitTo)}
             aria-label={practice ? 'Sair do treino' : 'Sair da fase e voltar ao mapa'}
             title="Sair"
-            className="w-11 h-11 shrink-0 flex items-center justify-center rounded-md bg-black/25 text-white text-xl hover:bg-black/40 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-lapis"
+            className="w-11 h-11 land:w-10 land:h-10 shrink-0 flex items-center justify-center rounded-md bg-black/25 text-white text-xl hover:bg-black/40 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-lapis"
           >
             <span aria-hidden="true">✕</span>
           </button>
@@ -490,15 +490,15 @@ function AdventureLevel() {
             </div>
           </div>
           <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-            <MusicButton />
-            <VoiceButton />
-            <MuteButton />
+            <MusicButton className="land:w-10 land:h-10" />
+            <VoiceButton className="land:w-10 land:h-10" />
+            <MuteButton className="land:w-10 land:h-10" />
           </div>
         </div>
       </motion.div>
 
       {/* Activity Area */}
-      <div className="flex-1 flex flex-col items-center justify-center p-4">
+      <div className="flex-1 flex flex-col items-center justify-center p-4 land:p-2">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}

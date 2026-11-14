@@ -51,7 +51,7 @@ export function MathMobsActivity({ activity, onCorrect, onWrong }: ActivityProps
         <MathMobsScene problem={problem} unit={unit} unitB={unitB} celebrate={fb.solved} replay={replay} slow={replay > 0} />
       </div>
 
-      <p className="text-center font-body font-bold text-lg sm:text-xl text-gray-900 mb-5" aria-live="polite">
+      <p className="text-center font-body font-bold text-lg sm:text-xl land:text-base text-gray-900 mb-5 land:mb-2" aria-live="polite">
         {mathMobsLabel(problem, unit).replace('?', fb.solved ? String(problem.answer) : '?')}
       </p>
 

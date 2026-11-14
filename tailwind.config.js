@@ -6,6 +6,10 @@ export default {
   ],
   theme: {
     extend: {
+      screens: {
+        // Celular deitado (tela baixa): layout compacto, cena e respostas lado a lado
+        land: { raw: '(orientation: landscape) and (max-height: 520px)' },
+      },
       colors: {
         // Paleta do StudyBlock. Papéis: principal = green, destaque/recompensa = gold (sempre com texto escuro),
         // sucesso = emerald, erro = redstone, informação/foco = lapis, fundo = sky.

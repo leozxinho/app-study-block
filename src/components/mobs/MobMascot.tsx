@@ -46,7 +46,7 @@ export function MobMascot({ mood, type, size = 64, say, silent = false }: MobMas
   return (
     <div
       // Celular: canto de cima, menor, balão ao lado (embaixo cobria as respostas). Tela maior: canto de baixo.
-      className="fixed top-[64px] right-1 sm:top-auto sm:bottom-3 sm:right-3 z-[60] pointer-events-none flex flex-row-reverse sm:flex-col items-start sm:items-end gap-1 origin-top-right scale-75 sm:scale-100"
+      className="fixed top-[64px] right-1 sm:top-auto sm:bottom-3 sm:right-3 z-[60] pointer-events-none flex flex-row-reverse sm:flex-col items-start sm:items-end gap-1 origin-top-right scale-75 sm:scale-100 land:scale-[0.6] land:origin-bottom-right"
       aria-hidden="true"
     >
       <AnimatePresence>

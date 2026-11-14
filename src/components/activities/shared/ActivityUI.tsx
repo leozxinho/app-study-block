@@ -39,10 +39,10 @@ export function ActivityCard({ question, spoken, subtitle, children }: ActivityC
   return (
     <section
       aria-labelledby={id}
-      className="bg-white rounded-xl pixel-border shadow-lg overflow-hidden lg:grid lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:min-h-[420px]"
+      className="bg-white rounded-xl pixel-border shadow-lg overflow-hidden lg:grid lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:min-h-[420px] land:grid land:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] land:min-h-0"
     >
       {/* Tela larga: a cena vira a coluna da esquerda, as respostas a da direita */}
-      <header className={`relative bg-gradient-to-b ${theme.sky} px-3 sm:px-5 pt-4 pb-7 overflow-hidden lg:flex lg:flex-col lg:justify-end lg:pb-10`}>
+      <header className={`relative bg-gradient-to-b ${theme.sky} px-3 sm:px-5 pt-4 pb-7 overflow-hidden lg:flex lg:flex-col lg:justify-end lg:pb-10 land:flex land:flex-col land:justify-start land:pt-3 land:pb-6`}>
         {/* enfeites do mundo */}
         <span aria-hidden="true" className="absolute right-3 top-2 opacity-50 scene-float">
           <ItemArt emoji={theme.decor[0]} size={28} />
@@ -58,7 +58,7 @@ export function ActivityCard({ question, spoken, subtitle, children }: ActivityC
           <div className="relative flex-1 min-w-0 bg-white rounded-xl border-2 border-gray-800 px-3 py-2 shadow-md">
             <span aria-hidden="true" className="absolute -left-2 bottom-3 w-3 h-3 bg-white border-l-2 border-b-2 border-gray-800 rotate-45" />
             <div className="flex items-center justify-between gap-2">
-              <h2 id={id} className="font-body text-base sm:text-xl font-bold text-gray-900">
+              <h2 id={id} className="font-body text-base sm:text-xl land:text-base font-bold text-gray-900">
                 {question}
               </h2>
               {isVoiceSupported() && (
@@ -79,7 +79,7 @@ export function ActivityCard({ question, spoken, subtitle, children }: ActivityC
         {/* chão do mundo */}
         <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-4" style={{ background: theme.ground }} />
       </header>
-      <div className="p-4 sm:p-6 lg:p-8 lg:flex lg:flex-col lg:justify-center">{children}</div>
+      <div className="p-4 sm:p-6 lg:p-8 lg:flex lg:flex-col lg:justify-center land:p-3 land:flex land:flex-col land:justify-center">{children}</div>
     </section>
   );
 }

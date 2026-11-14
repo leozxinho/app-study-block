@@ -89,26 +89,28 @@ export function HousePage() {
           {next && ` Próximo bloco (${next.name}) com ${next.unlockAt}.`}
         </p>
 
-        {/* Terreno */}
-        <div
-          className="grid gap-px bg-sky-300 p-1 rounded-lg pixel-border mx-auto"
-          style={{ gridTemplateColumns: `repeat(${HOUSE_COLS}, minmax(0, 1fr))`, maxWidth: 640 }}
-        >
-          {house.map((id, i) => {
-            const block = HOUSE_BLOCKS.find((b) => b.id === id);
-            return (
-              <button
-                key={i}
-                type="button"
-                onClick={() => place(i)}
-                aria-label={`Linha ${Math.floor(i / HOUSE_COLS) + 1}, coluna ${(i % HOUSE_COLS) + 1}: ${block ? block.name : 'vazio'}`}
-                className="aspect-square flex items-center justify-center text-base sm:text-xl hover:outline hover:outline-2 hover:outline-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-lapis"
-                style={{ background: block ? block.color : 'rgba(255,255,255,0.25)' }}
-              >
-                {block?.detail && <span aria-hidden="true">{block.detail}</span>}
-              </button>
-            );
-          })}
+        {/* Terreno: cada quadradinho com pelo menos 36 px; em tela estreita o terreno rola para o lado */}
+        <div className="overflow-x-auto -mx-4 px-4 pb-2">
+          <div
+            className="grid gap-px bg-sky-300 p-1 rounded-lg pixel-border mx-auto"
+            style={{ gridTemplateColumns: `repeat(${HOUSE_COLS}, minmax(0, 1fr))`, maxWidth: 640, minWidth: HOUSE_COLS * 37 + 8 }}
+          >
+            {house.map((id, i) => {
+              const block = HOUSE_BLOCKS.find((b) => b.id === id);
+              return (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => place(i)}
+                  aria-label={`Linha ${Math.floor(i / HOUSE_COLS) + 1}, coluna ${(i % HOUSE_COLS) + 1}: ${block ? block.name : 'vazio'}`}
+                  className="aspect-square flex items-center justify-center text-base sm:text-xl hover:outline hover:outline-2 hover:outline-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-lapis"
+                  style={{ background: block ? block.color : 'rgba(255,255,255,0.25)' }}
+                >
+                  {block?.detail && <span aria-hidden="true">{block.detail}</span>}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </main>
     </div>

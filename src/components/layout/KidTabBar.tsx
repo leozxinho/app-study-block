@@ -34,7 +34,7 @@ export function KidTabBar() {
                 type="button"
                 onClick={() => navigate(tab.path)}
                 aria-current={active ? 'page' : undefined}
-                className={`relative w-full min-h-[64px] flex flex-col items-center justify-center gap-0.5 font-body text-xs font-bold focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-lapis ${
+                className={`relative w-full min-h-[64px] land:min-h-[48px] flex flex-col land:flex-row land:gap-2 items-center justify-center gap-0.5 font-body text-xs font-bold focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-lapis ${
                   active ? 'text-brand-gold' : 'text-white/75 hover:text-white'
                 }`}
               >
@@ -46,7 +46,7 @@ export function KidTabBar() {
                   />
                 )}
                 <motion.span
-                  className="relative text-2xl leading-none"
+                  className="relative text-2xl land:text-xl leading-none"
                   animate={active ? { y: [0, -4, 0] } : { y: 0 }}
                   transition={{ duration: 0.4 }}
                   aria-hidden="true"
