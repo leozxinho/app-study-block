@@ -3,13 +3,25 @@ import { useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { MinecraftCard } from '../components/ui/MinecraftCard';
 import { AuthPanel } from '../components/auth/AuthPanel';
+import { IntroSplash } from '../components/intro/IntroSplash';
+import { useState } from 'react';
+
+// A abertura (Estourinho explodindo) toca ao chegar no login a cada vez que o site é aberto/atualizado;
+// zera ao recarregar a página, mas não ao voltar para /login dentro do site.
+let introPlayed = false;
 
 /** Página de acesso (mesmo conteúdo do modal da tela inicial). */
 export function LoginPage() {
   const navigate = useNavigate();
+  const [showIntro, setShowIntro] = useState(() => !introPlayed);
+  const endIntro = () => {
+    introPlayed = true;
+    setShowIntro(false);
+  };
 
   return (
     <div className="min-h-screen relative overflow-hidden flex items-center justify-center py-8">
+      {showIntro && <IntroSplash onDone={endIntro} />}
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-minecraft-sky via-blue-300 to-green-500" />
 
