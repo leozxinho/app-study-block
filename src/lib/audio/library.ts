@@ -2,7 +2,7 @@
  * Arquivos de áudio gravados (public/audio). O índice public/audio/manifest.json é gerado por
  * `npm run audio` (scripts/buildAudioManifest.ts) e diz quais arquivos existem e qual fala
  * corresponde a cada texto. Sem índice, nada é baixado e o jogo usa os sons sintetizados
- * e a voz do aparelho (src/lib/sounds.ts e src/lib/voice.ts).
+ * e fica sem voz (src/lib/sounds.ts e src/lib/voice.ts).
  */
 
 interface AudioManifest {

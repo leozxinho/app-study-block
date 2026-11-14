@@ -3,8 +3,9 @@ import { audioUrl, hasAudio, lineFile } from './audio/library';
 import { duckMusic } from './audio/music';
 
 // Voz do app: lê as perguntas e as falas do mascote (ajuda quem ainda não lê).
-// Usa a fala gravada (public/audio/voz, ver docs/audio/ROTEIRO-AUDIO.txt) quando existe;
-// senão, a voz do próprio aparelho. Liga/desliga fica salvo neste navegador.
+// Só fala gravada (public/audio/voz, ver docs/audio/ROTEIRO-AUDIO.txt), nunca a voz do aparelho:
+// texto sem gravação toca uma frase gravada parecida (similarText) ou fica em silêncio.
+// Liga/desliga fica salvo neste navegador.
 
 const KEY = 'minelearn_voice';
 const listeners = new Set<() => void>();
@@ -20,7 +21,7 @@ function readPref(): boolean {
 let enabled = readPref();
 
 export function isVoiceSupported(): boolean {
-  return typeof window !== 'undefined' && 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+  return typeof window !== 'undefined' && typeof Audio !== 'undefined';
 }
 
 export function setVoiceEnabled(value: boolean): void {
@@ -58,11 +59,6 @@ export function speechText(text: string): string {
     .trim();
 }
 
-function pickVoice(): SpeechSynthesisVoice | null {
-  const voices = window.speechSynthesis.getVoices();
-  return voices.find((v) => v.lang === 'pt-BR') ?? voices.find((v) => v.lang.startsWith('pt')) ?? null;
-}
-
 // ---------- falas gravadas ----------
 
 let current: HTMLAudioElement | null = null;
@@ -76,9 +72,46 @@ const queue: string[] = [];
 /** Tira as dicas "(1 ou 2)" das perguntas, como na tela e no CSV de gravação. */
 const withoutHints = (t: string) => t.replace(/\s*\([^)]*\d[^)]*\)/g, '').trim();
 
+function wholeLineFile(text: string): string | null {
+  return lineFile(speechText(text)) ?? lineFile(speechText(withoutHints(text)));
+}
+
+/** Cor da pergunta ("VERMELHA") no masculino, como nas frases gravadas ("Qual é vermelho?"). */
+const colorWord = (c: string) => {
+  const w = c.toLowerCase();
+  return w.endsWith('a') && w !== 'laranja' ? `${w.slice(0, -1)}o` : w;
+};
+const PLACE = / (?:do|no|da|na) Reino d(?:e|as) (?:Fogo|Estrelas)/;
+
+/**
+ * Frases gravadas parecidas com um texto que ainda não tem gravação (ex.: perguntas com os nomes
+ * novos, antes de gerar as falas). Em ordem de preferência; quem chama toca a 1ª que tiver gravação.
+ */
+const SIMILAR: [RegExp, (m: RegExpMatchArray) => string[]][] = [
+  [PLACE, (m) => [m.input!.replace(PLACE, '')]],
+  [/^Encontre (?:os|as|todos os) pares/, () => ['Encontre todos os pares iguais!', 'Encontre os pares iguais!']],
+  [/^Encontre .* iguais!$/, () => ['Encontre os pares iguais!', 'Encontre todos os pares iguais!']],
+  [/\b(retângulo|quadrado|losango|círculo|triângulo|hexágono|oval)\b/, (m) => [`Qual é o ${m[1]}?`, `Toque no ${m[1]}!`]],
+  [/^Qual é a cor (\p{Lu}+)/u, (m) => [`Qual é ${colorWord(m[1])}?`]],
+  // Probleminhas ("Téo tinha 3 maçãs e ganhou mais 2. Quantas tem agora?")
+  [/\d.*Quant[oa]s? .*\?$/, () => ['Quanto dá a conta?']],
+  [/^Quant[oa]s? /, () => ['Quantos objetos?']],
+];
+
+/** Frase gravada parecida com o texto (has = tem gravação); null = nenhuma. */
+export function similarText(text: string, has: (text: string) => boolean): string | null {
+  const clean = withoutHints(speechText(text));
+  for (const [re, alternatives] of SIMILAR) {
+    const m = clean.match(re);
+    const found = m && alternatives(m).find((t) => has(t));
+    if (found) return found;
+  }
+  return null;
+}
+
 function recordedFor(text: string, file?: string): string | null {
   if (file && hasAudio(file)) return file;
-  return lineFile(speechText(text)) ?? lineFile(speechText(withoutHints(text)));
+  return wholeLineFile(text);
 }
 
 const OP_PIECE: Record<string, string> = { '+': 'mais', '-': 'menos', '×': 'vezes', x: 'vezes', '÷': 'dividido-por' };
@@ -105,7 +138,7 @@ function recordedPieces(text: string): string[] | null {
   return pieces && pieces.every((f) => hasAudio(f)) ? pieces : null;
 }
 
-/** Tem voz gravada para este texto (a frase inteira ou montada com as peças)? */
+/** Tem voz gravada para este texto (a frase inteira ou montada com as peças, sem contar as parecidas)? */
 export function hasRecordedVoice(text: string): boolean {
   return recordedFor(text) !== null || recordedPieces(text) !== null;
 }
@@ -159,24 +192,13 @@ export function speak(text: string, { force = false, file }: { force?: boolean; 
     playRecordedList(pieces);
     return;
   }
-  if (!isVoiceSupported()) return;
-  const clean = speechText(text);
-  if (!clean) return;
-  try {
-    stopCurrent(); // não falar por cima de uma fala gravada
-    const u = new SpeechSynthesisUtterance(clean);
-    u.lang = 'pt-BR';
-    u.rate = 0.95;
-    u.pitch = 1.1;
-    const voice = pickVoice();
-    if (voice) u.voice = voice;
-    window.speechSynthesis.speak(u);
-  } catch {
-    /* sem voz disponível */
-  }
+  // Sem gravação: uma frase gravada parecida; sem nenhuma, silêncio (nunca a voz do aparelho)
+  const similar = similarText(text, (t) => wholeLineFile(t) !== null);
+  if (similar) playRecordedVoice(wholeLineFile(similar)!);
+  else stopCurrent();
 }
 
-/** Toca a fala gravada só se ela existir (sem cair na voz do aparelho). */
+/** Toca a fala gravada só se ela existir. */
 export function playVoiceFile(file: string): boolean {
   if (!enabled || !hasAudio(file)) return false;
   if (holding) {
@@ -233,12 +255,6 @@ function stopCurrent(): void {
     current.pause();
     current = null;
     duckMusic(false);
-  }
-  if (!isVoiceSupported()) return;
-  try {
-    window.speechSynthesis.cancel();
-  } catch {
-    /* ignora */
   }
 }
 

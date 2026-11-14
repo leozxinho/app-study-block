@@ -17,7 +17,7 @@ import type { Adaptive } from '../src/lib/adaptive';
 import type { Activity } from '../src/types';
 import { inspect } from './auditActivities';
 import { readFileSync, existsSync } from 'node:fs';
-import { mathPieces, speechText } from '../src/lib/voice';
+import { mathPieces, similarText, speechText } from '../src/lib/voice';
 
 const AGES = ['bercario', 'maternal', 'pre-escola-1', 'pre-escola-2', 'fundamental-1', 'fundamental-2'];
 const LEVELS: Adaptive[] = ['easier', 'normal', 'harder'];
@@ -52,7 +52,7 @@ const manifest = existsSync('public/audio/manifest.json')
 const audioFiles = new Set(manifest.files);
 const withoutHints = (t: string) => t.replace(/\s*\([^)]*\d[^)]*\)/g, '').trim();
 const wholeLine = (t: string) => [speechText(t), speechText(withoutHints(t))].some((k) => audioFiles.has(manifest.lines[k]));
-const voice = { whole: 0, pieces: 0, device: 0 };
+const voice = { whole: 0, pieces: 0, similar: 0, none: 0 };
 const deviceByFormat = new Map<string, number>();
 /** O que o cartão da atividade fala (igual aos componentes: alguns trocam ou limpam o texto). */
 function spokenText(r: Activity): string {
@@ -71,8 +71,10 @@ function countVoice(r: Activity) {
   if (wholeLine(text)) return void voice.whole++;
   const pieces = mathPieces(text);
   if (pieces && pieces.every((f) => audioFiles.has(f))) return void voice.pieces++;
-  voice.device++;
-  const format = `${r.activity_type}: ${text.replace(/\d+/g, 'N')}`;
+  const similar = similarText(text, wholeLine);
+  if (similar) voice.similar++;
+  else voice.none++;
+  const format = `${r.activity_type}: ${text.replace(/\d+/g, 'N')} → ${similar ?? 'silêncio'}`;
   deviceByFormat.set(format, (deviceByFormat.get(format) ?? 0) + 1);
 }
 
@@ -114,7 +116,7 @@ for (const age of AGES) {
 
 console.log(`Fases: ${phases} | rodadas conferidas: ${rounds} (${LEVELS.length} níveis × ${SAMPLES} montagens)`);
 const pct = (n: number) => `${((100 * n) / rounds).toFixed(1)}%`;
-console.log(`Voz da pergunta: gravada inteira ${voice.whole} (${pct(voice.whole)}) | montada com peças ${voice.pieces} (${pct(voice.pieces)}) | voz do aparelho ${voice.device} (${pct(voice.device)})`);
+console.log(`Voz da pergunta: gravada inteira ${voice.whole} (${pct(voice.whole)}) | montada com peças ${voice.pieces} (${pct(voice.pieces)}) | frase parecida ${voice.similar} (${pct(voice.similar)}) | sem voz ${voice.none} (${pct(voice.none)})`);
 if (process.argv.includes('--voz')) {
   [...deviceByFormat].sort((a, b) => b[1] - a[1]).forEach(([f, n]) => console.log(`    ${n} × ${f}`));
 }

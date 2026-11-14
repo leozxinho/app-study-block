@@ -2,7 +2,7 @@
  * Gera public/audio/manifest.json: quais arquivos de áudio existem e qual fala é de cada texto.
  *   npm run audio
  * Rodar sempre que colocar ou tirar arquivos em public/audio (o build também roda).
- * Sem nenhum arquivo, não gera o índice (o jogo usa os sons sintetizados e a voz do aparelho).
+ * Sem nenhum arquivo, não gera o índice (o jogo usa os sons sintetizados e fica sem voz).
  *
  * Falas fixas (mascote, contagem, chefes): src/lib/audio/voiceLines.json  { file, text }
  *   "text" = o que o jogo fala, sem emojis (igual ao texto passado para speak()).

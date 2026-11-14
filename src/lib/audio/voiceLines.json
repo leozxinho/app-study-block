@@ -178,5 +178,9 @@
  {
   "file": "voz/frases/quanto-da-conta.mp3",
   "text": "Quanto dá a conta?"
+ },
+ {
+  "file": "voz/mascote/proxima.mp3",
+  "text": "Muito bem! Próxima!"
  }
 ]

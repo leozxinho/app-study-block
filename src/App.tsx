@@ -31,7 +31,7 @@ const LightningPage = lazy(() => import('./pages/LightningPage').then((m) => ({ 
 
 // Carrega a conta da sessão salva (e o progresso dela) e acompanha login/logout
 authService.start();
-// Índice dos áudios gravados (sem ele, usa os sons sintetizados e a voz do aparelho)
+// Índice dos áudios gravados (sem ele, usa os sons sintetizados e fica sem voz)
 void loadAudioIndex();
 
 function RouteLoading() {

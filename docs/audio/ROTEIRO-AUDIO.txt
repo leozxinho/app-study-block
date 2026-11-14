@@ -751,7 +751,7 @@ Como o jogo usa cada coisa:
 Onde está no código:
   src/lib/audio/library.ts     índice, variações e efeitos gravados
   src/lib/audio/music.ts       músicas (troca, fade, abaixar na fala)
-  src/lib/voice.ts             falas (gravadas ou voz do aparelho)
+  src/lib/voice.ts             falas gravadas (sem gravação: frase parecida ou silêncio)
   src/lib/sounds.ts            efeitos (gravados ou sintetizados)
   src/components/ui/MusicRouter.tsx  qual música em cada tela
   scripts/buildAudioManifest.mjs     gera o índice (npm run audio)
