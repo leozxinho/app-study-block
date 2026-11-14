@@ -44,8 +44,3 @@ export function celebrationMs(problem: { a: number; b: number; op: string; answe
       return divCelebrationMs(problem.a);
   }
 }
-
-/** Contagem: no acerto, conta os itens um por um e mostra o total. */
-export function countCelebrationMs(items: number): number {
-  return items * ADD_COUNT_MS + 1300;
-}

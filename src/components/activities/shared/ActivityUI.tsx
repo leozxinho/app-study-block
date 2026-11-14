@@ -1,5 +1,5 @@
 import { useEffect, useId, type ReactNode } from 'react';
-import { isVoiceSupported, readsAloudByDefault, speak, stopSpeaking } from '../../../lib/voice';
+import { hasRecordedVoice, isVoiceSupported, readsAloudByDefault, speak, stopSpeaking } from '../../../lib/voice';
 import { Mob } from '../../mobs';
 import { useGameStats } from '../../../services/gameStatsService';
 import { useSceneTheme } from './sceneTheme';
@@ -11,27 +11,32 @@ interface ActivityCardProps {
   /** Ícone antigo do tipo de atividade (não aparece mais: quem pergunta é o personagem) */
   icon?: string;
   question: string;
+  /** O que falar no lugar da pergunta, se tiver voz gravada (ex.: a conta do math-mobs). */
+  spoken?: string;
   subtitle?: ReactNode;
   children: ReactNode;
 }
+
+/** Decide na hora de falar (o índice dos áudios pode ter acabado de carregar). */
+const textToSpeak = (question: string, spoken?: string) => (spoken && hasRecordedVoice(spoken) ? spoken : question);
 
 /**
  * Moldura padrão das atividades: em cima, o cenário do mundo com o personagem da criança
  * fazendo a pergunta num balão (com 🔊 para ouvir); embaixo, a atividade.
  */
-export function ActivityCard({ question, subtitle, children }: ActivityCardProps) {
+export function ActivityCard({ question, spoken, subtitle, children }: ActivityCardProps) {
   const id = useId();
   const theme = useSceneTheme();
   const { skin } = useGameStats();
   // Quem ainda não lê ouve a pergunta assim que ela aparece
   useEffect(() => {
     if (!readsAloudByDefault()) return;
-    const t = setTimeout(() => speak(question), 350);
+    const t = setTimeout(() => speak(textToSpeak(question, spoken)), 350);
     return () => {
       clearTimeout(t);
       stopSpeaking();
     };
-  }, [question]);
+  }, [question, spoken]);
   return (
     <section
       aria-labelledby={id}
@@ -60,7 +65,7 @@ export function ActivityCard({ question, subtitle, children }: ActivityCardProps
               {isVoiceSupported() && (
                 <button
                   type="button"
-                  onClick={() => speak(question, { force: true })}
+                  onClick={() => speak(textToSpeak(question, spoken), { force: true })}
                   aria-label="Ouvir a pergunta"
                   title="Ouvir a pergunta"
                   className="shrink-0 w-10 h-10 rounded-full bg-sky-100 text-xl hover:bg-sky-200 focus:outline-none focus-visible:ring-4 focus-visible:ring-sky-400"

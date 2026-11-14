@@ -40,7 +40,7 @@ export function MathMobsActivity({ activity, onCorrect, onWrong }: ActivityProps
   }, [fb.wrongCount]);
 
   return (
-    <ActivityCard icon={OP_ICON[problem.op]} question="Quanto dá a conta?">
+    <ActivityCard icon={OP_ICON[problem.op]} question="Quanto dá a conta?" spoken={`Quanto é ${problem.a} ${problem.op} ${problem.b}?`}>
       <div className="relative bg-gradient-to-b from-sky-100 to-green-100 rounded-lg pixel-border p-3 sm:p-4 mb-3 overflow-hidden">
         {/* Creeper "fiscal": incha e pisca no erro, mas não explode */}
         <div className="absolute top-1 right-2" aria-hidden="true">

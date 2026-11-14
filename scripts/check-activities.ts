@@ -12,7 +12,7 @@
  */
 import { ADVENTURE_ACTIVITIES } from '../src/data/adventureActivities';
 import { generateAdventureLevels } from '../src/data/adventureWorlds';
-import { buildRounds, parseCounting, parseWordBuilder, tasksPerRound, MIN_TASKS } from '../src/lib/activityParsers';
+import { buildRounds, parseCounting, parseMathMobs, parseWordBuilder, tasksPerRound, MIN_TASKS } from '../src/lib/activityParsers';
 import type { Adaptive } from '../src/lib/adaptive';
 import type { Activity } from '../src/types';
 import { inspect } from './auditActivities';
@@ -56,7 +56,12 @@ const voice = { whole: 0, pieces: 0, device: 0 };
 const deviceByFormat = new Map<string, number>();
 /** O que o cartão da atividade fala (igual aos componentes: alguns trocam ou limpam o texto). */
 function spokenText(r: Activity): string {
-  if (r.activity_type === 'math-mobs') return 'Quanto dá a conta?'; // MathMobsActivity: pergunta fixa
+  if (r.activity_type === 'math-mobs') {
+    // MathMobsActivity: lê a conta montada com as peças; sem elas, "Quanto dá a conta?"
+    const { a, b, op } = parseMathMobs(r).problem;
+    const conta = `Quanto é ${a} ${op} ${b}?`;
+    return mathPieces(conta)?.every((f) => audioFiles.has(f)) ? conta : 'Quanto dá a conta?';
+  }
   if (r.activity_type === 'word-builder') return parseWordBuilder(r).displayQuestion;
   if (r.activity_type === 'counting') return parseCounting(r).displayQuestion;
   return r.question;

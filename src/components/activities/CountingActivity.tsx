@@ -2,8 +2,15 @@ import { NumberDots } from './shared/NumberDots';
 import { showsNumberDots } from './shared/numberDotsAge';
 import { motion } from 'framer-motion';
 import { useEffect, useMemo, useState } from 'react';
-import { ADD_COUNT_MS, countCelebrationMs } from './shared/mathSceneTiming';
-import { speak } from '../../lib/voice';
+import { ADD_COUNT_MS } from './shared/mathSceneTiming';
+
+/** Até quantos itens o jogo conta em voz ("um, dois, três...") com as falas contando-NN. */
+const VOICED_MAX = 5;
+/** Tempo entre um número falado e o próximo (as falas duram ~0,7 s). */
+const VOICE_COUNT_MS = 750;
+const countFile = (n: number) => `voz/numeros/contando-${String(n).padStart(2, '0')}.mp3`;
+import { playVoiceFile, speak, useVoiceEnabled } from '../../lib/voice';
+import { hasAudio } from '../../lib/audio/library';
 import { playCount, playSound } from '../../lib/sounds';
 import { parseCounting, type CountIcon } from '../../lib/activityParsers';
 import { Mob } from '../mobs';
@@ -35,8 +42,12 @@ export function CountingActivity({ activity, onCorrect, onWrong }: ActivityProps
   const data = useMemo(() => parseCounting(activity), [activity]);
   const { count, options } = data;
 
+  // Poucos itens: conta em voz (mais devagar, para a fala caber); o último é o "São N!" gravado
+  const voiceOn = useVoiceEnabled();
+  const voiced = voiceOn && count <= VOICED_MAX && Array.from({ length: count - 1 }, (_, i) => countFile(i + 1)).every(hasAudio);
+  const countMs = voiced ? VOICE_COUNT_MS : ADD_COUNT_MS;
   // No acerto o jogo conta junto (1, 2, 3...): espera a contagem antes da próxima pergunta
-  const fb = useAnswerFeedback({ onCorrect, onWrong }, { correctDelay: countCelebrationMs(count) });
+  const fb = useAnswerFeedback({ onCorrect, onWrong }, { correctDelay: count * countMs + 1300 });
   // A criança pode tocar nos itens para contar; guardamos a ordem dos toques
   const [counted, setCounted] = useState<number[]>([]);
   // Contagem do acerto: quantos já foram contados pelo jogo
@@ -53,14 +64,14 @@ export function CountingActivity({ activity, onCorrect, onWrong }: ActivityProps
     const id = window.setInterval(() => {
       i++;
       setShown(i);
-      playCount(i, i === count);
+      if (!(voiced && i < count && playVoiceFile(countFile(i)))) playCount(i, i === count);
       if (i >= count) {
         clearInterval(id);
         speak(`São ${count}!`);
       }
-    }, ADD_COUNT_MS);
+    }, countMs);
     return () => clearInterval(id);
-  }, [celebrating, count]);
+  }, [celebrating, count, voiced, countMs]);
 
   // As respostas só aparecem depois que todos os itens "pularam" na tela
   const optionsDelay = count * POP_STEP + 0.2;

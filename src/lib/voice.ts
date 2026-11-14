@@ -105,6 +105,11 @@ function recordedPieces(text: string): string[] | null {
   return pieces && pieces.every((f) => hasAudio(f)) ? pieces : null;
 }
 
+/** Tem voz gravada para este texto (a frase inteira ou montada com as peças)? */
+export function hasRecordedVoice(text: string): boolean {
+  return recordedFor(text) !== null || recordedPieces(text) !== null;
+}
+
 /** Toca várias falas gravadas emendadas (sem "a vez": a próxima fala interrompe, como speak). */
 function playRecordedList(list: string[]): void {
   const next = (i: number) => {
