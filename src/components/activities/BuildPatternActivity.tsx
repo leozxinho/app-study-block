@@ -14,9 +14,10 @@ type Cell = BlockKind | null;
 
 const COLOR_COUNT: Record<Activity['difficulty'], number> = { facil: 2, medio: 3, dificil: 4 };
 const CELL_PX: Record<number, string> = {
-  2: 'w-16 h-16 sm:w-20 sm:h-20 land:w-14 land:h-14',
-  3: 'w-14 h-14 sm:w-16 sm:h-16 land:w-11 land:h-11',
-  4: 'w-11 h-11 sm:w-14 sm:h-14 land:w-9 land:h-9',
+  // Abaixo de 360 px de largura: um pouco menores, para o modelo e a construção ficarem lado a lado
+  2: 'w-16 h-16 sm:w-20 sm:h-20 land:w-14 land:h-14 [@media(max-width:359px)]:w-12 [@media(max-width:359px)]:h-12',
+  3: 'w-14 h-14 sm:w-16 sm:h-16 land:w-11 land:h-11 [@media(max-width:359px)]:w-11 [@media(max-width:359px)]:h-11',
+  4: 'w-11 h-11 sm:w-14 sm:h-14 land:w-9 land:h-9 [@media(max-width:359px)]:w-9 [@media(max-width:359px)]:h-9',
 };
 const MODEL_PX: Record<number, number> = { 2: 44, 3: 34, 4: 26 };
 
@@ -87,7 +88,7 @@ export function BuildPatternActivity({ activity, onCorrect, onWrong }: ActivityP
       question={activity.question}
       subtitle={`Copie a construção na grade ${size}x${size}!`}
     >
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 mb-5 land:gap-4 land:mb-2">
+      <div className="flex flex-row flex-wrap items-end justify-center gap-2 sm:gap-10 mb-5 land:flex-nowrap land:gap-4 land:mb-2">
         {/* Modelo */}
         <div className="text-center">
           <p className="font-body font-bold text-gray-800 mb-2">Modelo</p>

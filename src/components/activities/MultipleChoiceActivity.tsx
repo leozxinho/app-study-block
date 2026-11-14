@@ -37,18 +37,21 @@ export function MultipleChoiceActivity({ activity, onCorrect, onWrong }: Activit
     }
   }, [fb.wrongCount]);
 
+  // Respostas curtas (números): as 4 numa linha só, em qualquer tela (cabe sem rolar no celular pequeno)
+  const short = options.length === 4 && options.every((o) => o.text.length <= 3);
+
   return (
     <ActivityCard icon="📝" question={activity.question}>
       {/* Conta desenhada com mobs (animação conforme a operação) */}
       {scene && (
-        <div className="bg-gradient-to-b from-sky-100 to-green-100 rounded-lg pixel-border p-3 mb-6 overflow-hidden">
+        <div className="bg-gradient-to-b from-sky-100 to-green-100 rounded-lg pixel-border p-3 mb-4 sm:mb-6 overflow-hidden">
           <MathMobsScene problem={scene.problem} unit={scene.unit} unitB={scene.unitB} celebrate={fb.solved} replay={replay} slow={replay > 0} compact />
         </div>
       )}
 
       {/* Options */}
       <div
-        className="grid grid-cols-2 land:grid-cols-4 land:max-w-none land:gap-2 gap-3 sm:gap-4 max-w-md mx-auto"
+        className={`grid ${short ? 'grid-cols-4 gap-2 sm:gap-3' : 'grid-cols-2 land:grid-cols-4 land:max-w-none land:gap-2 gap-3 sm:gap-4'} max-w-md mx-auto`}
         role="group"
         aria-label="Respostas"
         onKeyDown={arrowNav}
@@ -67,7 +70,7 @@ export function MultipleChoiceActivity({ activity, onCorrect, onWrong }: Activit
               disabled={state === 'eliminated' || (fb.locked && state !== 'correct')}
               aria-label={`${option.text}${optionStateLabel(state)}`}
               className={`
-                ${OPTION_BASE} p-4 rounded-lg font-body text-2xl font-bold pixel-border
+                ${OPTION_BASE} ${short ? 'p-2' : 'p-4'} rounded-lg font-body text-2xl font-bold pixel-border
                 ${state === 'correct'
                   ? 'bg-brand-emerald text-gray-900'
                   : state === 'wrong'

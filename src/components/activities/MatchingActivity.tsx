@@ -32,7 +32,7 @@ export function MatchingActivity({ activity, onCorrect, onWrong }: ActivityProps
       subtitle="Arraste o modelo até o igual, ou toque nele!"
     >
       {/* Modelo (arrastável) */}
-      <div className="flex justify-center mb-6">
+      <div className="flex justify-center mb-6 land:mb-3">
         <motion.div
           drag={!fb.solved}
           dragSnapToOrigin
@@ -43,16 +43,16 @@ export function MatchingActivity({ activity, onCorrect, onWrong }: ActivityProps
           transition={{ duration: 2, repeat: fb.solved ? 0 : Infinity }}
           role="img"
           aria-label={`Modelo: ${target.name}`}
-          className="drag-handle cursor-grab active:cursor-grabbing inline-flex flex-col items-center bg-amber-100 rounded-xl p-5 sm:p-6 pixel-border"
+          className="drag-handle cursor-grab active:cursor-grabbing inline-flex flex-col items-center bg-amber-100 rounded-xl p-5 sm:p-6 land:p-2 pixel-border"
         >
-          <span className="text-6xl" aria-hidden="true">{target.icon}</span>
+          <span className="text-6xl land:text-4xl" aria-hidden="true">{target.icon}</span>
           <span className="font-body text-base font-bold mt-2 text-gray-900">{target.name}</span>
         </motion.div>
       </div>
 
       {/* Options */}
       <div
-        className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-lg mx-auto"
+        className="grid grid-cols-2 sm:grid-cols-4 land:grid-cols-4 gap-3 sm:gap-4 land:gap-2 max-w-lg mx-auto"
         role="group"
         aria-label="Opções"
         onKeyDown={arrowNav}

@@ -77,10 +77,12 @@ export function CraftingActivity({ activity, onCorrect, onWrong }: ActivityProps
       question={activity.question}
       subtitle="Escolha um item e toque nos quadrados para copiar a receita!"
     >
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-5 sm:gap-8 mb-5 land:gap-4 land:mb-2">
+      {/* Celular deitado: mesa à esquerda, itens e "Criar!" à direita (cabe sem rolar) */}
+      <div className="land:flex land:items-center land:justify-center land:gap-5">
+      <div className="flex flex-row flex-wrap items-center justify-center gap-3 sm:gap-8 mb-4 sm:mb-5 land:flex-nowrap land:gap-3 land:mb-0">
         {/* Receita */}
-        <div className="text-center">
-          <p className="font-body font-bold text-gray-800 mb-2">Receita</p>
+        <div className="text-center shrink-0 [@media(max-width:359px)]:order-1">
+          <p className="font-body font-bold text-gray-800 mb-2 land:mb-1 land:text-sm">Receita</p>
           <div
             className="grid grid-cols-3 gap-1 p-2 bg-amber-50 rounded-lg pixel-border"
             role="img"
@@ -90,7 +92,7 @@ export function CraftingActivity({ activity, onCorrect, onWrong }: ActivityProps
               .join(', ')}`}
           >
             {recipe.cells.map((c, i) => (
-              <div key={i} className="w-8 h-8 sm:w-9 sm:h-9 bg-stone-300 rounded-sm flex items-center justify-center">
+              <div key={i} className="w-7 h-7 sm:w-9 sm:h-9 landsm:w-6 landsm:h-6 bg-stone-300 rounded-sm flex items-center justify-center">
                 {c && <PixelArt sprite={ITEMS[c]} size={26} />}
               </div>
             ))}
@@ -98,8 +100,8 @@ export function CraftingActivity({ activity, onCorrect, onWrong }: ActivityProps
         </div>
 
         {/* Grade 3x3 da criança */}
-        <div className="text-center">
-          <p className="font-body font-bold text-gray-800 mb-2">Sua mesa</p>
+        <div className="text-center shrink-0 [@media(max-width:359px)]:order-3">
+          <p className="font-body font-bold text-gray-800 mb-2 land:mb-1 land:text-sm">Sua mesa</p>
           <div
             className="grid grid-cols-3 gap-1.5 p-2 bg-stone-500 rounded-lg pixel-border"
             role="group"
@@ -117,7 +119,7 @@ export function CraftingActivity({ activity, onCorrect, onWrong }: ActivityProps
                   disabled={fb.solved}
                   aria-label={`Casa ${i + 1}: ${item ? ITEMS[item].name : 'vazia'}`}
                   className={`
-                    ${OPTION_BASE} !min-h-0 w-14 h-14 sm:w-16 sm:h-16 land:w-11 land:h-11 rounded-sm bg-stone-300 hover:bg-stone-200
+                    ${OPTION_BASE} !min-h-0 w-12 h-12 sm:w-16 sm:h-16 land:w-11 land:h-11 landsm:w-9 landsm:h-9 [@media(max-width:359px)]:w-11 [@media(max-width:359px)]:h-11 rounded-sm bg-stone-300 hover:bg-stone-200
                     flex items-center justify-center
                     ${wrongCells.includes(i) ? 'animate-shake ring-4 ring-red-600 bg-red-200' : ''}
                     ${ghost ? 'answer-reveal' : ''}
@@ -136,11 +138,11 @@ export function CraftingActivity({ activity, onCorrect, onWrong }: ActivityProps
           </div>
         </div>
 
-        {/* Resultado */}
-        <div className="text-center">
-          <p className="font-body font-bold text-gray-800 mb-2">Resultado</p>
+        {/* Resultado (abaixo de 360 px: ao lado da receita, e a mesa embaixo das duas) */}
+        <div className="text-center shrink-0 [@media(max-width:359px)]:order-2">
+          <p className="font-body font-bold text-gray-800 mb-2 land:mb-1 land:text-sm">Resultado</p>
           <div
-            className={`w-20 h-20 land:w-14 land:h-14 rounded-lg pixel-border flex items-center justify-center
+            className={`w-20 h-20 land:w-14 land:h-14 landsm:w-12 landsm:h-12 rounded-lg pixel-border flex items-center justify-center
               ${fb.solved ? 'bg-green-200 answer-correct' : 'bg-stone-300'}`}
           >
             <motion.span
@@ -153,9 +155,10 @@ export function CraftingActivity({ activity, onCorrect, onWrong }: ActivityProps
         </div>
       </div>
 
+      <div className="land:flex land:flex-col land:items-center land:gap-2 [@media(max-width:359px)]:flex [@media(max-width:359px)]:items-center [@media(max-width:359px)]:justify-center [@media(max-width:359px)]:gap-3">
       {/* Paleta de itens */}
       <div
-        className="flex flex-wrap justify-center gap-3 mb-4 land:mb-2"
+        className="flex flex-wrap justify-center gap-3 mb-4 [@media(max-width:359px)]:mb-0 land:mb-0 land:gap-2 land:max-w-[180px] landsm:max-w-[88px]"
         role="group"
         aria-label="Itens: escolha um"
         onKeyDown={arrowNav}
@@ -190,11 +193,13 @@ export function CraftingActivity({ activity, onCorrect, onWrong }: ActivityProps
           type="button"
           onClick={craft}
           disabled={fb.solved || grid.every((v) => v === null)}
-          className={`${OPTION_BASE} px-8 rounded-lg pixel-border bg-brand-dark-green text-white font-minecraft text-sm
+          className={`${OPTION_BASE} px-8 landsm:px-4 rounded-lg pixel-border bg-brand-dark-green text-white font-minecraft text-sm
             disabled:opacity-50 disabled:cursor-not-allowed hover:brightness-110`}
         >
           Criar!
         </button>
+      </div>
+      </div>
       </div>
 
       <AnswerFeedback

@@ -77,13 +77,13 @@ export function ActivityCard({ question, spoken, subtitle, children }: ActivityC
                 </button>
               )}
             </div>
-            {subtitle && <p className="font-body text-sm text-gray-700 mt-0.5">{subtitle}</p>}
+            {subtitle && <p className="font-body text-sm text-gray-700 mt-0.5 landsm:hidden [@media(max-width:359px)]:hidden">{subtitle}</p>}
           </div>
         </div>
         {/* chão do mundo */}
         <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-4" style={{ background: theme.ground }} />
       </header>
-      <div className="p-4 sm:p-6 lg:p-8 lg:flex lg:flex-col lg:justify-center land:p-3 land:flex land:flex-col land:justify-center land:[zoom:0.85]">{children}</div>
+      <div className="p-4 sm:p-6 lg:p-8 lg:flex lg:flex-col lg:justify-center land:p-3 land:flex land:flex-col land:justify-center">{children}</div>
     </section>
   );
 }

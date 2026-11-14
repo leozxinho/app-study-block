@@ -9,6 +9,8 @@ export default {
       screens: {
         // Celular deitado (tela baixa): layout compacto, cena e respostas lado a lado
         land: { raw: '(orientation: landscape) and (max-height: 520px)' },
+        // Celular deitado bem estreito (ex.: 568x320): vem depois de land, então vence
+        landsm: { raw: '(orientation: landscape) and (max-height: 520px) and (max-width: 639px)' },
       },
       colors: {
         // Paleta do StudyBlock. Papéis: principal = green, destaque/recompensa = gold (sempre com texto escuro),

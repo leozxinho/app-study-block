@@ -18,6 +18,7 @@ import { isBossLevel, themeForLevel, stickerForLevel } from '../data/worldThemes
 import { scoreForErrors } from '../lib/scoring';
 import { gameStatsService, getAdaptiveLevel, getDailyProgress, getDailyStreak, CHEST_XP, type AchievementDef } from '../services/gameStatsService';
 import { AchievementToast } from '../components/ui/AchievementToast';
+import { FitToScreen } from '../components/ui/FitToScreen';
 import { buildRounds, baseActivityId } from '../lib/activityParsers';
 import { adventureService } from '../services/adventureService';
 import { progressService } from '../services/progressService';
@@ -458,6 +459,7 @@ function AdventureLevel() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className={`${themeForLevel(levelNumber).bar} backdrop-blur-sm px-3 py-2 land:py-1 sticky top-0 z-30`}
+        data-level-bar
       >
         <div className="max-w-5xl mx-auto flex items-center gap-2 sm:gap-3">
           <button
@@ -505,6 +507,8 @@ function AdventureLevel() {
           transition={{ duration: 0.4 }}
           className="w-full max-w-2xl lg:max-w-5xl"
         >
+          {/* Encolhe sozinho quando a atividade não cabe na altura da tela */}
+          <FitToScreen topSelector="[data-level-bar]" bottomGap={8}>
           {bossLevel && activities.length > 0 && (
             <BossBattle
               boss={boss}
@@ -530,6 +534,7 @@ function AdventureLevel() {
               </motion.div>
             </AnimatePresence>
           </SceneProvider>
+          </FitToScreen>
         </motion.div>
       </div>
 
