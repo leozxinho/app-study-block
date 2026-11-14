@@ -431,7 +431,7 @@ export function ParentAreaPage() {
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-6">
         {!isSupabaseConfigured() && (
           <p className="p-3 bg-amber-50 border border-amber-300 rounded-md font-body text-sm text-amber-900">
-            💡 <strong>Modo demonstração:</strong> as contas e o progresso das crianças ficam só neste navegador.
+            💡 <strong>Modo local:</strong> as contas e o progresso das crianças ficam salvos só neste aparelho.
             Conecte o Supabase para a criança entrar de qualquer aparelho.
           </p>
         )}

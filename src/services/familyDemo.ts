@@ -1,5 +1,6 @@
 /**
- * Modo demonstração (sem Supabase): responsáveis e crianças guardados neste navegador.
+ * Modo local (sem Supabase): responsáveis e crianças guardados neste navegador (localStorage).
+ * O progresso de cada criança fica em src/lib/store (adapter local), também no localStorage.
  * Serve para testar o fluxo; NÃO é seguro (qualquer um com acesso ao aparelho vê os dados).
  * Com Supabase, tudo isso vem do servidor (ver supabase/).
  */
@@ -12,6 +13,8 @@ export interface DemoGuardian {
   id: string;
   name: string;
   email: string;
+  /** Hash da senha (contas antigas, sem senha, ganham a do 1º login). Sem ela: conta de Google simulado. */
+  passwordHash?: string;
   created_at: string;
 }
 
@@ -47,6 +50,35 @@ export async function hashPassword(password: string, salt: string): Promise<stri
   const data = new TextEncoder().encode(`${salt}:${password}`);
   const digest = await crypto.subtle.digest('SHA-256', data);
   return Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+/** Acha o responsável pelo e-mail. */
+export function findGuardian(email: string): DemoGuardian | null {
+  const normalized = email.trim().toLowerCase();
+  return readFamily().guardians.find((g) => g.email === normalized) ?? null;
+}
+
+/** Cria o responsável com senha. Erro se o e-mail já tem conta. */
+export async function createGuardian(email: string, name: string, password: string): Promise<DemoGuardian> {
+  if (findGuardian(email)) throw new Error('User already registered');
+  const guardian = findOrCreateGuardian(email, name);
+  return setGuardianPassword(guardian, password);
+}
+
+/** Confere a senha do responsável; conta antiga sem senha passa a usar esta. */
+export async function checkGuardianPassword(guardian: DemoGuardian, password: string): Promise<boolean> {
+  if (!guardian.passwordHash) {
+    await setGuardianPassword(guardian, password);
+    return true;
+  }
+  return guardian.passwordHash === (await hashPassword(password, guardian.id));
+}
+
+async function setGuardianPassword(guardian: DemoGuardian, password: string): Promise<DemoGuardian> {
+  const updated = { ...guardian, passwordHash: await hashPassword(password, guardian.id) };
+  const family = readFamily();
+  writeFamily({ ...family, guardians: family.guardians.map((g) => (g.id === guardian.id ? updated : g)) });
+  return updated;
 }
 
 /** Acha ou cria o responsável da demonstração pelo e-mail. */

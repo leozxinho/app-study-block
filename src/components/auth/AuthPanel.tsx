@@ -253,7 +253,7 @@ export function AuthPanel({ onSuccess, initialTab = 'entrar' }: AuthPanelProps) 
 
       {demo && (
         <p className="mt-4 p-3 bg-amber-50 border border-amber-300 rounded-md font-body text-xs text-center text-amber-900">
-          💡 <strong>Modo demonstração</strong> (sem Supabase): o responsável entra com qualquer e-mail e senha, e o "Entrar com Google" é simulado. As contas das crianças ficam só neste navegador.
+          💡 <strong>Modo local</strong> (sem Supabase): as contas, as senhas e o progresso ficam salvos só neste aparelho. Crie a conta do responsável uma vez; o "Entrar com Google" é simulado.
         </p>
       )}
     </div>

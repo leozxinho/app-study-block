@@ -3,7 +3,7 @@ import { progressStore } from '../lib/store';
 import { normalizeUsername } from '../lib/family';
 import { User, AgeGroup } from '../types';
 import { readJSON, writeJSON } from '../lib/storage';
-import { findOrCreateGuardian, hashPassword, readFamily } from './familyDemo';
+import { checkGuardianPassword, createGuardian, findGuardian, findOrCreateGuardian, hashPassword, readFamily, type DemoGuardian } from './familyDemo';
 import { forgetProfile, listSavedProfiles, saveProfile, updateProfileSkin, type SavedProfile } from './savedProfiles';
 import type { Session } from '@supabase/supabase-js';
 
@@ -56,6 +56,11 @@ async function switchAccount(user: User | null): Promise<User | null> {
   return user;
 }
 
+/** Responsável local como usuário da sessão (sem o hash da senha). */
+function guardianUser(g: DemoGuardian): User {
+  return { id: g.id, name: g.name, email: g.email, created_at: g.created_at, role: 'parent' };
+}
+
 function saveDemoSession(user: User): User {
   writeJSON(LOCAL_AUTH_KEY, user);
   return user;
@@ -79,8 +84,8 @@ export const authService = {
   /** Cria a conta do responsável. */
   async signUp(email: string, password: string, name: string) {
     if (!isSupabaseConfigured()) {
-      const guardian = findOrCreateGuardian(email, name);
-      return switchAccount(saveDemoSession({ ...guardian, role: 'parent' }));
+      const guardian = await createGuardian(email, name, password);
+      return switchAccount(saveDemoSession(guardianUser(guardian)));
     }
 
     const { data, error } = await supabase.auth.signUp({
@@ -114,9 +119,10 @@ export const authService = {
   /** Responsável entra com e-mail e senha. */
   async signIn(email: string, password: string) {
     if (!isSupabaseConfigured()) {
-      // Demonstração: qualquer senha serve para o responsável
-      const guardian = findOrCreateGuardian(email, '');
-      return switchAccount(saveDemoSession({ ...guardian, role: 'parent' }));
+      // Modo local: a conta e a senha ficam neste navegador
+      const found = findGuardian(email);
+      if (!found || !(await checkGuardianPassword(found, password))) throw new Error('Invalid login credentials');
+      return switchAccount(saveDemoSession(guardianUser(found)));
     }
 
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
