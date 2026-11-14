@@ -1,11 +1,11 @@
 /* MineLearn — service worker (app instalável e funcionando sem internet no que já foi aberto).
- * - Páginas: rede primeiro; sem internet, usa o index.html guardado.
+ * - Páginas: rede primeiro; sem internet, usa o app.html guardado (o index.html é a landing, sem o app).
  * - Arquivos do build (/assets) e ícones: guardados na 1ª vez (nunca mudam de nome).
  * - Áudios (/audio): guardados quando tocam pela 1ª vez; o índice manifest.json sempre da rede.
  * Supabase e outros endereços externos não passam por aqui.
  */
-const VERSION = 'minelearn-v1';
-const SHELL = ['/', '/index.html', '/manifest.webmanifest', '/icons/icon-192.png'];
+const VERSION = 'minelearn-v2';
+const SHELL = ['/app.html', '/manifest.webmanifest', '/icons/icon-192.png'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(VERSION).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
@@ -31,11 +31,14 @@ async function cacheFirst(request) {
 async function networkFirstPage(request) {
   try {
     const res = await fetch(request);
-    const cache = await caches.open(VERSION);
-    cache.put('/index.html', res.clone());
+    // Guarda o shell do app (qualquer rota menos "/", que é a landing estática)
+    if (res.ok && new URL(request.url).pathname !== '/') {
+      const cache = await caches.open(VERSION);
+      cache.put('/app.html', res.clone());
+    }
     return res;
   } catch {
-    return (await caches.match('/index.html')) || Response.error();
+    return (await caches.match('/app.html')) || Response.error();
   }
 }
 

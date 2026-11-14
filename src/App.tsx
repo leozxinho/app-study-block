@@ -1,7 +1,6 @@
 import { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
-import { LandingPage } from './pages/LandingPage';
 import { RouteMeta } from './components/ui/RouteMeta';
 import { ProgressGate } from './components/ui/ProgressGate';
 import { BlockLoader } from './components/ui/BlockLoader';
@@ -12,7 +11,8 @@ import { SubscriptionGuard } from './components/ui/SubscriptionGuard';
 import { loadAudioIndex } from './lib/audio/library';
 
 // Telas carregadas só quando abertas (o celular não baixa o jogo inteiro de uma vez).
-// A landing ("/") vem junto, para abrir na hora (e é pré-renderizada no build).
+// A landing ("/") chega pronta em HTML estático (pré-render); aqui só serve para a navegação dentro do app.
+const LandingPage = lazy(() => import('./pages/LandingPage').then((m) => ({ default: m.LandingPage })));
 const SelectAgePage = lazy(() => import('./pages/SelectAgePage').then((m) => ({ default: m.SelectAgePage })));
 const WorldMapPage = lazy(() => import('./pages/WorldMapPage').then((m) => ({ default: m.WorldMapPage })));
 const ActivityListPage = lazy(() => import('./pages/ActivityListPage').then((m) => ({ default: m.ActivityListPage })));

@@ -2,7 +2,7 @@
  * Pré-render da landing (roda no fim do `npm run build`, depois do `vite build --ssr`).
  *
  * - dist/index.html → landing em HTML estático (H1, textos, FAQ), com canonical, og:*, JSON-LD.
- *   É o que "/" entrega; o React monta o app por cima no navegador.
+ *   É o que "/" entrega, sem o JavaScript do app (só HTML + CSS; os botões são links).
  * - dist/app.html   → o shell vazio de antes (noindex), servido para as outras rotas do app
  *   (vercel.json e public/_redirects), para não piscar a landing no jogo.
  * - dist/sitemap.xml e dist/robots.txt com o domínio de VITE_SITE_URL.
@@ -50,7 +50,11 @@ const consoleError = console.error;
 console.error = (msg, ...rest) => (String(msg).includes('useLayoutEffect does nothing on the server') ? undefined : consoleError(msg, ...rest));
 const landing = ssr.renderLanding();
 console.error = consoleError;
-writeFileSync('dist/index.html', html.replace('<!--seo-->', seo).replace('<!--app-->', landing));
+// A landing não precisa do JavaScript do app: é HTML + CSS, e os botões são links <a> para /login.
+// Sem o script, quem abre "/" não baixa React, router, Supabase etc. (o app carrega nas outras rotas).
+const appScript = /\s*<script type="module"[^>]*src="\/assets\/[^"]+\.js"><\/script>/;
+if (!appScript.test(html)) throw new Error('script do app não encontrado no dist/index.html');
+writeFileSync('dist/index.html', html.replace('<!--seo-->', seo).replace('<!--app-->', landing).replace(appScript, ''));
 
 writeFileSync(
   'dist/sitemap.xml',
