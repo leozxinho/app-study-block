@@ -28,7 +28,7 @@ export function ReadingActivity({ activity, onCorrect, onWrong }: ActivityProps)
           </motion.span>
         ))}
       </div>
-      <div className="grid grid-cols-2 gap-3 max-w-sm mx-auto" role="group" aria-label="Figuras" onKeyDown={arrowNav}>
+      <div className="grid grid-cols-2 land:grid-cols-4 land:max-w-none land:gap-2 gap-3 max-w-sm mx-auto" role="group" aria-label="Figuras" onKeyDown={arrowNav}>
         {data.options.map((opt, i) => {
           const ok = opt.word === data.word;
           const state = fb.stateOf(opt.word, ok);

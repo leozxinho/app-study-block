@@ -14,9 +14,9 @@ type Cell = BlockKind | null;
 
 const COLOR_COUNT: Record<Activity['difficulty'], number> = { facil: 2, medio: 3, dificil: 4 };
 const CELL_PX: Record<number, string> = {
-  2: 'w-16 h-16 sm:w-20 sm:h-20',
-  3: 'w-14 h-14 sm:w-16 sm:h-16',
-  4: 'w-11 h-11 sm:w-14 sm:h-14',
+  2: 'w-16 h-16 sm:w-20 sm:h-20 land:w-14 land:h-14',
+  3: 'w-14 h-14 sm:w-16 sm:h-16 land:w-11 land:h-11',
+  4: 'w-11 h-11 sm:w-14 sm:h-14 land:w-9 land:h-9',
 };
 const MODEL_PX: Record<number, number> = { 2: 44, 3: 34, 4: 26 };
 
@@ -87,7 +87,7 @@ export function BuildPatternActivity({ activity, onCorrect, onWrong }: ActivityP
       question={activity.question}
       subtitle={`Copie a construção na grade ${size}x${size}!`}
     >
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 mb-5">
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 mb-5 land:gap-4 land:mb-2">
         {/* Modelo */}
         <div className="text-center">
           <p className="font-body font-bold text-gray-800 mb-2">Modelo</p>
@@ -125,7 +125,7 @@ export function BuildPatternActivity({ activity, onCorrect, onWrong }: ActivityP
                   disabled={fb.solved}
                   aria-label={`Casa ${i + 1}: ${c ? BLOCKS[c].name : 'vazia'}`}
                   className={`
-                    ${OPTION_BASE} min-h-0 ${CELL_PX[size]} rounded-sm bg-white/70 border-2 border-dashed border-sky-400
+                    ${OPTION_BASE} !min-h-0 ${CELL_PX[size]} rounded-sm bg-white/70 border-2 border-dashed border-sky-400
                     flex items-center justify-center p-0
                     ${wrongCells.includes(i) ? 'animate-shake ring-4 ring-red-600' : ''}
                     ${ghost || (fb.stage === 'reveal' && c !== model[i]) ? 'answer-reveal' : ''}
@@ -151,7 +151,7 @@ export function BuildPatternActivity({ activity, onCorrect, onWrong }: ActivityP
       </div>
 
       {/* Paleta */}
-      <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-4" role="group" aria-label="Blocos: escolha um" onKeyDown={arrowNav}>
+      <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-4 land:mb-2" role="group" aria-label="Blocos: escolha um" onKeyDown={arrowNav}>
         {colors.map((c) => (
           <button
             key={c}
@@ -162,7 +162,7 @@ export function BuildPatternActivity({ activity, onCorrect, onWrong }: ActivityP
             }}
             aria-pressed={brush === c}
             aria-label={BLOCKS[c].name}
-            className={`${OPTION_BASE} w-20 py-2 rounded-lg pixel-border flex flex-col items-center gap-1
+            className={`${OPTION_BASE} w-20 py-2 land:py-1 land:min-h-[56px] rounded-lg pixel-border flex flex-col items-center gap-1
               ${brush === c ? 'bg-amber-200 ring-4 ring-brand-lapis' : 'bg-white hover:bg-amber-50'}`}
           >
             <PixelArt sprite={BLOCKS[c]} size={32} />
@@ -177,7 +177,7 @@ export function BuildPatternActivity({ activity, onCorrect, onWrong }: ActivityP
           }}
           aria-pressed={brush === null}
           aria-label="Apagar"
-          className={`${OPTION_BASE} w-20 py-2 rounded-lg pixel-border flex flex-col items-center justify-center gap-1
+          className={`${OPTION_BASE} w-20 py-2 land:py-1 land:min-h-[56px] rounded-lg pixel-border flex flex-col items-center justify-center gap-1
             ${brush === null ? 'bg-amber-200 ring-4 ring-brand-lapis' : 'bg-white hover:bg-amber-50'}`}
         >
           <Eraser size={28} aria-hidden="true" className="text-gray-800" />

@@ -39,10 +39,10 @@ export function ActivityCard({ question, spoken, subtitle, children }: ActivityC
   return (
     <section
       aria-labelledby={id}
-      className="bg-white rounded-xl pixel-border shadow-lg overflow-hidden lg:grid lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:min-h-[420px] land:grid land:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] land:min-h-0"
+      className="bg-white rounded-xl pixel-border shadow-lg overflow-hidden lg:grid lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:min-h-[420px] land:grid land:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] land:min-h-0"
     >
       {/* Tela larga: a cena vira a coluna da esquerda, as respostas a da direita */}
-      <header className={`relative bg-gradient-to-b ${theme.sky} px-3 sm:px-5 pt-4 pb-7 overflow-hidden lg:flex lg:flex-col lg:justify-end lg:pb-10 land:flex land:flex-col land:justify-start land:pt-3 land:pb-6`}>
+      <header className={`relative bg-gradient-to-b ${theme.sky} px-3 sm:px-5 pt-4 pb-7 overflow-hidden lg:flex lg:flex-col lg:pt-6 lg:pb-10 land:flex land:flex-col land:pt-3 land:pb-6`}>
         {/* enfeites do mundo */}
         <span aria-hidden="true" className="absolute right-3 top-2 opacity-50 scene-float">
           <ItemArt emoji={theme.decor[0]} size={28} />
@@ -50,13 +50,17 @@ export function ActivityCard({ question, spoken, subtitle, children }: ActivityC
         <span aria-hidden="true" className="absolute right-14 bottom-4 opacity-40 scene-float" style={{ animationDelay: '1.2s' }}>
           <ItemArt emoji={theme.decor[1]} size={22} />
         </span>
-        <div className="relative flex items-end gap-2 sm:gap-3">
-          <div className="shrink-0 -mb-2 lg:origin-bottom-left lg:scale-150 lg:mr-6">
+        {/* Tela larga e celular deitado: balão em cima, personagem embaixo no chão (sem céu vazio) */}
+        <div className="relative flex items-end gap-2 sm:gap-3 lg:flex-1 lg:flex-col-reverse lg:items-start lg:justify-between lg:gap-6 land:flex-1 land:flex-col-reverse land:items-start land:justify-end land:gap-3">
+          <div className="shrink-0 -mb-2 lg:origin-bottom-left lg:scale-150 lg:ml-6 land:hidden">
             <Mob type={skin.character} skin={skin} size={48} animation="idle" title="Você" />
           </div>
           {/* balão de fala com a pergunta */}
-          <div className="relative flex-1 min-w-0 bg-white rounded-xl border-2 border-gray-800 px-3 py-2 shadow-md">
-            <span aria-hidden="true" className="absolute -left-2 bottom-3 w-3 h-3 bg-white border-l-2 border-b-2 border-gray-800 rotate-45" />
+          <div className="relative flex-1 min-w-0 bg-white rounded-xl border-2 border-gray-800 px-3 py-2 shadow-md lg:flex-none lg:w-full land:flex-none land:w-full">
+            <span
+              aria-hidden="true"
+              className="absolute -left-2 bottom-3 w-3 h-3 bg-white border-l-2 border-b-2 border-gray-800 rotate-45 lg:left-10 lg:-bottom-[8px] lg:border-l-0 lg:border-r-2 land:hidden"
+            />
             <div className="flex items-center justify-between gap-2">
               <h2 id={id} className="font-body text-base sm:text-xl land:text-base font-bold text-gray-900">
                 {question}
@@ -79,7 +83,7 @@ export function ActivityCard({ question, spoken, subtitle, children }: ActivityC
         {/* chão do mundo */}
         <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-4" style={{ background: theme.ground }} />
       </header>
-      <div className="p-4 sm:p-6 lg:p-8 lg:flex lg:flex-col lg:justify-center land:p-3 land:flex land:flex-col land:justify-center">{children}</div>
+      <div className="p-4 sm:p-6 lg:p-8 lg:flex lg:flex-col lg:justify-center land:p-3 land:flex land:flex-col land:justify-center land:[zoom:0.85]">{children}</div>
     </section>
   );
 }

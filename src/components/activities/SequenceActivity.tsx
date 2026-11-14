@@ -45,7 +45,7 @@ export function SequenceActivity({ activity, onCorrect, onWrong }: ActivityProps
       </div>
 
       <div
-        className="grid grid-cols-2 gap-3 sm:gap-4 max-w-xs sm:max-w-sm mx-auto"
+        className="grid grid-cols-2 land:grid-cols-4 land:max-w-none land:gap-2 gap-3 sm:gap-4 max-w-xs sm:max-w-sm mx-auto"
         role="group"
         aria-label="Respostas"
         onKeyDown={arrowNav}

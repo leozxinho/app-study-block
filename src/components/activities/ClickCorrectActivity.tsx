@@ -24,7 +24,7 @@ export function ClickCorrectActivity({ activity, onCorrect, onWrong }: ActivityP
       subtitle={anyCorrect ? 'Toque em qualquer item! 🎉' : undefined}
     >
       <div
-        className="grid grid-cols-2 gap-3 sm:gap-5 max-w-sm sm:max-w-md mx-auto"
+        className="grid grid-cols-2 land:grid-cols-4 land:max-w-none land:gap-2 gap-3 sm:gap-5 max-w-sm sm:max-w-md mx-auto"
         role="group"
         aria-label="Itens para tocar"
         onKeyDown={arrowNav}

@@ -32,7 +32,7 @@ export function ShapeIdentificationActivity({ activity, onCorrect, onWrong }: Ac
   return (
     <ActivityCard icon="🔷" question={activity.question}>
       <div
-        className="grid grid-cols-2 gap-3 sm:gap-6 max-w-sm sm:max-w-md mx-auto"
+        className="grid grid-cols-2 land:grid-cols-4 land:max-w-none land:gap-2 gap-3 sm:gap-6 max-w-sm sm:max-w-md mx-auto"
         role="group"
         aria-label="Formas"
         onKeyDown={arrowNav}

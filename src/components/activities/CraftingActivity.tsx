@@ -77,7 +77,7 @@ export function CraftingActivity({ activity, onCorrect, onWrong }: ActivityProps
       question={activity.question}
       subtitle="Escolha um item e toque nos quadrados para copiar a receita!"
     >
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-5 sm:gap-8 mb-5">
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-5 sm:gap-8 mb-5 land:gap-4 land:mb-2">
         {/* Receita */}
         <div className="text-center">
           <p className="font-body font-bold text-gray-800 mb-2">Receita</p>
@@ -117,7 +117,7 @@ export function CraftingActivity({ activity, onCorrect, onWrong }: ActivityProps
                   disabled={fb.solved}
                   aria-label={`Casa ${i + 1}: ${item ? ITEMS[item].name : 'vazia'}`}
                   className={`
-                    ${OPTION_BASE} min-h-0 w-14 h-14 sm:w-16 sm:h-16 rounded-sm bg-stone-300 hover:bg-stone-200
+                    ${OPTION_BASE} !min-h-0 w-14 h-14 sm:w-16 sm:h-16 land:w-11 land:h-11 rounded-sm bg-stone-300 hover:bg-stone-200
                     flex items-center justify-center
                     ${wrongCells.includes(i) ? 'animate-shake ring-4 ring-red-600 bg-red-200' : ''}
                     ${ghost ? 'answer-reveal' : ''}
@@ -140,7 +140,7 @@ export function CraftingActivity({ activity, onCorrect, onWrong }: ActivityProps
         <div className="text-center">
           <p className="font-body font-bold text-gray-800 mb-2">Resultado</p>
           <div
-            className={`w-20 h-20 rounded-lg pixel-border flex items-center justify-center
+            className={`w-20 h-20 land:w-14 land:h-14 rounded-lg pixel-border flex items-center justify-center
               ${fb.solved ? 'bg-green-200 answer-correct' : 'bg-stone-300'}`}
           >
             <motion.span
@@ -155,7 +155,7 @@ export function CraftingActivity({ activity, onCorrect, onWrong }: ActivityProps
 
       {/* Paleta de itens */}
       <div
-        className="flex flex-wrap justify-center gap-3 mb-4"
+        className="flex flex-wrap justify-center gap-3 mb-4 land:mb-2"
         role="group"
         aria-label="Itens: escolha um"
         onKeyDown={arrowNav}
@@ -175,7 +175,7 @@ export function CraftingActivity({ activity, onCorrect, onWrong }: ActivityProps
             aria-pressed={selected === item}
             aria-label={ITEMS[item].name}
             className={`
-              ${OPTION_BASE} drag-handle w-20 px-2 py-2 rounded-lg pixel-border flex flex-col items-center gap-1
+              ${OPTION_BASE} drag-handle w-20 px-2 py-2 land:py-1 land:min-h-[56px] rounded-lg pixel-border flex flex-col items-center gap-1
               ${selected === item ? 'bg-amber-200 ring-4 ring-brand-lapis' : 'bg-white hover:bg-amber-50'}
             `}
           >

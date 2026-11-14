@@ -17,7 +17,7 @@ export function LetterIdentificationActivity({ activity, onCorrect, onWrong }: A
   return (
     <ActivityCard icon="🔤" question={activity.question}>
       <div
-        className="grid grid-cols-2 gap-3 sm:gap-4 max-w-sm sm:max-w-md mx-auto"
+        className="grid grid-cols-2 land:grid-cols-4 land:max-w-none land:gap-2 gap-3 sm:gap-4 max-w-sm sm:max-w-md mx-auto"
         role="group"
         aria-label="Letras"
         onKeyDown={arrowNav}
