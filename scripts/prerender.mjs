@@ -79,11 +79,11 @@ const LANDING_MUSIC = `
         music.volume = 0.4;
         var start = function () {
           music.play().then(function () {
-            ['pointerdown', 'keydown'].forEach(function (t) { document.removeEventListener(t, start); });
+            ['pointerdown', 'touchend', 'keydown'].forEach(function (t) { document.removeEventListener(t, start); });
           }, function () {});
         };
         start();
-        ['pointerdown', 'keydown'].forEach(function (t) { document.addEventListener(t, start); });
+        ['pointerdown', 'touchend', 'keydown'].forEach(function (t) { document.addEventListener(t, start); });
       })();
     </script>`;
 

@@ -167,7 +167,22 @@ function playRecordedVoice(file: string, onEnd?: () => void): void {
   el.addEventListener('ended', done);
   el.addEventListener('error', done);
   duckMusic(true);
-  el.play().catch(done);
+  el.play().catch((e: unknown) => {
+    // Bloqueada porque ainda não houve toque na tela: toca no 1º toque (se nada mais tocou antes)
+    if (e instanceof DOMException && e.name === 'NotAllowedError' && current === el) blocked = file;
+    done();
+  });
+}
+
+/** Última fala que o navegador bloqueou antes do 1º toque. */
+let blocked: string | null = null;
+if (typeof document !== 'undefined') {
+  const retry = () => {
+    const file = blocked;
+    blocked = null;
+    if (file && !current && enabled) playRecordedVoice(file);
+  };
+  ['pointerdown', 'touchend', 'keydown'].forEach((t) => document.addEventListener(t, retry, { capture: true }));
 }
 
 /**
@@ -260,18 +275,10 @@ function stopCurrent(): void {
 
 /** Para tudo: a fala atual, a sequência com a vez e o que estava esperando. */
 export function stopSpeaking(): void {
+  blocked = null;
   holding = false;
   pending = null;
   queue.length = 0;
   stopCurrent();
 }
 
-/** Faixas que ainda não leem sozinhas: a pergunta é lida automaticamente. */
-export function readsAloudByDefault(): boolean {
-  try {
-    const age = localStorage.getItem('minecraft_edu_age_group') || 'maternal';
-    return ['bercario', 'maternal', 'pre-escola-1', 'pre-escola-2'].includes(age);
-  } catch {
-    return true;
-  }
-}

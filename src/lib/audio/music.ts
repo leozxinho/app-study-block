@@ -93,11 +93,12 @@ function apply(): void {
   audio.play().then(() => fade(audio, target), () => undefined);
 }
 
-// Navegadores só deixam tocar depois de um toque/clique
+// Navegadores só deixam tocar depois de um toque/clique/tecla: tenta de novo no 1º que vier
 if (typeof document !== 'undefined') {
-  document.addEventListener('pointerdown', () => {
+  const retry = () => {
     if (el && el.paused) el.play().then(() => el && fade(el, ducked ? DUCKED : VOLUME), () => undefined);
-  });
+  };
+  ['pointerdown', 'touchend', 'keydown'].forEach((t) => document.addEventListener(t, retry, { capture: true }));
   subscribeMuted(apply);
 }
 

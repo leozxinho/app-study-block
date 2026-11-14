@@ -1,5 +1,5 @@
 import { useEffect, useId, type ReactNode } from 'react';
-import { hasRecordedVoice, isVoiceSupported, readsAloudByDefault, speak, stopSpeaking } from '../../../lib/voice';
+import { hasRecordedVoice, isVoiceSupported, speak, stopSpeaking } from '../../../lib/voice';
 import { Mob } from '../../mobs';
 import { useGameStats } from '../../../services/gameStatsService';
 import { useSceneTheme } from './sceneTheme';
@@ -28,9 +28,8 @@ export function ActivityCard({ question, spoken, subtitle, children }: ActivityC
   const id = useId();
   const theme = useSceneTheme();
   const { skin } = useGameStats();
-  // Quem ainda não lê ouve a pergunta assim que ela aparece
+  // A pergunta é lida assim que aparece (todas as faixas)
   useEffect(() => {
-    if (!readsAloudByDefault()) return;
     const t = setTimeout(() => speak(textToSpeak(question, spoken)), 350);
     return () => {
       clearTimeout(t);

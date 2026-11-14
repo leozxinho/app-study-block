@@ -186,6 +186,15 @@ export function unlockAudio(): void {
   }
 }
 
+// Libera os efeitos no 1º toque/clique/tecla em qualquer lugar da tela
+if (typeof document !== 'undefined') {
+  const first = () => {
+    unlockAudio();
+    ['pointerdown', 'touchend', 'keydown'].forEach((t) => document.removeEventListener(t, first, { capture: true }));
+  };
+  ['pointerdown', 'touchend', 'keydown'].forEach((t) => document.addEventListener(t, first, { capture: true }));
+}
+
 export function playSound(kind: SoundKind): void {
   if (muted) return;
   if (playRecorded(SFX_FILES[kind])) return;
