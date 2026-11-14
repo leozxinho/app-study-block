@@ -5,6 +5,7 @@ import { isMuted, subscribeMuted } from '../sounds';
 /**
  * Música de fundo (public/audio/musica, ver docs/audio/ROTEIRO-AUDIO.txt seção 5).
  * Uma faixa em loop por tela, com fade ao trocar, mais baixa enquanto alguém fala.
+ * "nome#início-fim" (em segundos) toca e repete só esse trecho da faixa (ex.: "entrada#13-30").
  * Sem o arquivo (ou com som/música desligados), fica em silêncio.
  */
 
@@ -43,10 +44,30 @@ function fade(audio: HTMLAudioElement, to: number, then?: () => void): void {
   }, FADE_MS / steps);
 }
 
+/** "entrada#13-30" → arquivo musica/entrada.mp3, trecho de 13 s a 30 s. */
+function parseTrack(track: string): { file: string; start: number; end: number | null } {
+  const m = track.match(/^(.+)#(\d+(?:\.\d+)?)-(\d+(?:\.\d+)?)$/);
+  return m ? { file: `musica/${m[1]}.mp3`, start: Number(m[2]), end: Number(m[3]) } : { file: `musica/${track}.mp3`, start: 0, end: null };
+}
+
+/** Repete só o trecho [start, end) da faixa. */
+function loopSegment(audio: HTMLAudioElement, start: number, end: number): void {
+  audio.loop = false;
+  const restart = () => {
+    audio.currentTime = start;
+    if (audio.paused && audio === el) audio.play().catch(() => undefined);
+  };
+  audio.addEventListener('loadedmetadata', () => (audio.currentTime = start), { once: true });
+  audio.addEventListener('timeupdate', () => {
+    if (audio.currentTime >= end) restart();
+  });
+  audio.addEventListener('ended', restart);
+}
+
 function apply(): void {
   const tracks = override ? [override] : wanted;
-  const file = tracks.map((t) => `musica/${t}.mp3`).find((f) => hasAudio(f)) ?? null;
-  const ok = file && enabled && !isMuted() ? file : null;
+  const track = tracks.find((t) => hasAudio(parseTrack(t).file)) ?? null;
+  const ok = track && enabled && !isMuted() ? track : null;
   const target = ducked ? DUCKED : VOLUME;
 
   if (ok && ok === playing && el) {
@@ -61,8 +82,10 @@ function apply(): void {
     playing = null;
   }
   if (!ok) return;
-  const audio = new Audio(audioUrl(ok));
+  const { file, start, end } = parseTrack(ok);
+  const audio = new Audio(audioUrl(file));
   audio.loop = true;
+  if (end !== null) loopSegment(audio, start, end);
   audio.volume = 0;
   el = audio;
   playing = ok;
