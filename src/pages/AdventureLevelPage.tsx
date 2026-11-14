@@ -25,39 +25,30 @@ import { activityService } from '../services/activityService';
 import { generateAdventureLevels, getWorldForLevel } from '../data/adventureWorlds';
 import { Activity } from '../types';
 
-// Activity components
-import { MultipleChoiceActivity } from '../components/activities/MultipleChoiceActivity';
-import { CountingActivity } from '../components/activities/CountingActivity';
-import { ColorIdentificationActivity } from '../components/activities/ColorIdentificationActivity';
-import { MemoryActivity } from '../components/activities/MemoryActivity';
-import { MatchingActivity } from '../components/activities/MatchingActivity';
-import { OrderingActivity } from '../components/activities/OrderingActivity';
-import { ShapeIdentificationActivity } from '../components/activities/ShapeIdentificationActivity';
-import { LetterIdentificationActivity } from '../components/activities/LetterIdentificationActivity';
-import { SequenceActivity } from '../components/activities/SequenceActivity';
-import { ClickCorrectActivity } from '../components/activities/ClickCorrectActivity';
-import { DragDropActivity } from '../components/activities/DragDropActivity';
-import { CraftingActivity } from '../components/activities/CraftingActivity';
-import { MiningMathActivity } from '../components/activities/MiningMathActivity';
-import { WordBuilderActivity } from '../components/activities/WordBuilderActivity';
-import { ShadowMatchActivity } from '../components/activities/ShadowMatchActivity';
-import { BuildPatternActivity } from '../components/activities/BuildPatternActivity';
-import { MathMobsActivity } from '../components/activities/MathMobsActivity';
-import { ClockActivity } from '../components/activities/ClockActivity';
-import { ReadingActivity } from '../components/activities/ReadingActivity';
+import { ActivityRenderer } from '../components/activities/ActivityRenderer';
 
-/** Ao ir para a próxima fase, a tela começa do zero (estado novo para cada fase). */
+/**
+ * Fase da aventura (/adventure/:levelNumber) e modo treino (/treino/:activityId: joga as rodadas de
+ * uma atividade, registra acertos e erros, sem mexer nas fases nem nas estrelas).
+ * Ao ir para a próxima fase, a tela começa do zero (estado novo para cada fase).
+ */
 export function AdventureLevelPage() {
-  const { levelNumber } = useParams<{ levelNumber: string }>();
-  return <AdventureLevel key={levelNumber} />;
+  const { levelNumber, activityId } = useParams<{ levelNumber: string; activityId: string }>();
+  return <AdventureLevel key={activityId ?? levelNumber} />;
 }
 
 function AdventureLevel() {
   const navigate = useNavigate();
-  const { levelNumber: levelParam } = useParams<{ levelNumber: string }>();
-  const levelNumber = parseInt(levelParam || '1', 10);
-
+  const { levelNumber: levelParam, activityId: practiceId } = useParams<{ levelNumber: string; activityId: string }>();
+  const practice = Boolean(practiceId);
   const ageGroup = localStorage.getItem('minecraft_edu_age_group') || 'maternal';
+  // Treino: usa o cenário da fase onde a atividade aparece (ou o da 1ª fase)
+  const [practiceLevel] = useState(() =>
+    practiceId ? generateAdventureLevels(ageGroup).find((l) => l.activityIds.includes(baseActivityId(practiceId)))?.levelNumber ?? 1 : null
+  );
+  const levelNumber = practiceLevel ?? parseInt(levelParam || '1', 10);
+  const [practiceDone, setPracticeDone] = useState(false);
+  const exitTo = practice ? '/treino' : '/adventure';
   // useMemo: antes a fase era recriada a cada render e o efeito de carregar rodava de novo
   const level = useMemo(
     () => generateAdventureLevels(ageGroup).find((l) => l.levelNumber === levelNumber) || null,
@@ -93,7 +84,7 @@ function AdventureLevel() {
   const [showWorldUnlock, setShowWorldUnlock] = useState(false);
   // Fase 10 de cada mundo: prova contra o chefe com perguntas das fases do mundo.
   // Acertou de primeira = ponto da criança; errou = ponto do chefe. Só passa de mundo vencendo.
-  const bossLevel = isBossLevel(levelNumber);
+  const bossLevel = !practice && isBossLevel(levelNumber);
   const boss = themeForLevel(levelNumber).boss;
   const [playerScore, setPlayerScore] = useState(0);
   const [bossScore, setBossScore] = useState(0);
@@ -104,17 +95,17 @@ function AdventureLevel() {
 
   // Começo da fase (a pergunta espera a vez): boas-vindas na 1ª fase do mundo; nas outras, "Bora!"
   useEffect(() => {
-    if (isBossLevel(levelNumber)) return; // o chefe se apresenta
+    if (bossLevel) return; // o chefe se apresenta
     const world = String(Math.ceil(levelNumber / 10)).padStart(2, '0');
-    playVoiceSequence([levelNumber % 10 === 1 ? `voz/mundos/mundo-${world}.mp3` : 'voz/mascote/inicio-fase.mp3']);
-  }, [levelNumber]);
+    playVoiceSequence([!practice && levelNumber % 10 === 1 ? `voz/mundos/mundo-${world}.mp3` : 'voz/mascote/inicio-fase.mp3']);
+  }, [levelNumber, bossLevel, practice]);
   const [attempt, setAttempt] = useState(0);
   const startedRef = useRef<string | null>(null);
   /** Última pergunta que já chamou o acerto (evita avançar 2 vezes a mesma). */
   const handledStep = useRef(-1);
   const [bossEvent, setBossEvent] = useState<BossEvent | null>(null);
   // Minijogo de diamantes no meio de algumas fases (de 3 em 3, menos nas de chefe)
-  const hasMinigame = !bossLevel && levelNumber % 3 === 0;
+  const hasMinigame = !practice && !bossLevel && levelNumber % 3 === 0;
   const [minigame, setMinigame] = useState(false);
   const [minigameXP, setMinigameXP] = useState(0);
 
@@ -126,6 +117,12 @@ function AdventureLevel() {
 
     const initLevel = async () => {
       try {
+        if (practiceId) {
+          const a = await activityService.getActivityById(baseActivityId(practiceId));
+          setActivities(a ? buildRounds(a, getAdaptiveLevel()) : []);
+          setStep(0);
+          return;
+        }
         // Check if level is locked
         const progress = adventureService.getLevelProgress(ageGroup);
         const levelProgress = progress[levelNumber];
@@ -143,7 +140,7 @@ function AdventureLevel() {
           adventureService.startLevel(levelNumber, ageGroup);
         }
 
-        if (isBossLevel(levelNumber)) {
+        if (bossLevel) {
           // Prova do mundo: uma pergunta de cada fase do mundo (fase 1 → 10, do mais fácil ao mais difícil)
           const first = levelNumber - 9;
           const worldLevels = generateAdventureLevels(ageGroup).filter((l) => l.levelNumber >= first && l.levelNumber <= levelNumber);
@@ -174,7 +171,7 @@ function AdventureLevel() {
     };
 
     initLevel();
-  }, [level, levelNumber, ageGroup, attempt]);
+  }, [level, levelNumber, ageGroup, attempt, practiceId, bossLevel]);
 
   /** Revanche contra o chefe: perguntas sorteadas de novo, placar zerado. */
   const retryBoss = useCallback(() => {
@@ -216,6 +213,13 @@ function AdventureLevel() {
         setMidCelebrate(false);
         setStep((s) => s + 1);
       }, 1400);
+      return;
+    }
+
+    // Treino: sem fase nem estrelas; soma o XP da atividade e mostra o fim do treino
+    if (practice) {
+      if (activity) void progressService.completeActivity(baseActivityId(activity.id), scoreForErrors(errors));
+      setPracticeDone(true);
       return;
     }
 
@@ -294,7 +298,7 @@ function AdventureLevel() {
       setTimeout(() => setShowRewardModal(true), 3200);
     }
     else setShowRewardModal(true);
-  }, [bossLevel, boss.name, playerScore, bossScore, hasMinigame, minigameXP, playedTodayAtStart, levelNumber, ageGroup, errors, step, activities.length, activity, stepErrors]);
+  }, [practice, bossLevel, boss.name, playerScore, bossScore, hasMinigame, minigameXP, playedTodayAtStart, levelNumber, ageGroup, errors, step, activities.length, activity, stepErrors]);
 
   const handleWrong = useCallback(() => {
     setErrors((e) => e + 1);
@@ -348,61 +352,14 @@ function AdventureLevel() {
           <p className="font-body text-gray-300 text-lg">
             Atividade não disponível.
           </p>
-          <MinecraftButton variant="secondary" onClick={() => navigate('/adventure')} className="mt-4">
-            Voltar ao Mapa
+          <MinecraftButton variant="secondary" onClick={() => navigate(exitTo)} className="mt-4">
+            {practice ? 'Voltar ao treino' : 'Voltar ao Mapa'}
           </MinecraftButton>
         </div>
       );
     }
 
-    const commonProps = {
-      activity,
-      onCorrect: handleCorrect,
-      onWrong: handleWrong,
-    };
-
-    switch (activity.activity_type) {
-      case 'multiple-choice':
-        return <MultipleChoiceActivity {...commonProps} />;
-      case 'counting':
-        return <CountingActivity {...commonProps} />;
-      case 'color-identification':
-        return <ColorIdentificationActivity {...commonProps} />;
-      case 'memory':
-        return <MemoryActivity {...commonProps} />;
-      case 'matching':
-        return <MatchingActivity {...commonProps} />;
-      case 'ordering':
-        return <OrderingActivity {...commonProps} />;
-      case 'shape-identification':
-        return <ShapeIdentificationActivity {...commonProps} />;
-      case 'letter-identification':
-        return <LetterIdentificationActivity {...commonProps} />;
-      case 'sequence':
-        return <SequenceActivity {...commonProps} />;
-      case 'click-correct':
-        return <ClickCorrectActivity {...commonProps} />;
-      case 'drag-drop':
-        return <DragDropActivity {...commonProps} />;
-      case 'crafting':
-        return <CraftingActivity {...commonProps} />;
-      case 'mining-math':
-        return <MiningMathActivity {...commonProps} />;
-      case 'word-builder':
-        return <WordBuilderActivity {...commonProps} />;
-      case 'shadow-match':
-        return <ShadowMatchActivity {...commonProps} />;
-      case 'build-pattern':
-        return <BuildPatternActivity {...commonProps} />;
-      case 'math-mobs':
-        return <MathMobsActivity {...commonProps} />;
-      case 'clock':
-        return <ClockActivity {...commonProps} />;
-      case 'reading':
-        return <ReadingActivity {...commonProps} />;
-      default:
-        return <MultipleChoiceActivity {...commonProps} />;
-    }
+    return <ActivityRenderer activity={activity} onCorrect={handleCorrect} onWrong={handleWrong} />;
   };
 
   // Loading state
@@ -469,8 +426,8 @@ function AdventureLevel() {
         <div className="max-w-5xl mx-auto flex items-center gap-2 sm:gap-3">
           <button
             type="button"
-            onClick={() => navigate('/adventure')}
-            aria-label="Sair da fase e voltar ao mapa"
+            onClick={() => navigate(exitTo)}
+            aria-label={practice ? 'Sair do treino' : 'Sair da fase e voltar ao mapa'}
             title="Sair"
             className="w-11 h-11 shrink-0 flex items-center justify-center rounded-md bg-black/25 text-white text-xl hover:bg-black/40 focus:outline-none focus-visible:ring-4 focus-visible:ring-minecraft-gold"
           >
@@ -478,7 +435,7 @@ function AdventureLevel() {
           </button>
           <div className="flex-1 min-w-0">
             <p className="font-minecraft text-[9px] sm:text-[10px] text-white/90 truncate mb-1">
-              {world?.icon} Fase {levelNumber} · {level.name}
+              {practice ? `🎯 Treino · ${activity?.title ?? ''}` : `${world?.icon ?? ''} Fase ${levelNumber} · ${level.name}`}
             </p>
             <div
               role="progressbar"
@@ -541,6 +498,19 @@ function AdventureLevel() {
       </div>
 
       {minigame && <DiamondRush onFinish={handleMinigameFinish} />}
+      {practiceDone && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4" role="dialog" aria-modal="true" aria-labelledby="practice-done">
+          <div className="bg-white rounded-xl pixel-border p-6 max-w-sm w-full text-center">
+            <p className="text-5xl mb-2" aria-hidden="true">🎯</p>
+            <h2 id="practice-done" className="font-minecraft text-base text-gray-900 mb-2">Treino concluído!</h2>
+            <p className="font-body text-gray-700 mb-5">{errors === 0 ? 'Acertou tudo de primeira!' : `Você errou ${errors} ${errors === 1 ? 'vez' : 'vezes'} e chegou até o fim.`}</p>
+            <div className="flex flex-col gap-2">
+              <MinecraftButton variant="gold" onClick={() => navigate('/treino')}>Voltar ao treino</MinecraftButton>
+              <MinecraftButton variant="secondary" onClick={() => navigate('/adventure')}>Ir para o mapa</MinecraftButton>
+            </div>
+          </div>
+        </div>
+      )}
       {bossLost && (
         <BossDefeat boss={boss} playerScore={playerScore} bossScore={bossScore} onRetry={retryBoss} onMap={() => navigate('/adventure')} />
       )}

@@ -50,7 +50,7 @@ export function TrainingPage() {
                     {item.errors} {item.errors === 1 ? 'erro' : 'erros'} nesta semana
                   </p>
                 </div>
-                <MinecraftButton variant="success" size="sm" onClick={() => navigate(`/activity/${item.activityId}`)}>
+                <MinecraftButton variant="success" size="sm" onClick={() => navigate(`/treino/${item.activityId}`)}>
                   ▶ Treinar
                 </MinecraftButton>
               </motion.li>

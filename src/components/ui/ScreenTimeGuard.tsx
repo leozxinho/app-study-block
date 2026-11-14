@@ -11,7 +11,7 @@ import { adultChallenge, secondsLeft } from '../../lib/screenTime';
 import { stopSpeaking } from '../../lib/voice';
 
 /** Telas onde o tempo conta (as de jogar; não conta na Área dos Pais nem no login). */
-const COUNTED = ['/adventure', '/activity', '/album', '/casa', '/loja', '/relampago', '/dashboard', '/world', '/activities'];
+const COUNTED = ['/adventure', '/treino', '/album', '/casa', '/loja', '/relampago', '/dashboard'];
 const TICK = 15; // segundos entre gravações
 
 /**

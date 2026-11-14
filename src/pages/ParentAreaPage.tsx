@@ -497,12 +497,6 @@ export function ParentAreaPage() {
           </div>
         </section>
 
-        <section aria-label="Outras atividades" className="bg-white border border-gray-200 rounded-md p-4 flex flex-wrap items-center justify-between gap-3">
-          <p className="font-body text-sm text-gray-700">Atividades avulsas por tema, fora da aventura (para jogar junto com a criança).</p>
-          <MinecraftButton variant="secondary" size="sm" onClick={() => navigate('/activities')}>
-            📚 Ver atividades por tema
-          </MinecraftButton>
-        </section>
 
         {children && children.length > 0 && (
           <section aria-labelledby="reset-title" className="bg-white border-2 border-red-200 rounded-md p-4">

@@ -13,7 +13,8 @@
  */
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { MOCK_ACTIVITIES } from '../src/data/mockActivities';
+import { EXTRA_CONTENT } from '../src/data/extraContent';
+import { NEW_TYPE_ACTIVITIES } from '../src/data/newTypeActivities';
 import { ADVENTURE_ACTIVITIES } from '../src/data/adventureActivities';
 import { generateAdventureLevels } from '../src/data/adventureWorlds';
 import type { Activity, ActivityType } from '../src/types';
@@ -27,7 +28,7 @@ import { DIFFICULTY_RULES, problemIssue } from '../src/lib/mathGenerator';
 
 // ---------------------------------------------------------------------------
 
-/** Tipos com componente registrado em ActivityPlayerPage e AdventureLevelPage. */
+/** Tipos com componente registrado em ActivityRenderer. */
 const RENDERED_TYPES: ActivityType[] = [
   'multiple-choice', 'counting', 'color-identification', 'memory', 'matching', 'ordering',
   'shape-identification', 'letter-identification', 'sequence', 'click-correct', 'drag-drop',
@@ -335,7 +336,8 @@ async function main() {
   const showAll = args.includes('--all');
 
   const list: { a: Activity; source: string }[] = [
-    ...MOCK_ACTIVITIES.map((a) => ({ a, source: 'mockActivities' })),
+    ...NEW_TYPE_ACTIVITIES.map((a) => ({ a, source: 'newTypeActivities' })),
+    ...EXTRA_CONTENT.map((a) => ({ a, source: 'extraContent (fora do jogo)' })),
     ...Object.values(ADVENTURE_ACTIVITIES).flat().map((a) => ({ a, source: 'adventureActivities' })),
   ];
   const supa = await loadSupabase();

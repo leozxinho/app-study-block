@@ -6,14 +6,14 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { ADVENTURE_ACTIVITIES } from '../../src/data/adventureActivities';
-import { MOCK_ACTIVITIES } from '../../src/data/mockActivities';
+import { EXTRA_CONTENT } from '../../src/data/extraContent';
 import { NEW_TYPE_ACTIVITIES } from '../../src/data/newTypeActivities';
 import { buildRounds, hideAnswer, parseWordBuilder, roundCount, variantPool } from '../../src/lib/activityParsers';
 import { stripNumberHints } from '../../src/lib/text';
 import { speechText } from '../../src/lib/voice';
 import type { Activity } from '../../src/types';
 
-const all = [...Object.values(ADVENTURE_ACTIVITIES).flat(), ...MOCK_ACTIVITIES, ...NEW_TYPE_ACTIVITIES];
+const all = [...Object.values(ADVENTURE_ACTIVITIES).flat(), ...EXTRA_CONTENT, ...NEW_TYPE_ACTIVITIES];
 
 test('variações fixas: a mesma atividade gera sempre a mesma lista', () => {
   for (const a of all.slice(0, 200)) assert.deepEqual(variantPool(a), variantPool(a), a.id);

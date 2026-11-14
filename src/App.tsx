@@ -14,9 +14,6 @@ import { loadAudioIndex } from './lib/audio/library';
 // A landing ("/") chega pronta em HTML estático (pré-render); aqui só serve para a navegação dentro do app.
 const LandingPage = lazy(() => import('./pages/LandingPage').then((m) => ({ default: m.LandingPage })));
 const SelectAgePage = lazy(() => import('./pages/SelectAgePage').then((m) => ({ default: m.SelectAgePage })));
-const WorldMapPage = lazy(() => import('./pages/WorldMapPage').then((m) => ({ default: m.WorldMapPage })));
-const ActivityListPage = lazy(() => import('./pages/ActivityListPage').then((m) => ({ default: m.ActivityListPage })));
-const ActivityPlayerPage = lazy(() => import('./pages/ActivityPlayerPage').then((m) => ({ default: m.ActivityPlayerPage })));
 const LoginPage = lazy(() => import('./pages/LoginPage').then((m) => ({ default: m.LoginPage })));
 const StudentDashboardPage = lazy(() => import('./pages/StudentDashboardPage').then((m) => ({ default: m.StudentDashboardPage })));
 const ParentAreaPage = lazy(() => import('./pages/ParentAreaPage').then((m) => ({ default: m.ParentAreaPage })));
@@ -29,11 +26,6 @@ const AlbumPage = lazy(() => import('./pages/AlbumPage').then((m) => ({ default:
 const HousePage = lazy(() => import('./pages/HousePage').then((m) => ({ default: m.HousePage })));
 const TrainingPage = lazy(() => import('./pages/TrainingPage').then((m) => ({ default: m.TrainingPage })));
 const LightningPage = lazy(() => import('./pages/LightningPage').then((m) => ({ default: m.LightningPage })));
-
-// Página de conferência dos mobs: só existe em desenvolvimento (fica fora do build).
-const MobsPage = import.meta.env.DEV
-  ? lazy(() => import('./pages/MobsPage').then((m) => ({ default: m.MobsPage })))
-  : null;
 
 // Carrega a conta da sessão salva (e o progresso dela) e acompanha login/logout
 authService.start();
@@ -72,14 +64,9 @@ function App() {
         <Routes>
           <Route path="/" element={<HomeRoute />} />
           <Route path="/select-age" element={<SelectAgePage />} />
-          <Route path="/world" element={<WorldMapPage />} />
-          <Route path="/activities" element={<ActivityListPage />} />
-        <Route path="/activities/:category" element={<ActivityListPage />} />
-          <Route path="/activity/:id" element={<ActivityPlayerPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/dashboard" element={<StudentDashboardPage />} />
           <Route path="/responsavel" element={<ParentAreaPage />} />
-          <Route path="/teacher" element={<Navigate to="/responsavel" replace />} />
           <Route path="/adventure" element={<AdventureMapPage />} />
           <Route path="/adventure/:levelNumber" element={<AdventureLevelPage />} />
           <Route path="/loja" element={<ShopPage />} />
@@ -88,18 +75,9 @@ function App() {
           <Route path="/casa" element={<HousePage />} />
           <Route path="/relampago" element={<LightningPage />} />
           <Route path="/treino" element={<TrainingPage />} />
+          <Route path="/treino/:activityId" element={<AdventureLevelPage />} />
           {/* Endereço antigo da landing (no servidor é um 301; aqui cobre a navegação dentro do app) */}
           <Route path="/conheca" element={<Navigate to="/" replace />} />
-          {MobsPage && (
-            <Route
-              path="/mobs"
-              element={
-                <Suspense fallback={null}>
-                  <MobsPage />
-                </Suspense>
-              }
-            />
-          )}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         </Suspense>

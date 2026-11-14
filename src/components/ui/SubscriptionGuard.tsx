@@ -6,7 +6,7 @@ import { subscriptionService, useSubscription } from '../../services/subscriptio
 import { stopSpeaking } from '../../lib/voice';
 
 /** Telas de jogar: precisam de assinatura ativa (a Área dos Pais, o login e a landing ficam livres). */
-const GATED = ['/adventure', '/activity', '/activities', '/album', '/casa', '/loja', '/relampago', '/treino', '/dashboard', '/world'];
+const GATED = ['/adventure', '/album', '/casa', '/loja', '/relampago', '/treino', '/dashboard'];
 
 /**
  * Bloqueia as telas de jogar quando a assinatura não está ativa (mesmo abrindo pela URL).

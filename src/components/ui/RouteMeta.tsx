@@ -18,6 +18,7 @@ const META: { path: RegExp; title: string; description?: string; index?: boolean
   { path: /^\/casa$/, title: 'Casinha — MineLearn' },
   { path: /^\/relampago$/, title: 'Relâmpago — MineLearn' },
   { path: /^\/treino$/, title: 'Treino — MineLearn' },
+  { path: /^\/treino\/.+$/, title: 'Treinando — MineLearn' },
   { path: /^\/dashboard$/, title: 'Meu painel — MineLearn' },
   { path: /^\/select-age$/, title: 'Escolher a idade — MineLearn' },
 ];

@@ -1,5 +1,4 @@
 User-agent: *
 Disallow: /responsavel
-Disallow: /teacher
 Disallow: /login
 Disallow: /dashboard

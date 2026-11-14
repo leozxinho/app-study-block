@@ -242,7 +242,7 @@ export function StudentDashboardPage() {
                   <MinecraftCard
                     hoverable
                     gradient={biome.unlocked ? biome.bgColor : undefined}
-                    onClick={() => biome.unlocked && navigate('/world')}
+                    onClick={() => biome.unlocked && navigate('/adventure')}
                   >
                     <div className={`p-4 ${!biome.unlocked ? 'opacity-50' : ''}`}>
                       <div className="flex items-center gap-2 mb-2">
@@ -305,7 +305,7 @@ export function StudentDashboardPage() {
           <MinecraftButton
             variant="primary"
             size="lg"
-            onClick={() => navigate('/world')}
+            onClick={() => navigate('/adventure')}
           >
             🗺️ Voltar ao Mapa
           </MinecraftButton>
