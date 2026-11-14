@@ -152,8 +152,8 @@ Todos estes passam:
    - Os desenhos dos mobs (`mobSprites.ts`) também lembram o jogo.
    - O que é só código (`MinecraftButton`, `font-minecraft`, as chaves `minecraft_edu_*`) não aparece para o usuário. As chaves não devem ser renomeadas, porque isso apagaria o progresso salvo.
 2. **`VITE_SITE_URL`:** a variável foi criada no `.env.example` com `https://minelearn.app`, que é um palpite a partir do domínio das contas de criança. Configure o domínio real na Vercel. Sem ela, o build avisa e usa esse valor.
-3. **`tsx`:** o `check:activities` roda com `npx tsx`, que não está no `package.json`. Vale adicioná-lo como devDependency.
-4. **Órfãos que surgiram ao apagar o player antigo** (não apaguei sem pedir): `src/components/ui/ActivityProgress.tsx` e `src/components/ui/RewardAnimation.tsx`.
+3. ~~`tsx`~~: adicionado como devDependency; `npm run check:activities` usa o `tsx` do projeto.
+4. ~~Órfãos do player antigo~~: `ActivityProgress.tsx` e `RewardAnimation.tsx` apagados.
 5. **Relógio e leitura:** dados, parsers e componentes foram mantidos, mas não estão em nenhuma fase.
 6. **Chunk principal (591 kB):** quase todo é Supabase, router e framer-motion, que o app inteiro usa. Tirar o Supabase do carregamento inicial exigiria refatorar a autenticação.
 7. **Hidratação:** a landing pré-renderizada não é hidratada, porque não carrega JS. Os links levam a `/login`, onde o app carrega.

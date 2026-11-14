@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "audio": "node scripts/buildAudioManifest.mjs",
-    "check:activities": "npx tsx scripts/check-activities.ts",
+    "check:activities": "tsx scripts/check-activities.ts",
     "vozes:rodadas": "python3 scripts/gerar_vozes_elevenlabs.py docs/audio/falas-rodadas.csv",
     "vozes:chefes": "python3 scripts/gerar_vozes_elevenlabs.py docs/audio/falas-voz-suave.csv --secao \"7.7 chefe\" --refazer",
     "vozes:listar": "python3 scripts/gerar_vozes_elevenlabs.py --listar-vozes"
@@ -35,6 +35,7 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.14",
     "globals": "^15.11.0",
+    "tsx": "^4.23.15",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.11.0",
     "vite": "^5.4.10"
