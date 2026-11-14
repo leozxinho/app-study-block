@@ -17,7 +17,7 @@ export function MusicButton({ className = '' }: { className?: string }) {
       aria-label={label}
       title={label}
       className={`relative w-11 h-11 flex items-center justify-center rounded-md bg-black/25 text-white hover:bg-black/40
-        focus:outline-none focus-visible:ring-4 focus-visible:ring-minecraft-gold ${className}`}
+        focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-lapis ${className}`}
     >
       {on ? <Music size={22} aria-hidden="true" /> : <Music2 size={22} aria-hidden="true" className="opacity-50" />}
     </button>

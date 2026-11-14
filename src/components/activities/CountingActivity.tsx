@@ -88,7 +88,7 @@ export function CountingActivity({ activity, onCorrect, onWrong }: ActivityProps
       <div className="flex flex-col items-center gap-2 mb-6 sm:mb-8">
       <div
         className={`relative flex flex-wrap items-end justify-center gap-2 sm:gap-3 px-3 sm:px-4 pt-6 pb-7 rounded-lg border-4 overflow-hidden bg-gradient-to-b ${theme.sky} ${
-          celebrating ? 'border-minecraft-gold' : 'border-sky-600/60'
+          celebrating ? 'border-brand-gold' : 'border-sky-600/60'
         }`}
         role="group"
         aria-label={`Itens para contar. Você já contou ${counted.length}.`}
@@ -108,7 +108,7 @@ export function CountingActivity({ activity, onCorrect, onWrong }: ActivityProps
               className={`
                 pop-in ${OPTION_BASE} min-h-0 relative z-[1] rounded-lg p-1
                 flex items-center justify-center
-                ${order >= 0 ? 'bg-white/70 ring-4 ring-minecraft-emerald' : 'bg-white/25 hover:bg-white/50'}
+                ${order >= 0 ? 'bg-white/70 ring-4 ring-brand-emerald' : 'bg-white/25 hover:bg-white/50'}
               `}
             >
               <motion.span
@@ -120,7 +120,7 @@ export function CountingActivity({ activity, onCorrect, onWrong }: ActivityProps
                 <ItemIcon icon={data.icon} index={i} size={size} />
               </motion.span>
               {order >= 0 && (
-                <span className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-minecraft-dark-green text-white font-minecraft text-[10px] flex items-center justify-center">
+                <span className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-brand-dark-green text-white font-minecraft text-[10px] flex items-center justify-center">
                   {order + 1}
                 </span>
               )}
@@ -136,7 +136,7 @@ export function CountingActivity({ activity, onCorrect, onWrong }: ActivityProps
           initial={{ scale: 0.4, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           className={`min-w-[32px] px-3 h-8 rounded-sm text-white font-minecraft text-sm flex items-center justify-center ${
-            celebrating ? 'bg-minecraft-dark-green' : 'bg-sky-600'
+            celebrating ? 'bg-brand-dark-green' : 'bg-sky-600'
           }`}
           aria-live="polite"
         >
@@ -167,7 +167,7 @@ export function CountingActivity({ activity, onCorrect, onWrong }: ActivityProps
               className={`
                 ${OPTION_BASE} w-full min-h-[64px] py-2 rounded-lg font-minecraft text-xl pixel-border
                 ${state === 'correct'
-                  ? 'bg-minecraft-emerald text-gray-900'
+                  ? 'bg-brand-emerald text-gray-900'
                   : state === 'wrong'
                     ? 'bg-red-600 text-white'
                     : 'bg-amber-100 hover:bg-amber-200 text-gray-900'

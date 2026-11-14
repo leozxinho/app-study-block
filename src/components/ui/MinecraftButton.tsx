@@ -7,27 +7,33 @@ interface MinecraftButtonProps {
   onClick?: () => void;
   /** Vira um link <a href> (o buscador segue), com o mesmo visual de botão. */
   href?: string;
-  variant?: 'primary' | 'secondary' | 'danger' | 'success' | 'gold';
+  variant?: 'primary' | 'secondary' | 'danger' | 'success' | 'gold' | 'info';
   size?: 'sm' | 'md' | 'lg' | 'xl';
   disabled?: boolean;
   className?: string;
   fullWidth?: boolean;
+  /** Fonte de leitura fácil (Nunito) no lugar da pixel: para textos longos e para os pais. */
+  plain?: boolean;
 }
 
+// Cor do texto por fundo (contraste): fundos claros (dourado, esmeralda) usam texto escuro
 const variants = {
-  primary: 'bg-minecraft-green hover:bg-minecraft-dark-green border-minecraft-dark-green',
-  secondary: 'bg-minecraft-stone hover:bg-minecraft-dark-stone border-minecraft-dark-stone',
-  danger: 'bg-minecraft-redstone hover:bg-red-700 border-red-900',
-  success: 'bg-minecraft-emerald hover:bg-green-600 border-green-800',
-  gold: 'bg-minecraft-gold hover:bg-yellow-500 border-yellow-700',
+  primary: 'bg-brand-green hover:bg-brand-dark-green border-brand-dark-green text-white',
+  secondary: 'bg-brand-stone hover:bg-brand-dark-stone border-brand-dark-stone text-white',
+  danger: 'bg-brand-redstone hover:bg-red-700 border-red-900 text-white',
+  success: 'bg-brand-emerald hover:bg-emerald-400 border-green-800 text-brand-ink',
+  gold: 'bg-brand-gold hover:bg-amber-300 border-amber-700 text-brand-ink',
+  info: 'bg-brand-lapis hover:bg-blue-700 border-blue-900 text-white',
 };
 
+// Altura mínima: alvo de toque confortável (44 px; 48 px a partir do médio)
 const sizes = {
-  sm: 'px-3 py-1.5 text-xs',
-  md: 'px-5 py-2.5 text-sm',
-  lg: 'px-8 py-4 text-base',
-  xl: 'px-10 py-5 text-lg',
+  sm: 'px-3 py-1.5 text-xs min-h-[44px]',
+  md: 'px-5 py-2.5 text-sm min-h-[48px]',
+  lg: 'px-8 py-4 text-base min-h-[56px]',
+  xl: 'px-10 py-5 text-lg min-h-[64px]',
 };
+const plainSizes = { sm: 'text-sm', md: 'text-base', lg: 'text-lg', xl: 'text-xl' };
 
 export function MinecraftButton({
   children,
@@ -38,12 +44,14 @@ export function MinecraftButton({
   className = '',
   fullWidth = false,
   href,
+  plain = false,
 }: MinecraftButtonProps) {
   const look = `
         ${variants[variant]}
         ${sizes[size]}
         ${fullWidth ? 'w-full' : ''}
-        font-minecraft text-white
+        ${plain ? `font-body font-extrabold ${plainSizes[size]}` : 'font-minecraft'}
+        focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-lapis focus-visible:ring-offset-2
         border-b-4 border-r-2
         rounded-sm
         transition-colors duration-200
@@ -54,7 +62,7 @@ export function MinecraftButton({
       `;
   if (href) {
     return (
-      <Link to={href} onClick={onClick} className={`${look} inline-block text-center transition-transform hover:scale-105 active:scale-95`}>
+      <Link to={href} onClick={onClick} className={`${look} inline-flex items-center justify-center text-center transition-transform hover:scale-105 active:scale-95`}>
         {children}
       </Link>
     );

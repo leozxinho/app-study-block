@@ -73,7 +73,7 @@ interface OpProps {
 }
 
 const Badge = ({ n }: { n: number }) => (
-  <span className="pop-in absolute -top-3 left-1/2 -translate-x-1/2 min-w-[22px] h-[22px] px-1 rounded-sm bg-minecraft-dark-green text-white font-minecraft text-[10px] flex items-center justify-center z-10">
+  <span className="pop-in absolute -top-3 left-1/2 -translate-x-1/2 min-w-[22px] h-[22px] px-1 rounded-sm bg-brand-dark-green text-white font-minecraft text-[10px] flex items-center justify-center z-10">
     {n}
   </span>
 );
@@ -110,8 +110,8 @@ function Group({ tone, label, children }: { tone: 'a' | 'b' | 'total'; label: Re
       ? 'border-sky-500 bg-sky-50/80'
       : tone === 'b'
       ? 'border-pink-500 bg-pink-50/80'
-      : 'border-minecraft-gold bg-amber-50/90';
-  const chip = tone === 'a' ? 'bg-sky-600' : tone === 'b' ? 'bg-pink-600' : 'bg-minecraft-dark-green';
+      : 'border-brand-gold bg-amber-50/90';
+  const chip = tone === 'a' ? 'bg-sky-600' : tone === 'b' ? 'bg-pink-600' : 'bg-brand-dark-green';
   return (
     <motion.div layout className="flex flex-col items-center gap-1.5">
       <motion.div
@@ -359,7 +359,7 @@ function MultScene({ problem, unit, size, factor, celebrate }: OpProps) {
             return (
               <motion.div
                 key={row}
-                className={`flex items-end gap-1 rounded-sm px-1 pt-3 pb-0.5 border-2 border-dashed ${rowDone ? 'border-minecraft-gold bg-amber-100/70' : 'border-pink-400 bg-pink-50/70'}`}
+                className={`flex items-end gap-1 rounded-sm px-1 pt-3 pb-0.5 border-2 border-dashed ${rowDone ? 'border-brand-gold bg-amber-100/70' : 'border-pink-400 bg-pink-50/70'}`}
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: row * 0.5 * factor, duration: 0.3 * factor }}
@@ -385,7 +385,7 @@ function MultScene({ problem, unit, size, factor, celebrate }: OpProps) {
                   key={rowDone ? 'sum' : 'b'}
                   initial={{ scale: 0.4 }}
                   animate={{ scale: 1 }}
-                  className={`ml-1 self-center min-w-[26px] px-1.5 h-6 rounded-sm text-white font-minecraft text-xs flex items-center justify-center ${rowDone ? 'bg-minecraft-dark-green' : 'bg-pink-600'}`}
+                  className={`ml-1 self-center min-w-[26px] px-1.5 h-6 rounded-sm text-white font-minecraft text-xs flex items-center justify-center ${rowDone ? 'bg-brand-dark-green' : 'bg-pink-600'}`}
                 >
                   {rowDone ? (row + 1) * problem.b : problem.b}
                 </motion.span>

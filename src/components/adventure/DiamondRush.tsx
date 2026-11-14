@@ -90,7 +90,7 @@ export function DiamondRush({ onFinish, seconds = 8 }: DiamondRushProps) {
             className="absolute inset-0 flex flex-col items-center justify-center text-center px-6"
           >
             <p className="text-6xl mb-3" aria-hidden="true">⛏️💎</p>
-            <p className="font-minecraft text-xl text-minecraft-gold">MINIJOGO!</p>
+            <p className="font-minecraft text-xl text-brand-gold">MINIJOGO!</p>
             <p className="font-body text-white text-lg mt-2">Toque nos diamantes antes que caiam!</p>
             <p className="font-body text-white/80 text-sm mt-1">⭐ vale 3</p>
           </motion.div>
@@ -124,12 +124,12 @@ export function DiamondRush({ onFinish, seconds = 8 }: DiamondRushProps) {
           >
             <p className="text-6xl" aria-hidden="true">💎</p>
             <p className="font-minecraft text-xl text-white mt-2">Você pegou {collected}!</p>
-            <p className="font-minecraft text-lg text-minecraft-gold mt-1">+{Math.min(collected, 10)} XP</p>
+            <p className="font-minecraft text-lg text-brand-gold mt-1">+{Math.min(collected, 10)} XP</p>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <div className="absolute bottom-0 inset-x-0 h-8 bg-minecraft-dirt block-pattern" aria-hidden="true" />
+      <div className="absolute bottom-0 inset-x-0 h-8 bg-brand-dirt block-pattern" aria-hidden="true" />
     </div>
   );
 }

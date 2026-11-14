@@ -111,7 +111,7 @@ export function ShadowMatchActivity({ activity, onCorrect, onWrong }: ActivityPr
                 aria-label={`${MOBS[m].label}${done ? ', ligado à sombra' : ''}`}
                 className={`
                   ${OPTION_BASE} drag-handle ${cell}
-                  ${done ? 'bg-green-100' : isSel ? 'bg-amber-200 ring-4 ring-minecraft-lapis' : 'bg-sky-50 hover:bg-sky-100'}
+                  ${done ? 'bg-green-100' : isSel ? 'bg-amber-200 ring-4 ring-brand-lapis' : 'bg-sky-50 hover:bg-sky-100'}
                   ${revealType === m && !done ? 'answer-reveal' : ''}
                 `}
                 style={done ? { boxShadow: `0 0 0 4px ${colorOf(m)}` } : undefined}
@@ -139,7 +139,7 @@ export function ShadowMatchActivity({ activity, onCorrect, onWrong }: ActivityPr
                 aria-label={done ? `Sombra do ${MOBS[s].label}` : 'Sombra misteriosa'}
                 className={`
                   ${OPTION_BASE} ${cell}
-                  ${done ? 'bg-green-100 answer-correct' : isSel ? 'bg-amber-200 ring-4 ring-minecraft-lapis' : 'bg-gray-100 hover:bg-gray-200'}
+                  ${done ? 'bg-green-100 answer-correct' : isSel ? 'bg-amber-200 ring-4 ring-brand-lapis' : 'bg-gray-100 hover:bg-gray-200'}
                   ${shake === s ? 'animate-shake ring-4 ring-red-600' : ''}
                   ${revealType === s && !done ? 'answer-reveal' : ''}
                 `}

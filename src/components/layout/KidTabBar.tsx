@@ -34,14 +34,14 @@ export function KidTabBar() {
                 type="button"
                 onClick={() => navigate(tab.path)}
                 aria-current={active ? 'page' : undefined}
-                className={`relative w-full min-h-[64px] flex flex-col items-center justify-center gap-0.5 font-body text-xs font-bold focus:outline-none focus-visible:ring-4 focus-visible:ring-minecraft-gold ${
-                  active ? 'text-minecraft-gold' : 'text-white/75 hover:text-white'
+                className={`relative w-full min-h-[64px] flex flex-col items-center justify-center gap-0.5 font-body text-xs font-bold focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-lapis ${
+                  active ? 'text-brand-gold' : 'text-white/75 hover:text-white'
                 }`}
               >
                 {active && (
                   <motion.span
                     layoutId="tab-active"
-                    className="absolute inset-x-3 top-1 bottom-1 rounded-lg bg-white/10 border-2 border-minecraft-gold/60"
+                    className="absolute inset-x-3 top-1 bottom-1 rounded-lg bg-white/10 border-2 border-brand-gold/60"
                     transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                   />
                 )}

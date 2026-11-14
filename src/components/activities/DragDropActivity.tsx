@@ -87,7 +87,7 @@ export function DragDropActivity({ activity, onCorrect, onWrong }: ActivityProps
   return (
     <ActivityCard icon="📦" question={activity.question} subtitle="Arraste ou toque nos itens, na ordem certa!">
       {/* Slots at top */}
-      <div className="flex items-center justify-center gap-2 sm:gap-3 mb-6 sm:mb-8 p-3 sm:p-4 bg-minecraft-sky/20 rounded-lg flex-wrap" role="list" aria-label="Espaços">
+      <div className="flex items-center justify-center gap-2 sm:gap-3 mb-6 sm:mb-8 p-3 sm:p-4 bg-brand-sky/20 rounded-lg flex-wrap" role="list" aria-label="Espaços">
         {data.targetEmoji && (
           <div className="flex flex-col items-center mr-2" aria-label={`Alvo: ${data.targetLabel}`}>
             <span className="text-5xl" aria-hidden="true">{data.targetEmoji}</span>
@@ -108,7 +108,7 @@ export function DragDropActivity({ activity, onCorrect, onWrong }: ActivityProps
                 ${fb.solved ? 'answer-correct bg-green-200' : ''}
                 ${shakeSlot !== index && !fb.solved && item ? 'bg-amber-200' : ''}
                 ${shakeSlot !== index && !fb.solved && !item ? 'bg-gray-100 border-dashed border-2 border-gray-500' : ''}
-                ${index === nextIndex && !fb.solved ? 'ring-2 ring-minecraft-lapis' : ''}
+                ${index === nextIndex && !fb.solved ? 'ring-2 ring-brand-lapis' : ''}
               `}
             >
               {item ? (

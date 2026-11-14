@@ -29,7 +29,7 @@ export function AchievementToast({ achievements, onDone }: AchievementToastProps
           >
             <span className="text-3xl" aria-hidden="true">{a.icon}</span>
             <div>
-              <p className="font-minecraft text-[10px] text-minecraft-gold">Conquista desbloqueada!</p>
+              <p className="font-minecraft text-[10px] text-brand-gold">Conquista desbloqueada!</p>
               <p className="font-body font-bold">{a.name}</p>
             </div>
           </motion.div>

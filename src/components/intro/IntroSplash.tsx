@@ -129,14 +129,14 @@ export function IntroSplash({ onDone }: IntroSplashProps) {
       aria-label="Abertura animada do StudyBlock"
     >
       {/* Cenário */}
-      <div className="absolute inset-0 bg-gradient-to-b from-minecraft-sky via-blue-300 to-blue-200" />
+      <div className="absolute inset-0 bg-gradient-to-b from-brand-sky via-blue-300 to-blue-200" />
       <div className="absolute bottom-0 left-0 right-0 h-28">
-        <div className="h-4 bg-minecraft-green w-full" />
-        <div className="h-24 bg-minecraft-dirt w-full block-pattern" />
+        <div className="h-4 bg-brand-green w-full" />
+        <div className="h-24 bg-brand-dirt w-full block-pattern" />
       </div>
       {/* Cratera depois da explosão */}
       {exploded && (
-        <div className="absolute bottom-[100px] left-1/2 -translate-x-1/2 w-[70vw] max-w-[520px] h-12 bg-minecraft-dark-brown rounded-[50%] opacity-80" aria-hidden="true" />
+        <div className="absolute bottom-[100px] left-1/2 -translate-x-1/2 w-[70vw] max-w-[520px] h-12 bg-brand-dark-brown rounded-[50%] opacity-80" aria-hidden="true" />
       )}
 
       {/* Tela "Toque para jogar" */}
@@ -144,7 +144,7 @@ export function IntroSplash({ onDone }: IntroSplashProps) {
         <>
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 px-4 pb-28 text-center">
             <h1 className="font-minecraft text-3xl sm:text-5xl text-white drop-shadow-[3px_3px_0px_rgba(0,0,0,0.8)]">StudyBlock</h1>
-            <p className="font-minecraft text-xs sm:text-sm text-minecraft-gold drop-shadow-[2px_2px_0px_rgba(0,0,0,0.6)]">Aprenda jogando!</p>
+            <p className="font-minecraft text-xs sm:text-sm text-brand-gold drop-shadow-[2px_2px_0px_rgba(0,0,0,0.6)]">Aprenda jogando!</p>
             <div className="cta-pulse rounded-md">
               <MinecraftButton variant="gold" size="lg" onClick={start}>
                 <span ref={(el) => { playRef.current = el?.closest('button') ?? null; }}>▶ Toque para jogar</span>

@@ -4,6 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import { MinecraftCard } from '../components/ui/MinecraftCard';
 import { AuthPanel } from '../components/auth/AuthPanel';
 import { IntroSplash } from '../components/intro/IntroSplash';
+import { GroundStrip } from '../components/layout/GroundStrip';
 import { useState } from 'react';
 
 // A abertura (Estourinho explodindo) toca ao chegar no login a cada vez que o site é aberto/atualizado;
@@ -23,13 +24,10 @@ export function LoginPage() {
     <div className="min-h-screen relative overflow-hidden flex items-center justify-center py-8">
       {showIntro && <IntroSplash onDone={endIntro} />}
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-minecraft-sky via-blue-300 to-green-500" />
+      <div className="absolute inset-0 bg-gradient-to-b from-brand-sky via-blue-300 to-green-500" />
 
-      {/* Decorative blocks */}
-      <div className="absolute bottom-0 left-0 right-0 h-32">
-        <div className="h-4 bg-minecraft-green w-full" />
-        <div className="h-28 bg-minecraft-brown w-full" />
-      </div>
+      {/* Chão (o mesmo da landing) */}
+      <GroundStrip dirt="h-28" />
 
       <motion.div
         initial={{ y: -30, opacity: 0 }}
@@ -47,7 +45,7 @@ export function LoginPage() {
           <div className="pb-6 text-center">
             <Link
               to="/"
-              className="inline-flex items-center gap-1 font-body text-sm text-gray-700 hover:text-minecraft-green min-h-[44px]"
+              className="inline-flex items-center gap-1 font-body text-sm text-gray-700 hover:text-brand-green min-h-[44px]"
             >
               <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               Voltar ao início

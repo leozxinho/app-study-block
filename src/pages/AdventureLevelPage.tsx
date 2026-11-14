@@ -457,7 +457,7 @@ function AdventureLevel() {
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-minecraft-dark-green/90 backdrop-blur-sm px-3 py-2 sticky top-0 z-30"
+        className={`${themeForLevel(levelNumber).bar} backdrop-blur-sm px-3 py-2 sticky top-0 z-30`}
       >
         <div className="max-w-5xl mx-auto flex items-center gap-2 sm:gap-3">
           <button
@@ -465,7 +465,7 @@ function AdventureLevel() {
             onClick={() => navigate(exitTo)}
             aria-label={practice ? 'Sair do treino' : 'Sair da fase e voltar ao mapa'}
             title="Sair"
-            className="w-11 h-11 shrink-0 flex items-center justify-center rounded-md bg-black/25 text-white text-xl hover:bg-black/40 focus:outline-none focus-visible:ring-4 focus-visible:ring-minecraft-gold"
+            className="w-11 h-11 shrink-0 flex items-center justify-center rounded-md bg-black/25 text-white text-xl hover:bg-black/40 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-lapis"
           >
             <span aria-hidden="true">✕</span>
           </button>
@@ -482,7 +482,7 @@ function AdventureLevel() {
               className="h-4 rounded-full bg-black/30 overflow-hidden border-2 border-black/30"
             >
               <motion.div
-                className="h-full rounded-full bg-gradient-to-r from-minecraft-emerald to-lime-300"
+                className="h-full rounded-full bg-gradient-to-r from-brand-emerald to-lime-300"
                 initial={false}
                 animate={{ width: `${(Math.min(step + (showRewardModal ? 1 : 0), activities.length) / Math.max(activities.length, 1)) * 100}%` }}
                 transition={{ type: 'spring', stiffness: 120, damping: 18 }}
@@ -570,7 +570,7 @@ function AdventureLevel() {
             role="status"
             className="fixed inset-x-0 top-1/3 z-40 flex justify-center pointer-events-none"
           >
-            <div className="bg-minecraft-gold text-gray-900 font-minecraft text-sm sm:text-base px-6 py-4 rounded-lg pixel-border shadow-xl">
+            <div className="bg-brand-gold text-gray-900 font-minecraft text-sm sm:text-base px-6 py-4 rounded-lg pixel-border shadow-xl">
               Muito bem! Próxima! ⛏️
             </div>
           </motion.div>

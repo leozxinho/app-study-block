@@ -7,27 +7,30 @@ export default {
   theme: {
     extend: {
       colors: {
-        minecraft: {
-          green: '#5D8C3E',
-          'dark-green': '#3B5E28',
+        // Paleta do StudyBlock. Papéis: principal = green, destaque/recompensa = gold (sempre com texto escuro),
+        // sucesso = emerald, erro = redstone, informação/foco = lapis, fundo = sky.
+        brand: {
+          green: '#4E8A3A',
+          'dark-green': '#2F5E22',
           brown: '#8B6914',
           'dark-brown': '#5C4A0E',
-          stone: '#7F7F7F',
-          'dark-stone': '#4A4A4A',
+          stone: '#7A7F87',
+          'dark-stone': '#474C54',
           dirt: '#9B7653',
           wood: '#BC9862',
-          sky: '#87CEEB',
+          sky: '#8ED1F5',
           'dark-sky': '#1A1A3E',
-          gold: '#FFD700',
-          diamond: '#4AEDD9',
-          redstone: '#FF0000',
-          emerald: '#17DD62',
-          lapis: '#345EC3',
+          gold: '#FFC83D',
+          diamond: '#3DD6C6',
+          redstone: '#E5484D',
+          emerald: '#2FBF71',
+          lapis: '#2F6FDB',
           iron: '#D8D8D8',
           coal: '#2C2C2C',
           bedrock: '#353535',
           water: '#3F76E4',
           lava: '#CF4401',
+          ink: '#10263F',
         },
       },
       fontFamily: {

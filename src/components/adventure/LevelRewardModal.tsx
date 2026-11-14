@@ -138,7 +138,7 @@ function HighlightCard({ item, delay }: { item: RewardHighlight; delay: number }
         {item.kind === 'chest' && !opened ? '📦' : item.icon}
       </motion.span>
       <span className="text-left relative">
-        <span className="block font-minecraft text-[10px] text-minecraft-gold">{item.label}</span>
+        <span className="block font-minecraft text-[10px] text-brand-gold">{item.label}</span>
         <span className="block font-body font-bold text-sm">{item.title}</span>
         {item.text && <span className="block font-body text-xs text-gray-300">{item.text}</span>}
       </span>
@@ -271,7 +271,7 @@ export function LevelRewardModal({
                 initial={{ opacity: 0, scale: 0, rotate: 10 }}
                 animate={{ opacity: 1, scale: [0, 1.25, 1], rotate: 0 }}
                 transition={{ delay: T_LEVEL_UP, duration: 0.6 }}
-                className="relative mb-3 bg-minecraft-emerald/90 rounded-lg py-2 px-4"
+                className="relative mb-3 bg-brand-emerald/90 rounded-lg py-2 px-4"
               >
                 <Burst delay={T_LEVEL_UP + 0.1} />
                 <p className="font-minecraft text-sm text-white">⬆️ Subiu para o nível {newPlayerLevel}!</p>

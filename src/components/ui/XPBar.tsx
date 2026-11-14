@@ -14,17 +14,17 @@ export function XPBar({ currentXP, currentLevel }: XPBarProps) {
   const progress = xpNeeded > 0 ? (xpInLevel / xpNeeded) * 100 : 100;
 
   return (
-    <div className="bg-minecraft-dark-stone/80 rounded-lg p-3 pixel-border">
+    <div className="bg-brand-dark-stone/80 rounded-lg p-3 pixel-border">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <span className="text-2xl">{level.icon}</span>
           <div>
-            <p className="font-minecraft text-xs text-minecraft-gold">Nível {currentLevel}</p>
+            <p className="font-minecraft text-xs text-brand-gold">Nível {currentLevel}</p>
             <p className="font-body text-sm text-white font-bold">{level.name}</p>
           </div>
         </div>
         <div className="text-right">
-          <p className="font-minecraft text-xs text-minecraft-diamond">
+          <p className="font-minecraft text-xs text-brand-diamond">
             {currentXP} XP
           </p>
         </div>
@@ -34,7 +34,7 @@ export function XPBar({ currentXP, currentLevel }: XPBarProps) {
           initial={{ width: 0 }}
           animate={{ width: `${progress}%` }}
           transition={{ duration: 1, ease: 'easeOut' }}
-          className="h-full bg-gradient-to-r from-minecraft-emerald to-minecraft-diamond rounded-sm"
+          className="h-full bg-gradient-to-r from-brand-emerald to-brand-diamond rounded-sm"
         />
       </div>
       <p className="text-[10px] font-body text-gray-400 mt-1 text-right">

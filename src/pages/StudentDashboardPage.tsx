@@ -88,7 +88,7 @@ export function StudentDashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-minecraft-sky via-blue-100 to-green-50">
+    <div className="min-h-screen bg-gradient-to-b from-brand-sky via-blue-100 to-green-50">
       <MinecraftHeader studentName="Explorador" showNav />
 
       <motion.div
@@ -102,7 +102,7 @@ export function StudentDashboardPage() {
           <motion.div
             animate={{ y: [0, -5, 0] }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="w-16 h-16 bg-gradient-to-br from-minecraft-emerald to-minecraft-green rounded-lg flex items-end justify-center pb-1 pixel-border"
+            className="w-16 h-16 bg-gradient-to-br from-brand-emerald to-brand-green rounded-lg flex items-end justify-center pb-1 pixel-border"
           >
             <Mob type={game.skin.character} skin={game.skin} size={48} animation="idle" title="Seu personagem" />
           </motion.div>
@@ -124,7 +124,7 @@ export function StudentDashboardPage() {
                 <div className="flex items-center gap-2">
                   <span className="text-2xl">{currentLevel.icon}</span>
                   <div>
-                    <p className="font-minecraft text-sm text-minecraft-gold">
+                    <p className="font-minecraft text-sm text-brand-gold">
                       Nível {currentLevel.level}
                     </p>
                     <p className="font-body text-xs text-gray-500">{currentLevel.name}</p>
@@ -231,7 +231,7 @@ export function StudentDashboardPage() {
         {/* Continue Adventure - Biomes */}
         <motion.div variants={itemVariants}>
           <h2 className="font-minecraft text-md text-gray-700 mb-3 flex items-center gap-2">
-            <MapPin className="w-5 h-5 text-minecraft-green" />
+            <MapPin className="w-5 h-5 text-brand-green" />
             Continue sua aventura
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -279,7 +279,7 @@ export function StudentDashboardPage() {
         {/* Achievements */}
         <motion.div variants={itemVariants} id="conquistas" className="scroll-mt-4">
           <h2 className="font-minecraft text-md text-gray-700 mb-3 flex items-center gap-2">
-            <Trophy className="w-5 h-5 text-minecraft-gold" />
+            <Trophy className="w-5 h-5 text-brand-gold" />
             Conquistas ({ACHIEVEMENTS.filter((a) => game.unlocked[a.id]).length}/{ACHIEVEMENTS.length})
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">

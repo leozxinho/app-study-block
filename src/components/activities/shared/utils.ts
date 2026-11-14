@@ -30,4 +30,4 @@ export function arrowNav(e: KeyboardEvent<HTMLElement>): void {
 /** Base comum dos botões de resposta: alvo grande, foco visível, sem atraso no toque. */
 export const OPTION_BASE =
   'relative min-h-[72px] touch-manipulation select-none transition-all ' +
-  'focus:outline-none focus-visible:ring-4 focus-visible:ring-offset-2 focus-visible:ring-minecraft-lapis';
+  'focus:outline-none focus-visible:ring-4 focus-visible:ring-offset-2 focus-visible:ring-brand-lapis';

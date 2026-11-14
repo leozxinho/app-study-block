@@ -105,7 +105,7 @@ export function useAnswerFeedback({ onCorrect, onWrong }: Callbacks, options: { 
 export function optionStateClass(state: OptionState): string {
   switch (state) {
     case 'correct':
-      return 'answer-correct ring-4 ring-minecraft-emerald';
+      return 'answer-correct ring-4 ring-brand-emerald';
     case 'wrong':
       return 'animate-shake ring-4 ring-red-600';
     case 'eliminated':

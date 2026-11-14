@@ -36,7 +36,7 @@ export function HousePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-minecraft-sky to-blue-200">
+    <div className="min-h-screen bg-gradient-to-b from-brand-sky to-blue-200">
       <MinecraftHeader showNav />
       <AchievementToast achievements={earned} onDone={clearEarned} />
       <main className="max-w-4xl mx-auto px-4 py-6">
@@ -61,8 +61,8 @@ export function HousePage() {
                 disabled={locked}
                 onClick={() => setSelected(b.id)}
                 title={locked ? `Libera com ${b.unlockAt} figurinhas` : b.name}
-                className={`relative w-12 h-12 rounded-md border-4 focus:outline-none focus-visible:ring-4 focus-visible:ring-minecraft-gold ${
-                  selected === b.id ? 'border-minecraft-gold scale-110' : 'border-gray-700'
+                className={`relative w-12 h-12 rounded-md border-4 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-lapis ${
+                  selected === b.id ? 'border-brand-gold scale-110' : 'border-gray-700'
                 } ${locked ? 'opacity-40 cursor-not-allowed' : ''}`}
                 style={{ background: b.color }}
               >
@@ -77,7 +77,7 @@ export function HousePage() {
             role="radio"
             aria-checked={selected === ERASER}
             onClick={() => setSelected(ERASER)}
-            className={`w-12 h-12 rounded-md border-4 bg-white text-xl ${selected === ERASER ? 'border-minecraft-gold scale-110' : 'border-gray-700'}`}
+            className={`w-12 h-12 rounded-md border-4 bg-white text-xl ${selected === ERASER ? 'border-brand-gold scale-110' : 'border-gray-700'}`}
             title="Apagar"
           >
             <span aria-hidden="true">🧽</span>
@@ -102,7 +102,7 @@ export function HousePage() {
                 type="button"
                 onClick={() => place(i)}
                 aria-label={`Linha ${Math.floor(i / HOUSE_COLS) + 1}, coluna ${(i % HOUSE_COLS) + 1}: ${block ? block.name : 'vazio'}`}
-                className="aspect-square flex items-center justify-center text-base sm:text-xl hover:outline hover:outline-2 hover:outline-white focus:outline-none focus-visible:ring-2 focus-visible:ring-minecraft-gold"
+                className="aspect-square flex items-center justify-center text-base sm:text-xl hover:outline hover:outline-2 hover:outline-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-lapis"
                 style={{ background: block ? block.color : 'rgba(255,255,255,0.25)' }}
               >
                 {block?.detail && <span aria-hidden="true">{block.detail}</span>}

@@ -13,7 +13,7 @@ export function AchievementCard({ achievement, unlocked }: AchievementCardProps)
       className={`
         p-4 rounded-lg pixel-border text-center
         ${unlocked
-          ? 'bg-gradient-to-br from-minecraft-gold/20 to-minecraft-gold/40 border-minecraft-gold'
+          ? 'bg-gradient-to-br from-brand-gold/20 to-brand-gold/40 border-brand-gold'
           : 'bg-gray-200/50 border-gray-400 grayscale opacity-60'
         }
       `}
@@ -25,7 +25,7 @@ export function AchievementCard({ achievement, unlocked }: AchievementCardProps)
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          className="mt-2 text-minecraft-gold font-minecraft text-[10px]"
+          className="mt-2 text-brand-gold font-minecraft text-[10px]"
         >
           ✅ Desbloqueado!
         </motion.div>

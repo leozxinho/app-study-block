@@ -38,7 +38,7 @@ function GoogleLogo() {
 }
 
 const input =
-  'w-full pl-10 pr-4 py-3 pixel-border bg-gray-50 font-body text-base text-gray-900 focus:outline-none focus:ring-4 focus:ring-minecraft-gold/50';
+  'w-full pl-10 pr-4 py-3 pixel-border bg-gray-50 font-body text-base text-gray-900 focus:outline-none focus:ring-4 focus:ring-brand-lapis/50';
 
 /** Responsável: Google, e-mail ou criar conta. Criança: login e senha criados pelo responsável. */
 export function AuthPanel({ onSuccess, initialTab = 'entrar' }: AuthPanelProps) {
@@ -118,7 +118,7 @@ export function AuthPanel({ onSuccess, initialTab = 'entrar' }: AuthPanelProps) 
         type="button"
         onClick={handleGoogle}
         disabled={loading}
-        className="w-full min-h-[52px] flex items-center justify-center gap-3 bg-white border-2 border-gray-300 rounded-md font-body font-bold text-gray-800 hover:bg-gray-50 disabled:opacity-60 focus:outline-none focus-visible:ring-4 focus-visible:ring-minecraft-lapis"
+        className="w-full min-h-[52px] flex items-center justify-center gap-3 bg-white border-2 border-gray-300 rounded-md font-body font-bold text-gray-800 hover:bg-gray-50 disabled:opacity-60 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-lapis"
       >
         <GoogleLogo />
         Entrar com Google
@@ -141,8 +141,8 @@ export function AuthPanel({ onSuccess, initialTab = 'entrar' }: AuthPanelProps) 
             role="tab"
             aria-selected={tab === id}
             onClick={() => { setTab(id); setError(''); }}
-            className={`min-h-[44px] rounded-md font-body font-bold text-sm focus:outline-none focus-visible:ring-4 focus-visible:ring-minecraft-lapis
-              ${tab === id ? 'bg-minecraft-dark-green text-white' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'}`}
+            className={`min-h-[44px] rounded-md font-body font-bold text-sm focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-lapis
+              ${tab === id ? 'bg-brand-dark-green text-white' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'}`}
           >
             {label}
           </button>
@@ -168,7 +168,7 @@ export function AuthPanel({ onSuccess, initialTab = 'entrar' }: AuthPanelProps) 
                       onSuccess();
                     })
                   }
-                  className="w-full rounded-lg pixel-border bg-gradient-to-b from-sky-100 to-green-100 hover:from-sky-200 p-2 flex flex-col items-center gap-1 focus:outline-none focus-visible:ring-4 focus-visible:ring-minecraft-gold"
+                  className="w-full rounded-lg pixel-border bg-gradient-to-b from-sky-100 to-green-100 hover:from-sky-200 p-2 flex flex-col items-center gap-1 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-lapis"
                 >
                   <Mob type={(p.skin?.character as PlayerSkin['character']) ?? 'steve'} skin={{ ...DEFAULT_SKIN, ...p.skin } as PlayerSkin} size={40} animation="idle" />
                   <span className="font-body text-sm font-bold text-gray-900 truncate max-w-full">{p.name}</span>

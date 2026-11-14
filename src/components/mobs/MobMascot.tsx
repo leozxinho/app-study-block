@@ -57,7 +57,7 @@ export function MobMascot({ mood, type, size = 64, say, silent = false }: MobMas
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8 }}
             className={`mt-3 sm:mt-0 sm:mb-10 bg-white pixel-border rounded-sm px-3 py-1 font-body font-bold text-sm ${
-              mood === 'sad' ? 'text-orange-700' : 'text-minecraft-dark-green'
+              mood === 'sad' ? 'text-orange-700' : 'text-brand-dark-green'
             }`}
           >
             {phrase}

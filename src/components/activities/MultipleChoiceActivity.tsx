@@ -69,7 +69,7 @@ export function MultipleChoiceActivity({ activity, onCorrect, onWrong }: Activit
               className={`
                 ${OPTION_BASE} p-4 rounded-lg font-body text-2xl font-bold pixel-border
                 ${state === 'correct'
-                  ? 'bg-minecraft-emerald text-gray-900'
+                  ? 'bg-brand-emerald text-gray-900'
                   : state === 'wrong'
                     ? 'bg-red-600 text-white'
                     : 'bg-white hover:bg-amber-50 text-gray-900'

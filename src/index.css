@@ -5,9 +5,9 @@
 @tailwind utilities;
 
 :root {
-  --minecraft-green: #5D8C3E;
-  --minecraft-brown: #8B6914;
-  --minecraft-sky: #87CEEB;
+  --brand-green: #5D8C3E;
+  --brand-brown: #8B6914;
+  --brand-sky: #8ED1F5;
 }
 
 * {
@@ -19,7 +19,7 @@
 body {
   font-family: 'Nunito', sans-serif;
   overflow-x: hidden;
-  background-color: #87CEEB;
+  background-color: #8ED1F5;
 }
 
 .pixel-border {
@@ -98,8 +98,8 @@ body {
 }
 
 .drop-target-active {
-  border-color: #FFD700;
-  background: rgba(255, 215, 0, 0.1);
+  border-color: #FFC83D;
+  background: rgba(255, 200, 61, 0.1);
 }
 
 /* Activity cards */
@@ -145,8 +145,8 @@ body {
 }
 
 @keyframes answer-glow {
-  0%, 100% { box-shadow: 0 0 0 4px #FFD700, 0 0 0 0 rgba(255, 215, 0, 0.7); }
-  50% { box-shadow: 0 0 0 4px #FFD700, 0 0 0 10px rgba(255, 215, 0, 0); }
+  0%, 100% { box-shadow: 0 0 0 4px #FFC83D, 0 0 0 0 rgba(255, 200, 61, 0.7); }
+  50% { box-shadow: 0 0 0 4px #FFC83D, 0 0 0 10px rgba(255, 200, 61, 0); }
 }
 .answer-reveal {
   animation: answer-glow 1.2s ease-in-out infinite;
@@ -347,8 +347,8 @@ body {
 
 /* Botão "Área do Professor / Responsável" pulsando (anel dourado que respira) */
 @keyframes cta-pulse {
-  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.75); }
-  50% { transform: scale(1.05); box-shadow: 0 0 0 12px rgba(255, 215, 0, 0); }
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 200, 61, 0.75); }
+  50% { transform: scale(1.05); box-shadow: 0 0 0 12px rgba(255, 200, 61, 0); }
 }
 .cta-pulse {
   animation: cta-pulse 2s ease-in-out infinite;
@@ -356,7 +356,7 @@ body {
 @media (prefers-reduced-motion: reduce) {
   html:not([data-motion="on"]) .cta-pulse {
     animation: none;
-    box-shadow: 0 0 0 3px #FFD700;
+    box-shadow: 0 0 0 3px #FFC83D;
   }
 }
 
@@ -469,7 +469,7 @@ body {
 
   html[data-motion="reduced"] .cta-pulse {
     animation: none;
-    box-shadow: 0 0 0 3px #FFD700;
+    box-shadow: 0 0 0 3px #FFC83D;
   }
 
   html[data-motion="reduced"] .intro-shake, html[data-motion="reduced"] .intro-debris, html[data-motion="reduced"] .intro-smoke, html[data-motion="reduced"] .intro-blast {

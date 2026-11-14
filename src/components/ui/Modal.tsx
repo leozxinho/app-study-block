@@ -73,7 +73,7 @@ export function Modal({ open, onClose, title, children, maxWidth = 'max-w-md' }:
               type="button"
               onClick={onClose}
               aria-label="Fechar"
-              className="absolute top-2 right-2 w-10 h-10 flex items-center justify-center rounded-md text-gray-600 hover:bg-gray-100 focus:outline-none focus-visible:ring-4 focus-visible:ring-minecraft-lapis z-10"
+              className="absolute top-2 right-2 w-10 h-10 flex items-center justify-center rounded-md text-gray-600 hover:bg-gray-100 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-lapis z-10"
             >
               <X size={20} />
             </button>

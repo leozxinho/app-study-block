@@ -57,7 +57,7 @@ function byType(results: ChildResult[]) {
 }
 
 const field =
-  'w-full px-3 py-2.5 pixel-border bg-gray-50 font-body text-base text-gray-900 focus:outline-none focus:ring-4 focus:ring-minecraft-gold/50';
+  'w-full px-3 py-2.5 pixel-border bg-gray-50 font-body text-base text-gray-900 focus:outline-none focus:ring-4 focus:ring-brand-lapis/50';
 
 function AddChildForm({ onCreated }: { onCreated: () => void }) {
   const [name, setName] = useState('');
@@ -243,7 +243,7 @@ function ChildCard({
               <div key={d.key} className="flex-1 flex flex-col items-center justify-end h-full gap-1">
                 <span className="font-body text-[10px] text-gray-700 tabular-nums">{d.count || ''}</span>
                 <div
-                  className={`w-full rounded-t ${d.count ? (d.isToday ? 'bg-minecraft-gold' : 'bg-minecraft-emerald') : 'bg-gray-200'}`}
+                  className={`w-full rounded-t ${d.count ? (d.isToday ? 'bg-brand-gold' : 'bg-brand-emerald') : 'bg-gray-200'}`}
                   style={{ height: `${d.count ? Math.max(12, (d.count / weekMax) * 100) : 6}%` }}
                 />
                 <span className={`font-body text-[10px] ${d.isToday ? 'font-bold text-gray-900' : 'text-gray-600'}`}>{d.label}</span>

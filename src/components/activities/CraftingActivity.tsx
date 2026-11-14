@@ -176,7 +176,7 @@ export function CraftingActivity({ activity, onCorrect, onWrong }: ActivityProps
             aria-label={ITEMS[item].name}
             className={`
               ${OPTION_BASE} drag-handle w-20 px-2 py-2 rounded-lg pixel-border flex flex-col items-center gap-1
-              ${selected === item ? 'bg-amber-200 ring-4 ring-minecraft-lapis' : 'bg-white hover:bg-amber-50'}
+              ${selected === item ? 'bg-amber-200 ring-4 ring-brand-lapis' : 'bg-white hover:bg-amber-50'}
             `}
           >
             <PixelArt sprite={ITEMS[item]} size={36} />
@@ -190,7 +190,7 @@ export function CraftingActivity({ activity, onCorrect, onWrong }: ActivityProps
           type="button"
           onClick={craft}
           disabled={fb.solved || grid.every((v) => v === null)}
-          className={`${OPTION_BASE} px-8 rounded-lg pixel-border bg-minecraft-dark-green text-white font-minecraft text-sm
+          className={`${OPTION_BASE} px-8 rounded-lg pixel-border bg-brand-dark-green text-white font-minecraft text-sm
             disabled:opacity-50 disabled:cursor-not-allowed hover:brightness-110`}
         >
           Criar!

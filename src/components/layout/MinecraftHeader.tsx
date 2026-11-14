@@ -20,13 +20,13 @@ export function MinecraftHeader({ studentName, showNav = true }: MinecraftHeader
       <motion.header
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        className="bg-gradient-to-r from-minecraft-dark-green to-minecraft-green px-4 py-2.5 shadow-lg pixel-border sticky top-0 z-40"
+        className="bg-gradient-to-r from-brand-dark-green to-brand-green px-4 py-2.5 shadow-lg pixel-border sticky top-0 z-40"
       >
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-3">
           <button
             type="button"
             onClick={() => navigate('/inicio')}
-            className="flex items-center gap-2 rounded focus:outline-none focus-visible:ring-4 focus-visible:ring-minecraft-gold"
+            className="flex items-center gap-2 rounded focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-lapis"
             aria-label="Início"
           >
             <span className="text-2xl" aria-hidden="true">⛏️</span>
@@ -44,7 +44,7 @@ export function MinecraftHeader({ studentName, showNav = true }: MinecraftHeader
             <button
               type="button"
               onClick={() => navigate('/inicio')}
-              className="flex items-center gap-2 text-white/80 hover:text-white p-2 rounded focus:outline-none focus-visible:ring-4 focus-visible:ring-minecraft-gold"
+              className="flex items-center gap-2 text-white/80 hover:text-white p-2 rounded focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-lapis"
               aria-label="Voltar ao início"
             >
               <span className="font-body text-sm font-bold hidden sm:block">{studentName}</span>

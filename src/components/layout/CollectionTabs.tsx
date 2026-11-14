@@ -17,8 +17,8 @@ export function CollectionTabs() {
           role="tab"
           aria-selected={pathname === t.path}
           onClick={() => navigate(t.path)}
-          className={`min-h-[48px] rounded-lg pixel-border font-body font-bold text-sm focus:outline-none focus-visible:ring-4 focus-visible:ring-minecraft-gold ${
-            pathname === t.path ? 'bg-minecraft-gold text-gray-900' : 'bg-white/80 text-gray-800 hover:bg-white'
+          className={`min-h-[48px] rounded-lg pixel-border font-body font-bold text-sm focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-lapis ${
+            pathname === t.path ? 'bg-brand-gold text-gray-900' : 'bg-white/80 text-gray-800 hover:bg-white'
           }`}
         >
           {t.label}

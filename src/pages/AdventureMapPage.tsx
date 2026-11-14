@@ -152,7 +152,7 @@ export function AdventureMapPage() {
             {index > 0 && (
               <div className="flex flex-col items-center -mt-4 mb-2" aria-hidden="true">
                 {[0, 1, 2].map((d) => (
-                  <span key={d} className={`w-2 h-4 rounded-full my-0.5 ${isUnlocked ? 'bg-minecraft-gold' : 'bg-white/25'}`} />
+                  <span key={d} className={`w-2 h-4 rounded-full my-0.5 ${isUnlocked ? 'bg-brand-gold' : 'bg-white/25'}`} />
                 ))}
               </div>
             )}
@@ -176,7 +176,7 @@ export function AdventureMapPage() {
               initial={{ y: 40, opacity: 0 }}
               animate={{ y: 0, opacity: 1, scale: [1, 1.04, 1] }}
               transition={{ delay: 0.6, scale: { duration: 1.6, repeat: Infinity, delay: 1.2 } }}
-              className="pointer-events-auto min-h-[56px] px-6 rounded-lg pixel-border bg-minecraft-gold hover:bg-yellow-400 border-b-4 border-yellow-700 font-minecraft text-sm sm:text-base text-gray-900 shadow-2xl focus:outline-none focus-visible:ring-4 focus-visible:ring-white"
+              className="pointer-events-auto min-h-[56px] px-6 rounded-lg pixel-border bg-brand-gold hover:bg-yellow-400 border-b-4 border-yellow-700 font-minecraft text-sm sm:text-base text-gray-900 shadow-2xl focus:outline-none focus-visible:ring-4 focus-visible:ring-white"
             >
               ▶ CONTINUAR · FASE {currentLevel}
             </motion.button>

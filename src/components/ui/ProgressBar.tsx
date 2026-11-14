@@ -13,7 +13,7 @@ interface ProgressBarProps {
 export function ProgressBar({
   value,
   max,
-  color = 'bg-minecraft-emerald',
+  color = 'bg-brand-emerald',
   height = 'h-4',
   showLabel = true,
   label,

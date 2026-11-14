@@ -53,7 +53,7 @@ export function MobWalker({ type, size = 48, duration = 20, offset = 0, interact
           type="button"
           onClick={handleClick}
           aria-label={`${MOBS[type].label}: toque para pular`}
-          className="block pointer-events-auto cursor-pointer rounded-sm focus:outline-none focus-visible:ring-4 focus-visible:ring-minecraft-gold"
+          className="block pointer-events-auto cursor-pointer rounded-sm focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-lapis"
         >
           {mob}
         </button>

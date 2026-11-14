@@ -249,7 +249,7 @@ export function Viewer360({ type, skin, unit = 7, label = 'Boneco em 360 graus' 
   };
 
   const btn =
-    'min-h-[44px] min-w-[44px] px-3 rounded-md bg-white border-2 border-gray-300 font-body font-bold text-gray-800 hover:bg-gray-50 focus:outline-none focus-visible:ring-4 focus-visible:ring-minecraft-lapis';
+    'min-h-[44px] min-w-[44px] px-3 rounded-md bg-white border-2 border-gray-300 font-body font-bold text-gray-800 hover:bg-gray-50 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-lapis';
 
   return (
     <div className="flex flex-col items-center gap-3">
@@ -265,7 +265,7 @@ export function Viewer360({ type, skin, unit = 7, label = 'Boneco em 360 graus' 
         onPointerMove={onMove}
         onPointerUp={onUp}
         onPointerCancel={onUp}
-        className="drag-handle cursor-grab active:cursor-grabbing rounded-lg bg-gradient-to-b from-sky-200 to-green-200 pixel-border flex items-center justify-center focus:outline-none focus-visible:ring-4 focus-visible:ring-minecraft-lapis"
+        className="drag-handle cursor-grab active:cursor-grabbing rounded-lg bg-gradient-to-b from-sky-200 to-green-200 pixel-border flex items-center justify-center focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-lapis"
         style={{ width: 24 * unit, height: 44 * unit }}
       >
         <Mob3D type={type} skin={skin} unit={unit} angle={angle} />

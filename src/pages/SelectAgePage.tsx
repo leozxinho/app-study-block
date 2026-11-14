@@ -15,7 +15,7 @@ export function SelectAgePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-minecraft-sky via-blue-300 to-minecraft-green relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-brand-sky via-blue-300 to-brand-green relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 block-pattern opacity-10" />
 
@@ -102,8 +102,8 @@ export function SelectAgePage() {
 
       {/* Ground */}
       <div className="absolute bottom-0 left-0 right-0">
-        <div className="h-4 bg-minecraft-green w-full" />
-        <div className="h-12 bg-minecraft-dirt w-full" />
+        <div className="h-4 bg-brand-green w-full" />
+        <div className="h-12 bg-brand-dirt w-full" />
       </div>
     </div>
   );

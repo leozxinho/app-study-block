@@ -62,7 +62,7 @@ function RestScreen() {
         <div className="flex justify-center mb-3">
           <Mob type="steve" size={80} animation="sad" title="Personagem descansando" />
         </div>
-        <h2 id="rest-title" className="font-minecraft text-lg text-minecraft-gold mb-2">Hora de descansar!</h2>
+        <h2 id="rest-title" className="font-minecraft text-lg text-brand-gold mb-2">Hora de descansar!</h2>
         <p className="font-body text-base mb-6">Você jogou bastante hoje. Seu progresso está guardado. Volte amanhã para continuar a aventura!</p>
         {!asking ? (
           <MinecraftButton variant="secondary" size="sm" onClick={() => setAsking(true)}>

@@ -65,7 +65,7 @@ export function ClockActivity({ activity, onCorrect, onWrong }: ActivityProps) {
               disabled={state === 'eliminated' || (fb.locked && state !== 'correct')}
               aria-label={`${opt.replace(':', ' e ')}${optionStateLabel(state)}`}
               className={`${OPTION_BASE} min-h-[64px] rounded-lg pixel-border font-minecraft text-xl ${
-                state === 'correct' ? 'bg-minecraft-emerald text-gray-900' : state === 'wrong' ? 'bg-red-600 text-white' : 'bg-white hover:bg-amber-50 text-gray-900'
+                state === 'correct' ? 'bg-brand-emerald text-gray-900' : state === 'wrong' ? 'bg-red-600 text-white' : 'bg-white hover:bg-amber-50 text-gray-900'
               } ${optionStateClass(state)}`}
             >
               {opt}

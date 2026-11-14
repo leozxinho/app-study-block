@@ -18,7 +18,7 @@ export function SequenceActivity({ activity, onCorrect, onWrong }: ActivityProps
   return (
     <ActivityCard icon="🧩" question={activity.question} subtitle="Complete a sequência!">
       <div
-        className="flex items-center justify-center gap-2 sm:gap-3 mb-6 sm:mb-8 p-3 sm:p-4 bg-minecraft-sky/20 rounded-lg flex-wrap"
+        className="flex items-center justify-center gap-2 sm:gap-3 mb-6 sm:mb-8 p-3 sm:p-4 bg-brand-sky/20 rounded-lg flex-wrap"
         role="img"
         aria-label={`Sequência: ${data.pattern.map((p) => p.label).join(', ')}, e qual vem agora?`}
       >

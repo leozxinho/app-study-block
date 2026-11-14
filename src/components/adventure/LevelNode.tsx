@@ -25,10 +25,10 @@ export function LevelNode({
   const getNodeStyles = () => {
     switch (status) {
       case 'completed':
-        return 'bg-minecraft-emerald border-green-800 text-white shadow-lg shadow-green-500/30';
+        return 'bg-brand-emerald border-green-800 text-brand-ink shadow-lg shadow-green-500/30';
       case 'available':
       case 'in_progress':
-        return 'bg-minecraft-gold border-yellow-700 text-white shadow-lg shadow-yellow-500/40';
+        return 'bg-brand-gold border-yellow-700 text-brand-ink shadow-lg shadow-yellow-500/40';
       case 'locked':
         return 'bg-gray-600 border-gray-800 text-gray-400 opacity-60';
       default:

@@ -73,7 +73,7 @@ export function OrderingActivity({ activity, onCorrect, onWrong }: ActivityProps
               key={item.id}
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              className="bg-minecraft-dark-green text-white px-4 py-3 rounded-lg pixel-border font-minecraft text-lg"
+              className="bg-brand-dark-green text-white px-4 py-3 rounded-lg pixel-border font-minecraft text-lg"
             >
               <span style={item.scale ? { fontSize: `${item.scale * 1.2}rem` } : undefined}>{item.text}</span>
             </motion.div>

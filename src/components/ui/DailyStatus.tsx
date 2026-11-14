@@ -28,7 +28,7 @@ export function DailyStatus() {
       <span className="flex items-center gap-1 rounded-md bg-black/25 px-2 py-1" aria-hidden="true">
         <span className="flex gap-0.5">
           {Array.from({ length: daily.goal }, (_, i) => (
-            <span key={i} className={`w-2 h-3 rounded-sm ${i < daily.done ? 'bg-minecraft-gold' : 'bg-white/30'}`} />
+            <span key={i} className={`w-2 h-3 rounded-sm ${i < daily.done ? 'bg-brand-gold' : 'bg-white/30'}`} />
           ))}
         </span>
         <motion.span

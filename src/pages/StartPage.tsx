@@ -53,12 +53,12 @@ export function StartPage() {
 
   return (
     <div className="min-h-screen relative overflow-hidden flex items-center justify-center px-4">
-      <div className="absolute inset-0 bg-gradient-to-b from-minecraft-sky via-blue-300 to-blue-200" />
+      <div className="absolute inset-0 bg-gradient-to-b from-brand-sky via-blue-300 to-blue-200" />
 
       {/* Chão com mobs andando */}
       <div className="absolute bottom-0 left-0 right-0 h-28">
-        <div className="h-4 bg-minecraft-green w-full" />
-        <div className="h-24 bg-minecraft-dirt w-full block-pattern" />
+        <div className="h-4 bg-brand-green w-full" />
+        <div className="h-24 bg-brand-dirt w-full block-pattern" />
       </div>
       <div className="absolute bottom-28 left-0 right-0 h-24 pointer-events-none">
         <MobWalker type="pig" size={48} duration={20} offset={0.2} interactive={false} />
@@ -80,7 +80,7 @@ export function StartPage() {
             <h1 className="font-minecraft text-lg sm:text-xl text-gray-900 mb-1">Tudo pronto!</h1>
             {isChild ? (
               <>
-                <p className="font-minecraft text-base sm:text-lg text-minecraft-dark-green mb-1">{user?.name}</p>
+                <p className="font-minecraft text-base sm:text-lg text-brand-dark-green mb-1">{user?.name}</p>
                 <p className="font-body text-gray-700 mb-4">Bora aprender jogando?</p>
                 {/* Nível, XP e ofensiva da criança */}
                 <div className="flex justify-center gap-2 mb-6 font-body text-sm font-bold">

@@ -32,7 +32,7 @@ export function SubscriptionGuard() {
       ) : (
         <div className="max-w-sm w-full text-center text-white space-y-4">
           <div className="text-6xl" aria-hidden="true">{info.failed ? '📡' : '🔒'}</div>
-          <h2 id="sub-guard-title" className="font-minecraft text-lg text-minecraft-gold">
+          <h2 id="sub-guard-title" className="font-minecraft text-lg text-brand-gold">
             {info.failed ? 'Sem conexão' : 'Assinatura vencida'}
           </h2>
           <p className="font-body text-base">

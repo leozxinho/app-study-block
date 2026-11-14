@@ -76,7 +76,7 @@ export function MathMobsActivity({ activity, onCorrect, onWrong }: ActivityProps
               aria-label={`${n}${optionStateLabel(state)}`}
               className={`
                 ${OPTION_BASE} h-20 rounded-md pixel-border font-minecraft text-2xl text-gray-900
-                ${state === 'correct' ? 'bg-minecraft-emerald' : state === 'wrong' ? 'bg-red-300' : 'block-pattern bg-stone-300 hover:bg-stone-200'}
+                ${state === 'correct' ? 'bg-brand-emerald' : state === 'wrong' ? 'bg-red-300' : 'block-pattern bg-stone-300 hover:bg-stone-200'}
                 ${optionStateClass(state)}
               `}
             >

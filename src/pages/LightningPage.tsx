@@ -120,7 +120,7 @@ export function LightningPage() {
       <MinecraftHeader showNav />
       <AchievementToast achievements={earned} onDone={clearEarned} />
       <main className="max-w-xl mx-auto px-4 py-6 text-center text-white">
-        <h1 className="font-minecraft text-xl sm:text-2xl text-minecraft-gold">⚡ Desafio Relâmpago</h1>
+        <h1 className="font-minecraft text-xl sm:text-2xl text-brand-gold">⚡ Desafio Relâmpago</h1>
 
         {!difficulty ? (
           <div className="mt-6 bg-white/10 rounded-xl p-6">
@@ -146,7 +146,7 @@ export function LightningPage() {
               <span className={left <= 10 ? 'text-red-300' : ''}>⏱️ {left}s</span>
             </div>
             <div className="h-2 bg-white/20 rounded mb-5 overflow-hidden" aria-hidden="true">
-              <div className="h-full bg-minecraft-gold transition-all duration-1000 ease-linear" style={{ width: `${(left / SECONDS) * 100}%` }} />
+              <div className="h-full bg-brand-gold transition-all duration-1000 ease-linear" style={{ width: `${(left / SECONDS) * 100}%` }} />
             </div>
             <motion.p
               key={opText(round.problem) + score}
@@ -164,7 +164,7 @@ export function LightningPage() {
                   type="button"
                   onClick={() => answer(o)}
                   animate={wrong === o ? { x: [0, -8, 8, -4, 0] } : undefined}
-                  className={`min-h-[64px] rounded-lg pixel-border font-minecraft text-2xl focus:outline-none focus-visible:ring-4 focus-visible:ring-minecraft-gold ${
+                  className={`min-h-[64px] rounded-lg pixel-border font-minecraft text-2xl focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-lapis ${
                     wrong === o ? 'bg-red-400 text-white' : 'bg-white text-gray-900 hover:bg-yellow-100'
                   }`}
                 >
@@ -178,7 +178,7 @@ export function LightningPage() {
             <p className="text-5xl" aria-hidden="true">{record ? '🏆' : '⚡'}</p>
             <p className="font-minecraft text-xl">{record ? 'NOVO RECORDE!' : 'Fim do tempo!'}</p>
             <p className="font-body text-lg">Você fez {score} pontos.</p>
-            {score > 0 && <p className="font-minecraft text-minecraft-gold">+{Math.min(score, MAX_XP)} XP</p>}
+            {score > 0 && <p className="font-minecraft text-brand-gold">+{Math.min(score, MAX_XP)} XP</p>}
             <div className="flex flex-col gap-2">
               <MinecraftButton variant="gold" size="lg" fullWidth onClick={start}>
                 🔁 Jogar de novo

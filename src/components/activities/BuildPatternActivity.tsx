@@ -163,7 +163,7 @@ export function BuildPatternActivity({ activity, onCorrect, onWrong }: ActivityP
             aria-pressed={brush === c}
             aria-label={BLOCKS[c].name}
             className={`${OPTION_BASE} w-20 py-2 rounded-lg pixel-border flex flex-col items-center gap-1
-              ${brush === c ? 'bg-amber-200 ring-4 ring-minecraft-lapis' : 'bg-white hover:bg-amber-50'}`}
+              ${brush === c ? 'bg-amber-200 ring-4 ring-brand-lapis' : 'bg-white hover:bg-amber-50'}`}
           >
             <PixelArt sprite={BLOCKS[c]} size={32} />
             <span className="font-body text-xs font-bold text-gray-900">{BLOCKS[c].name}</span>
@@ -178,7 +178,7 @@ export function BuildPatternActivity({ activity, onCorrect, onWrong }: ActivityP
           aria-pressed={brush === null}
           aria-label="Apagar"
           className={`${OPTION_BASE} w-20 py-2 rounded-lg pixel-border flex flex-col items-center justify-center gap-1
-            ${brush === null ? 'bg-amber-200 ring-4 ring-minecraft-lapis' : 'bg-white hover:bg-amber-50'}`}
+            ${brush === null ? 'bg-amber-200 ring-4 ring-brand-lapis' : 'bg-white hover:bg-amber-50'}`}
         >
           <Eraser size={28} aria-hidden="true" className="text-gray-800" />
           <span className="font-body text-xs font-bold text-gray-900">Apagar</span>
@@ -190,7 +190,7 @@ export function BuildPatternActivity({ activity, onCorrect, onWrong }: ActivityP
           type="button"
           onClick={check}
           disabled={fb.solved || grid.every((v) => v === null)}
-          className={`${OPTION_BASE} px-8 rounded-lg pixel-border bg-minecraft-dark-green text-white font-minecraft text-sm
+          className={`${OPTION_BASE} px-8 rounded-lg pixel-border bg-brand-dark-green text-white font-minecraft text-sm
             disabled:opacity-50 disabled:cursor-not-allowed hover:brightness-110`}
         >
           Pronto!

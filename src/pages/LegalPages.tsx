@@ -23,7 +23,7 @@ function Contact() {
 function LegalLayout({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div className="min-h-screen bg-white text-gray-900">
-      <header className="bg-gradient-to-b from-minecraft-sky to-sky-200 px-4 py-5">
+      <header className="bg-gradient-to-b from-brand-sky to-sky-200 px-4 py-5">
         <nav className="max-w-3xl mx-auto flex items-center justify-between gap-3">
           <Link to="/" className="font-minecraft text-sm text-white drop-shadow">
             {PRODUCT.name}
@@ -46,7 +46,7 @@ function LegalLayout({ title, children }: { title: string; children: ReactNode }
 /** Rodapé com os links legais (também usado na landing). */
 export function LegalFooter() {
   return (
-    <footer className="bg-minecraft-dark-green text-white/90 font-body text-sm text-center py-6 px-4">
+    <footer className="bg-brand-dark-green text-white/90 font-body text-sm text-center py-6 px-4">
       <p>{PRODUCT.name}: aprender jogando.</p>
       {PRODUCT.contactEmail && <p className="mt-1">Contato: {PRODUCT.contactEmail}</p>}
       <p className="mt-2 flex justify-center gap-4">

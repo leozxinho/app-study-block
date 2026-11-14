@@ -56,7 +56,7 @@ export function ShopPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-minecraft-sky via-blue-100 to-green-50">
+    <div className="min-h-screen bg-gradient-to-b from-brand-sky via-blue-100 to-green-50">
       <MinecraftHeader showNav />
       <AchievementToast achievements={earned} onDone={clearEarned} />
 
@@ -102,7 +102,7 @@ export function ShopPage() {
                     gameStatsService.setCharacter(c.id);
                   }}
                   className={`min-h-[48px] px-4 rounded-lg pixel-border font-body font-bold flex items-center gap-2
-                    focus:outline-none focus-visible:ring-4 focus-visible:ring-minecraft-lapis
+                    focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-lapis
                     ${stats.skin.character === c.id ? 'bg-amber-200 text-gray-900' : 'bg-white text-gray-800 hover:bg-amber-50'}`}
                 >
                   <Mob type={c.id} skin={{ ...stats.skin, character: c.id }} size={36} animation="idle" />
@@ -123,8 +123,8 @@ export function ShopPage() {
               aria-selected={slot === s.id}
               onClick={() => setSlot(s.id)}
               className={`min-h-[48px] px-4 rounded-lg font-body font-bold text-sm
-                focus:outline-none focus-visible:ring-4 focus-visible:ring-minecraft-lapis
-                ${slot === s.id ? 'bg-minecraft-dark-green text-white' : 'bg-white text-gray-800 border border-gray-300'}`}
+                focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-lapis
+                ${slot === s.id ? 'bg-brand-dark-green text-white' : 'bg-white text-gray-800 border border-gray-300'}`}
             >
               <span aria-hidden="true">{s.icon}</span> {s.label}
             </button>
@@ -155,7 +155,7 @@ export function ShopPage() {
                 key={item.id}
                 layout
                 className={`bg-white rounded-lg pixel-border p-3 flex flex-col items-center gap-2
-                  ${equipped ? 'ring-4 ring-minecraft-emerald' : ''}`}
+                  ${equipped ? 'ring-4 ring-brand-emerald' : ''}`}
               >
                 <div className="h-24 flex items-end justify-center pt-4">
                   <Mob
@@ -171,7 +171,7 @@ export function ShopPage() {
                   type="button"
                   onClick={() => setPreview({ skin: { ...stats.skin, [item.slot]: item.id }, title: item.name })}
                   aria-label={`Provar ${item.name} em 360 graus`}
-                  className="w-full min-h-[40px] rounded-md border-2 border-gray-300 bg-white font-body font-bold text-sm text-gray-800 hover:bg-gray-50 focus:outline-none focus-visible:ring-4 focus-visible:ring-minecraft-lapis"
+                  className="w-full min-h-[40px] rounded-md border-2 border-gray-300 bg-white font-body font-bold text-sm text-gray-800 hover:bg-gray-50 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-lapis"
                 >
                   👁️ Provar em 360°
                 </button>
@@ -181,15 +181,15 @@ export function ShopPage() {
                   disabled={equipped || (!owned && missing > 0)}
                   aria-label={`${item.name}: ${label}`}
                   className={`w-full min-h-[44px] rounded-md font-body font-bold text-sm
-                    focus:outline-none focus-visible:ring-4 focus-visible:ring-minecraft-lapis
+                    focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-lapis
                     disabled:cursor-not-allowed
                     ${equipped
                       ? 'bg-green-100 text-green-900'
                       : owned
-                        ? 'bg-minecraft-dark-green text-white hover:brightness-110'
+                        ? 'bg-brand-dark-green text-white hover:brightness-110'
                         : missing > 0
                           ? 'bg-gray-200 text-gray-700'
-                          : 'bg-minecraft-gold text-gray-900 hover:brightness-105'}`}
+                          : 'bg-brand-gold text-gray-900 hover:brightness-105'}`}
                 >
                   {label}
                 </button>

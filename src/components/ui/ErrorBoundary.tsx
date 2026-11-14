@@ -23,7 +23,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   render() {
     if (!this.state.hasError) return this.props.children;
     return (
-      <div role="alert" className="min-h-screen flex flex-col items-center justify-center gap-6 bg-minecraft-sky px-4 text-center">
+      <div role="alert" className="min-h-screen flex flex-col items-center justify-center gap-6 bg-brand-sky px-4 text-center">
         <h1 className="font-minecraft text-xl sm:text-2xl text-white drop-shadow-[3px_3px_0px_rgba(0,0,0,0.8)]">
           Ops! Algo deu errado.
         </h1>
@@ -31,7 +31,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
         <button
           type="button"
           onClick={() => window.location.assign('/')}
-          className="font-minecraft text-sm px-6 py-3 bg-minecraft-green hover:bg-minecraft-dark-green text-white border-b-4 border-minecraft-dark-green"
+          className="font-minecraft text-sm px-6 py-3 bg-brand-green hover:bg-brand-dark-green text-white border-b-4 border-brand-dark-green"
         >
           Recomeçar
         </button>

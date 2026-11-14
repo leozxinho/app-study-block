@@ -81,7 +81,7 @@ const STEPS: Step[] = [
                 <Mob type="steve" size={34} animation="idle" />
               </span>
             )}
-            <span className={`w-12 h-12 rounded-lg pixel-border flex items-center justify-center text-xl ${i < 2 ? 'bg-minecraft-emerald' : i === 2 ? 'bg-minecraft-gold' : 'bg-gray-400'}`}>{s}</span>
+            <span className={`w-12 h-12 rounded-lg pixel-border flex items-center justify-center text-xl ${i < 2 ? 'bg-brand-emerald' : i === 2 ? 'bg-brand-gold' : 'bg-gray-400'}`}>{s}</span>
           </span>
         ))}
         <span className="ml-2 text-2xl" aria-hidden="true">⭐⭐⭐</span>
@@ -119,7 +119,7 @@ const STEPS: Step[] = [
     visual: (
       <div className="flex items-end justify-center gap-2 h-24" aria-hidden="true">
         {[40, 70, 55, 90, 65].map((h, i) => (
-          <span key={i} className="w-8 rounded-t bg-minecraft-emerald" style={{ height: `${h}%` }} />
+          <span key={i} className="w-8 rounded-t bg-brand-emerald" style={{ height: `${h}%` }} />
         ))}
         <span className="text-3xl ml-2">📋</span>
       </div>
@@ -169,7 +169,7 @@ export function TutorialModal({ open, onClose, userName }: TutorialModalProps) {
               aria-selected={i === step}
               aria-label={`Passo ${i + 1}: ${x.title}`}
               onClick={() => setStep(i)}
-              className={`w-3 h-3 rounded-sm focus:outline-none focus-visible:ring-4 focus-visible:ring-minecraft-lapis ${i === step ? 'bg-minecraft-dark-green' : 'bg-gray-300'}`}
+              className={`w-3 h-3 rounded-sm focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-lapis ${i === step ? 'bg-brand-dark-green' : 'bg-gray-300'}`}
             />
           ))}
         </div>
