@@ -522,3 +522,19 @@ body.has-tabbar { padding-bottom: calc(68px + env(safe-area-inset-bottom)); }
   90% { transform: translateY(0) rotate(180deg); }
 }
 .block-loader > * { animation: block-hop 1.1s ease-in-out infinite; }
+
+/* Landing: blocos do topo pulando (agacha, sobe girando um pouco, cai e amassa) */
+@keyframes hero-hop {
+  0%, 55%, 100% { transform: translateY(0) scale(1, 1) rotate(0); }
+  8% { transform: translateY(0) scale(1.12, 0.86) rotate(0); }
+  22% { transform: translateY(-34px) scale(0.94, 1.08) rotate(-6deg); }
+  34% { transform: translateY(-34px) scale(1, 1) rotate(4deg); }
+  46% { transform: translateY(0) scale(1.1, 0.9) rotate(0); }
+}
+.hero-hop {
+  transform-origin: 50% 100%;
+  animation: hero-hop 1.8s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-hop { animation: none; }
+}

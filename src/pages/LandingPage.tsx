@@ -59,11 +59,14 @@ export function LandingPage() {
           </div>
           <div className="flex justify-center items-end gap-2 sm:gap-3" aria-hidden="true">
             {HERO_BLOCKS.map((b, i) => (
-              <span
-                key={b.text}
-                className={`${b.color} w-14 h-14 sm:w-20 sm:h-20 flex items-center justify-center font-minecraft text-xl sm:text-3xl text-white border-b-8 border-r-4 border-black/25 shadow-lg ${i % 2 ? 'mb-6' : ''}`}
-              >
-                {b.text}
+              <span key={b.text} className={i % 2 ? 'mb-6' : ''}>
+                {/* Cada bloco pula na sua vez (onda da esquerda para a direita) */}
+                <span
+                  className={`hero-hop ${b.color} w-14 h-14 sm:w-20 sm:h-20 flex items-center justify-center font-minecraft text-xl sm:text-3xl text-white border-b-8 border-r-4 border-black/25 shadow-lg`}
+                  style={{ animationDelay: `${i * 0.18}s` }}
+                >
+                  {b.text}
+                </span>
               </span>
             ))}
           </div>
