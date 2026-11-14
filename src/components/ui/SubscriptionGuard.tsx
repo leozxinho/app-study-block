@@ -5,7 +5,7 @@ import { BlockLoader } from './BlockLoader';
 import { subscriptionService, useSubscription } from '../../services/subscriptionService';
 import { stopSpeaking } from '../../lib/voice';
 
-/** Telas de jogar: precisam de assinatura ativa (a Área dos Pais, o login e a /conheca ficam livres). */
+/** Telas de jogar: precisam de assinatura ativa (a Área dos Pais, o login e a landing ficam livres). */
 const GATED = ['/adventure', '/activity', '/activities', '/album', '/casa', '/loja', '/relampago', '/treino', '/dashboard', '/world'];
 
 /**

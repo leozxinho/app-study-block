@@ -1,5 +1,5 @@
 /**
- * Dados comerciais do MineLearn (página /conheca e assinatura).
+ * Dados comerciais do MineLearn (landing em "/" e assinatura).
  * Preencha quando decidir os valores. Enquanto o preço for null, a página mostra "em breve".
  */
 export const PRODUCT = {
@@ -19,3 +19,12 @@ export const PRODUCT = {
 export function formatBRL(value: number): string {
   return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
+
+/** Perguntas frequentes da landing (também viram o JSON-LD FAQPage no pré-render). */
+export const FAQ = [
+  { q: 'Para qual idade é?', a: 'Do berçário ao 5º ano (0 a 10 anos). Cada criança joga as atividades da faixa dela.' },
+  { q: 'Tem anúncios?', a: 'Não. Nenhum anúncio e nenhuma compra dentro do jogo: tudo é conquistado jogando.' },
+  { q: 'Posso limitar o tempo de tela?', a: 'Sim. Na Área dos Pais você escolhe quantos minutos por dia cada criança pode jogar.' },
+  { q: 'Funciona no tablet e no celular?', a: 'Sim, no navegador do tablet, celular ou computador. Dá até para instalar como app.' },
+  { q: 'Quantas crianças posso cadastrar?', a: `Até ${PRODUCT.maxChildren} crianças por conta, cada uma com o próprio progresso.` },
+];

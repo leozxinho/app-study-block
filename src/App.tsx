@@ -1,7 +1,8 @@
-import { lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { lazy, Suspense, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
-import { HomePage } from './pages/HomePage';
+import { LandingPage } from './pages/LandingPage';
+import { RouteMeta } from './components/ui/RouteMeta';
 import { ProgressGate } from './components/ui/ProgressGate';
 import { BlockLoader } from './components/ui/BlockLoader';
 import { authService } from './services/authService';
@@ -11,7 +12,7 @@ import { SubscriptionGuard } from './components/ui/SubscriptionGuard';
 import { loadAudioIndex } from './lib/audio/library';
 
 // Telas carregadas só quando abertas (o celular não baixa o jogo inteiro de uma vez).
-// A tela inicial vem junto, para abrir na hora.
+// A landing ("/") vem junto, para abrir na hora (e é pré-renderizada no build).
 const SelectAgePage = lazy(() => import('./pages/SelectAgePage').then((m) => ({ default: m.SelectAgePage })));
 const WorldMapPage = lazy(() => import('./pages/WorldMapPage').then((m) => ({ default: m.WorldMapPage })));
 const ActivityListPage = lazy(() => import('./pages/ActivityListPage').then((m) => ({ default: m.ActivityListPage })));
@@ -26,7 +27,6 @@ const StartPage = lazy(() => import('./pages/StartPage').then((m) => ({ default:
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage').then((m) => ({ default: m.NotFoundPage })));
 const AlbumPage = lazy(() => import('./pages/AlbumPage').then((m) => ({ default: m.AlbumPage })));
 const HousePage = lazy(() => import('./pages/HousePage').then((m) => ({ default: m.HousePage })));
-const LandingPage = lazy(() => import('./pages/LandingPage').then((m) => ({ default: m.LandingPage })));
 const TrainingPage = lazy(() => import('./pages/TrainingPage').then((m) => ({ default: m.TrainingPage })));
 const LightningPage = lazy(() => import('./pages/LightningPage').then((m) => ({ default: m.LightningPage })));
 
@@ -48,17 +48,29 @@ function RouteLoading() {
   );
 }
 
+/** "/": a landing para quem não entrou; quem já entrou vai para o jogo (o index.html já tenta antes do React). */
+function HomeRoute() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    void authService.getCurrentUser().then((u) => {
+      if (u) navigate('/inicio', { replace: true });
+    });
+  }, [navigate]);
+  return <LandingPage />;
+}
+
 function App() {
   return (
     <MotionConfig reducedMotion="never">
       <Router>
+        <RouteMeta />
         <MusicRouter />
         <ScreenTimeGuard />
         <SubscriptionGuard />
         <ProgressGate>
         <Suspense fallback={<RouteLoading />}>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<HomeRoute />} />
           <Route path="/select-age" element={<SelectAgePage />} />
           <Route path="/world" element={<WorldMapPage />} />
           <Route path="/activities" element={<ActivityListPage />} />
@@ -76,7 +88,8 @@ function App() {
           <Route path="/casa" element={<HousePage />} />
           <Route path="/relampago" element={<LightningPage />} />
           <Route path="/treino" element={<TrainingPage />} />
-          <Route path="/conheca" element={<LandingPage />} />
+          {/* Endereço antigo da landing (no servidor é um 301; aqui cobre a navegação dentro do app) */}
+          <Route path="/conheca" element={<Navigate to="/" replace />} />
           {MobsPage && (
             <Route
               path="/mobs"

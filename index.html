@@ -4,22 +4,35 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/icons/icon-192.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MineLearn</title>
-    <meta name="description" content="MineLearn: atividades educativas com tema de Minecraft para crianças aprenderem letras, números, cores e formas brincando." />
-    <meta property="og:title" content="MineLearn" />
-    <meta property="og:description" content="Atividades educativas com tema de Minecraft para crianças aprenderem brincando." />
+    <title>MineLearn — aprender jogando num mundo de blocos</title>
+    <meta name="description" content="Matemática, letras, cores e formas em uma aventura com voz, personagens e recompensas, para crianças de 0 a 10 anos estudarem em casa." />
+    <meta property="og:site_name" content="MineLearn" />
+    <meta property="og:title" content="MineLearn — aprender jogando num mundo de blocos" />
+    <meta property="og:description" content="Matemática, letras, cores e formas em uma aventura com voz, personagens e recompensas, para crianças de 0 a 10 anos." />
     <meta property="og:type" content="website" />
-      <link rel="manifest" href="/manifest.webmanifest" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <!--seo-->
+    <link rel="manifest" href="/manifest.webmanifest" />
     <meta name="theme-color" content="#3B5E28" />
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="MineLearn" />
+    <script>
+      // Já entrou na conta? Na landing ("/"), vai direto para o jogo antes de mostrar a página.
+      (function () {
+        if (location.pathname !== '/') return;
+        try {
+          for (var i = 0; i < localStorage.length; i++) {
+            var k = localStorage.key(i) || '';
+            if (k === 'minecraft_edu_auth' || /^sb-.+-auth-token$/.test(k)) return location.replace('/inicio');
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"><!--app--></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-
-
- <!--http://localhost:5173/-->

@@ -1,9 +1,12 @@
 import { motion } from 'framer-motion';
 import { ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 
 interface MinecraftButtonProps {
   children: ReactNode;
   onClick?: () => void;
+  /** Vira um link <a href> (o buscador segue), com o mesmo visual de botão. */
+  href?: string;
   variant?: 'primary' | 'secondary' | 'danger' | 'success' | 'gold';
   size?: 'sm' | 'md' | 'lg' | 'xl';
   disabled?: boolean;
@@ -34,14 +37,9 @@ export function MinecraftButton({
   disabled = false,
   className = '',
   fullWidth = false,
+  href,
 }: MinecraftButtonProps) {
-  return (
-    <motion.button
-      whileHover={{ scale: disabled ? 1 : 1.05 }}
-      whileTap={{ scale: disabled ? 1 : 0.95 }}
-      onClick={onClick}
-      disabled={disabled}
-      className={`
+  const look = `
         ${variants[variant]}
         ${sizes[size]}
         ${fullWidth ? 'w-full' : ''}
@@ -53,7 +51,21 @@ export function MinecraftButton({
         shadow-lg
         pixel-border
         ${className}
-      `}
+      `;
+  if (href) {
+    return (
+      <Link to={href} onClick={onClick} className={`${look} inline-block text-center transition-transform hover:scale-105 active:scale-95`}>
+        {children}
+      </Link>
+    );
+  }
+  return (
+    <motion.button
+      whileHover={{ scale: disabled ? 1 : 1.05 }}
+      whileTap={{ scale: disabled ? 1 : 0.95 }}
+      onClick={onClick}
+      disabled={disabled}
+      className={look}
     >
       {children}
     </motion.button>

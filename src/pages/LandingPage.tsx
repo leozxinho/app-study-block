@@ -1,10 +1,8 @@
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { MinecraftButton } from '../components/ui/MinecraftButton';
-import { Mob } from '../components/mobs';
+import { Mob } from '../components/mobs/Mob';
 import { ItemArt } from '../components/activities/shared/ItemArt';
 import { AGE_GROUPS } from '../lib/constants';
-import { PRODUCT, formatBRL } from '../config/product';
+import { FAQ, PRODUCT, formatBRL } from '../config/product';
 
 const STEPS = [
   { icon: '👨‍👧', title: 'Crie sua conta', text: 'Você cria o login e a senha de cada criança na Área dos Pais.' },
@@ -21,17 +19,8 @@ const FEATURES = [
   { icon: '🎯', title: 'Se adapta à criança', text: 'Acertou tudo? As próximas ficam mais difíceis. Errou muito? Mais fáceis.' },
 ];
 
-const FAQ = [
-  { q: 'Para qual idade é?', a: 'Do berçário ao 5º ano (0 a 10 anos). Cada criança joga as atividades da faixa dela.' },
-  { q: 'Tem anúncios?', a: 'Não. Nenhum anúncio e nenhuma compra dentro do jogo: tudo é conquistado jogando.' },
-  { q: 'Posso limitar o tempo de tela?', a: 'Sim. Na Área dos Pais você escolhe quantos minutos por dia cada criança pode jogar.' },
-  { q: 'Funciona no tablet e no celular?', a: 'Sim, no navegador do tablet, celular ou computador. Dá até para instalar como app.' },
-  { q: 'Quantas crianças posso cadastrar?', a: `Até ${PRODUCT.maxChildren} crianças por conta, cada uma com o próprio progresso.` },
-];
-
-/** Página para os pais conhecerem o MineLearn (vendas). */
+/** Página para os pais conhecerem o MineLearn (vendas). Fica em "/" e é pré-renderizada no build. */
 export function LandingPage() {
-  const navigate = useNavigate();
   const price = PRODUCT.monthlyPrice;
 
   return (
@@ -40,7 +29,7 @@ export function LandingPage() {
       <header className="bg-gradient-to-b from-minecraft-sky to-sky-200 px-4 pt-6 pb-16 relative overflow-hidden">
         <nav className="max-w-5xl mx-auto flex items-center justify-between mb-10">
           <span className="font-minecraft text-sm text-white drop-shadow">⛏️ {PRODUCT.name}</span>
-          <MinecraftButton variant="secondary" size="sm" onClick={() => navigate('/login')}>
+          <MinecraftButton variant="secondary" size="sm" href="/login">
             Entrar
           </MinecraftButton>
         </nav>
@@ -51,10 +40,10 @@ export function LandingPage() {
               Matemática, letras, cores e formas em uma aventura com voz, personagens e recompensas — feita para crianças de 0 a 10 anos estudarem em casa.
             </p>
             <div className="flex flex-wrap gap-3 mt-6">
-              <MinecraftButton variant="gold" size="lg" onClick={() => navigate('/login')}>
+              <MinecraftButton variant="gold" size="lg" href="/login">
                 {PRODUCT.trialDays > 0 ? `Testar ${PRODUCT.trialDays} dias grátis` : 'Começar'}
               </MinecraftButton>
-              <MinecraftButton variant="secondary" size="lg" onClick={() => navigate('/')}>
+              <MinecraftButton variant="secondary" size="lg" href="/login">
                 Ver o jogo
               </MinecraftButton>
             </div>
@@ -74,11 +63,11 @@ export function LandingPage() {
           <h2 id="como" className="font-minecraft text-lg sm:text-xl text-center mb-8">Como funciona</h2>
           <ol className="grid md:grid-cols-3 gap-5">
             {STEPS.map((s, i) => (
-              <motion.li key={s.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="rounded-xl border-2 border-gray-200 p-5 text-center">
+              <li key={s.title} className="rounded-xl border-2 border-gray-200 p-5 text-center">
                 <div className="text-4xl mb-2" aria-hidden="true">{s.icon}</div>
                 <p className="font-body font-bold text-lg">{i + 1}. {s.title}</p>
                 <p className="font-body text-gray-700 mt-1">{s.text}</p>
-              </motion.li>
+              </li>
             ))}
           </ol>
         </section>
@@ -145,7 +134,7 @@ export function LandingPage() {
             <p className="font-body text-sm text-gray-800 mt-2">
               Até {PRODUCT.maxChildren} crianças na mesma conta{PRODUCT.trialDays > 0 ? ` · ${PRODUCT.trialDays} dias grátis para testar` : ''}.
             </p>
-            <MinecraftButton variant="gold" size="lg" fullWidth className="mt-5" onClick={() => navigate('/login')}>
+            <MinecraftButton variant="gold" size="lg" fullWidth className="mt-5" href="/login">
               Criar minha conta
             </MinecraftButton>
           </div>
