@@ -17,12 +17,12 @@ const LEVEL_NAMES: string[][] = [
   ['Mergulho Inicial', 'Peixes Coloridos', 'Contando Conchas', 'Letras Submarinas', 'Formas do Mar', 'Bolhas Numéricas', 'Coral das Cores', 'Tartaruga Sábia', 'Navio Pirata', 'Tesouro Submarino'],
   // World 6 - Montanhas de Neve
   ['Primeira Neve', 'Flocos de Gelo', 'Iglu dos Números', 'Letras Geladas', 'Formas de Cristal', 'Esqui Colorido', 'Boneco de Neve', 'Urso Polar', 'Aurora Boreal', 'Topo da Montanha'],
-  // World 7 - Reino do Nether
-  ['Portal do Nether', 'Fogo e Cores', 'Lava Numérica', 'Blocos de Magma', 'Ghast das Letras', 'Fortaleza Secreta', 'Poção Mágica', 'Blaze de Fogo', 'Wither Skeleton', 'Trono do Nether'],
+  // World 7 - Reino de Fogo
+  ['Portal de Fogo', 'Fogo e Cores', 'Lava Numérica', 'Blocos de Magma', 'Fantasminha das Letras', 'Fortaleza Secreta', 'Poção Mágica', 'Fogaréu', 'Esqueleto Sombrio', 'Trono de Fogo'],
   // World 8 - Castelo dos Desafios
   ['Portão do Castelo', 'Sala de Quebra-Cabeças', 'Torre dos Números', 'Biblioteca Mágica', 'Labirinto de Formas', 'Salão das Cores', 'Masmorra Secreta', 'Dragão Guardião', 'Coroa de Diamante', 'Trono Real'],
-  // World 9 - Reino do End
-  ['Portal do End', 'Enderman das Letras', 'Ilha dos Números', 'Chorus Colorido', 'Formas do Vazio', 'Shulker Numérico', 'Barco do End', 'Cidade do End', 'Ovo do Dragão', 'Ender Dragon'],
+  // World 9 - Reino das Estrelas
+  ['Portal das Estrelas', 'Sombrio das Letras', 'Ilha dos Números', 'Jardim Colorido', 'Formas do Vazio', 'Caixa Numérica', 'Barco das Estrelas', 'Cidade das Estrelas', 'Ovo do Dragão', 'Dragão das Estrelas'],
   // World 10 - Grande Desafio
   ['Desafio das Cores', 'Desafio dos Números', 'Desafio das Letras', 'Desafio das Formas', 'Desafio dos Animais', 'Super Memória', 'Super Sequência', 'Super Contagem', 'Desafio Final', 'Grande Mestre!'],
 ];

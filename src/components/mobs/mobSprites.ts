@@ -147,41 +147,48 @@ function humanoid(opts: {
   ];
 }
 
+// Téo: personagem própria (cabelo arrepiado, moletom vermelho com listra, tênis branco)
 const STEVE: MobDef = {
-  label: 'Steve',
+  label: 'Téo',
   view: 'front',
   width: 16,
   height: 32,
   palette: {
-    H: '#4a2f1b', S: '#c8956d', s: '#b07e58', W: '#ffffff', B: '#3b3fa0', M: '#7a4030',
-    T: '#2aa7a7', t: '#1f8a8a', P: '#3b4aa0', p: '#2f3c85', G: '#5a5a5a', ...PICKAXE_COLORS,
+    H: '#2b1d14', h: '#4a3020', S: '#e0a982', s: '#c98f68', W: '#ffffff', B: '#1d1d1d', M: '#b5523b',
+    T: '#d64541', t: '#a8322f', L: '#f5f5f5', P: '#34495e', p: '#283a4b', G: '#f2f2f2', g: '#c9c9c9', ...PICKAXE_COLORS,
   },
   parts: humanoid({
-    head: ['HHHHHHHH', 'HHHHHHHH', 'HSSSSSSH', 'SSSSSSSS', 'SWBSSBWS', 'SSSssSSS', 'SSMMMMSS', 'SSSSSSSS'],
-    body: ['TTTSSTTT', 'TTTTTTTT', 'TTTTTTTT', 'tTTTTTTt', 'TTTTTTTT', 'TTTTTTTT', 'tTTTTTTt', 'TTTTTTTT', 'TTTTTTTT', 'TTTTTTTT', 'PPPPPPPP', 'PPPPPPPP'],
-    arm: ['tTTT', 'TTTT', 'TTTT', 'SSSS', 'SSSS', 'SSSS', 'SSSS', 'SSSS', 'SSSS', 'SSSS', 'sSSS', 'SSSS'],
-    leg: ['PPPP', 'PPPP', 'PPPP', 'PPPP', 'PPPP', 'PPPP', 'PPPP', 'pPPP', 'PPPP', 'PPPP', 'GGGG', 'GGGG'],
+    head: ['.H.HH.H.', 'HHHHHHHH', 'HhHHHHhH', 'SSSSSSSS', 'SBSSSSBS', 'SSSssSSS', 'SSSMMSSS', 'SSSSSSSS'],
+    body: ['TTTSSTTT', 'TTTTTTTT', 'LLLLLLLL', 'TTTTTTTT', 'TTTTTTTT', 'TTTttTTT', 'TTTTTTTT', 'TTTTTTTT', 'tTTTTTTt', 'TTTTTTTT', 'PPPPPPPP', 'PPPPPPPP'],
+    arm: ['TTTT', 'TTTT', 'LLLL', 'TTTT', 'TTTT', 'TTTT', 'TTTT', 'tTTT', 'TTTT', 'SSSS', 'SSSS', 'sSSS'],
+    leg: ['PPPP', 'PPPP', 'PPPP', 'pPPP', 'PPPP', 'PPPP', 'PPPP', 'PPPP', 'PPPP', 'PPPP', 'GGGG', 'gGGG'],
     withTool: true,
   }),
   special: ['mine'],
 };
 
+// Lia: personagem própria (cabelo cacheado com dois coques, camiseta amarela com estrela, macacão roxo)
 const ALEX: MobDef = {
-  label: 'Alex',
+  label: 'Lia',
   view: 'front',
   width: 16,
   height: 32,
   palette: {
-    O: '#d8752a', o: '#b85f1e', S: '#f0c39b', W: '#ffffff', E: '#2f8a3a', M: '#c06a5a',
-    G: '#6cb34a', g: '#559a38', N: '#6b4a2b', n: '#5a3d22', D: '#3d2a1a', ...PICKAXE_COLORS,
+    O: '#1f1410', o: '#3a2618', S: '#8d5a3b', s: '#7a4c31', W: '#ffffff', E: '#1d1d1d', M: '#d9607a', R: '#ff8fb1',
+    G: '#f4c430', g: '#d4a514', Y: '#ffffff', N: '#7d4cc2', n: '#6339a3', D: '#f2f2f2', ...PICKAXE_COLORS,
   },
-  parts: humanoid({
-    head: ['OOOOOOOO', 'OOOOOOoO', 'OSSSSSOO', 'SSSSSSOO', 'SWESSWEO', 'SSSSSSSO', 'SSSMMSSS', 'SSSSSSSS'],
-    body: ['GGGSSGGG', 'GGGGGGGG', 'GGGGGGGG', 'gGGGGGGg', 'GGGGGGGG', 'GGGGGGGG', 'gGGGGGGg', 'GGGGGGGG', 'GGGGGGGG', 'GGGGGGGG', 'NNNNNNNN', 'NNNNNNNN'],
-    arm: ['gGGG', 'GGGG', 'GGGG', 'SSSS', 'SSSS', 'SSSS', 'SSSS', 'SSSS', 'SSSS', 'SSSS', 'SSSS', 'SSSS'],
-    leg: ['NNNN', 'NNNN', 'NNNN', 'NNNN', 'NNNN', 'NNNN', 'nNNN', 'NNNN', 'NNNN', 'NNNN', 'DDDD', 'DDDD'],
-    withTool: true,
-  }),
+  parts: [
+    // dois coques dos lados da cabeça (balançam com ela)
+    ...humanoid({
+      head: ['OOOOOOOO', 'OoOOOOoO', 'OSSSSSSO', 'SSSSSSSS', 'SESSSSES', 'SRSSSSRS', 'SSSMMSSS', 'SSSSSSSS'],
+      body: ['GGGSSGGG', 'GGGGGGGG', 'GGGYGGGG', 'GGYYYGGG', 'GGGYGGGG', 'gGGGGGGg', 'NGGGGGGN', 'NNNNNNNN', 'NNNNNNNN', 'NNNnnNNN', 'NNNNNNNN', 'NNNNNNNN'],
+      arm: ['gGGG', 'GGGG', 'GGGG', 'SSSS', 'SSSS', 'SSSS', 'SSSS', 'SSSS', 'SSSS', 'SSSS', 'sSSS', 'SSSS'],
+      leg: ['NNNN', 'NNNN', 'NNNN', 'nNNN', 'NNNN', 'NNNN', 'NNNN', 'NNNN', 'NNNN', 'NNNN', 'DDDD', 'DDDD'],
+      withTool: true,
+    }).map((part) =>
+      part.role === 'head' ? { ...part, children: [{ role: 'detail' as const, x: 2, y: 0, rows: ['.OO........OO.', 'OOo........oOO', '.OO........OO.'] }] } : part
+    ),
+  ],
   special: ['mine'],
 };
 
@@ -253,12 +260,12 @@ const ZOMBIE: MobDef = {
   width: 16,
   height: 32,
   palette: {
-    G: '#5c9b4e', g: '#477d3c', K: '#1f2e1c', T: '#2f8f96', t: '#246f75',
-    P: '#4b3f9a', p: '#3a3080', D: '#3b3b3b',
+    G: '#9bb07f', g: '#7f9466', K: '#2b2b2b', W: '#ffffff', T: '#d9822b', t: '#b06a22',
+    P: '#5b4636', p: '#4a382b', D: '#2e2e2e',
   },
   parts: humanoid({
-    head: ['gggggggg', 'gGGGGGGg', 'GGGGGGGG', 'GGGGGGGG', 'GKKGGKKG', 'GGGgGGGG', 'GGKKKKGG', 'GGGGGGGG'],
-    body: ['TTTGGTTT', 'TTTTTTTT', 'TtTTTTGT', 'TTTTTTTT', 'TTTTtTTT', 'TGTTTTTT', 'TTTTTTtT', 'TTTTTTTT', 'tTTTTGTT', 'TTTTTTTT', 'PPPPPPPP', 'PPPPPPPP'],
+    head: ['GgGGGgGG', 'GGGGGGGG', 'GGGGGGGG', 'GWKGGKWG', 'GGGGGGGG', 'GGGgGGGG', 'GKGKGKGG', 'GGGGGGGG'],
+    body: ['TTTGGTTT', 'TTTTTTTT', 'TTtTTTTT', 'TTTTTTtT', 'TTTTTTTT', 'TtTTTTTT', 'TTTTTTTT', 'TTTT.TTT', 'TTT...TT', 'TTTTTTTT', 'PPPPPPPP', 'PPPPPPPP'],
     arm: ['TTTT', 'TTTT', 'tTTT', 'GGGG', 'GGGG', 'GgGG', 'GGGG', 'GGGG', 'GGgG', 'GGGG', 'GGGG', 'GGGG'],
     leg: ['PPPP', 'PPPP', 'PPPP', 'pPPP', 'PPPP', 'PPPP', 'PPPP', 'PPpP', 'PPPP', 'PPPP', 'DDDD', 'DDDD'],
   }),
@@ -282,73 +289,89 @@ const SKELETON: MobDef = {
   special: [],
 };
 
+// Sombrio: sombra alta de capa estrelada, olhos amarelos e cachecol (silhueta própria: capa longa, pernas curtas)
 const ENDERMAN: MobDef = {
-  label: 'Enderman',
+  label: 'Sombrio',
   view: 'front',
   width: 12,
   height: 50,
-  palette: { K: '#161616', k: '#2a2a2a', P: '#d36cff', p: '#f0c2ff' },
+  palette: { K: '#26305a', k: '#323f73', s: '#e8e8ff', Y: '#ffd23f', R: '#e85d5d', r: '#b84444', D: '#1a2140' },
   parts: [
-    { role: 'leg-a', x: 3, y: 20, rows: mottle(2, 30, 'KKKKk', 11) },
-    { role: 'leg-b', x: 7, y: 20, rows: mottle(2, 30, 'KKKKk', 23) },
-    { role: 'body', x: 2, y: 8, rows: mottle(8, 12, 'KKKk', 5) },
-    { role: 'arm-a', x: 0, y: 8, rows: mottle(2, 30, 'KKKKk', 37) },
-    { role: 'arm-b', x: 10, y: 8, rows: mottle(2, 30, 'KKKKk', 41) },
+    { role: 'leg-a', x: 3, y: 42, rows: fill(2, 8, 'D') },
+    { role: 'leg-b', x: 7, y: 42, rows: fill(2, 8, 'D') },
+    {
+      role: 'body',
+      x: 1,
+      y: 10,
+      rows: Array.from({ length: 33 }, (_, r) => {
+        const row = r % 7 === 3 ? 'KKsKKKKsKK' : r % 7 === 6 ? 'KKKKsKKKKK' : 'KKKKKKKKKK';
+        return r < 2 ? row.replace(/^K|K$/g, '.') : row;
+      }),
+    },
+    { role: 'arm-a', x: 0, y: 12, rows: fill(1, 14, 'k') },
+    { role: 'arm-b', x: 11, y: 12, rows: fill(1, 14, 'k') },
     {
       role: 'head',
       x: 2,
       y: 0,
-      rows: ['KKKKKKKK', 'KkKKKKkK', 'KKKKKKKK', 'KKKKKKKK', 'PpPKKPpP', 'KKKKKKKK', 'KKKkKKKK', 'KKKKKKKK'],
+      rows: ['..KKKK..', '.KKKKKK.', 'KKKKKKKK', 'KKKKKKKK', 'KYYKKYYK', 'KKKKKKKK', 'KKKKKKKK', 'RRRRRRRR', 'rRRRRRRr', '..RR....'],
     },
   ],
   special: ['teleport'],
 };
 
+// Morador: chapéu de palha, bigode e macacão azul (personagem própria)
 const VILLAGER: MobDef = {
-  label: 'Aldeão',
+  label: 'Morador',
   view: 'front',
   width: 10,
   height: 30,
   palette: {
-    S: '#b98a68', s: '#a07558', b: '#4a3424', g: '#2e7a3a', W: '#f5f5f5', n: '#9c6b4f',
-    R: '#7a5232', r: '#5e3d23', A: '#8c6240', D: '#3d2a1a',
+    S: '#e0b089', s: '#c9976f', K: '#1d1d1d', m: '#6b4226', Y: '#f2c94c', y: '#c9a227',
+    B: '#3d6fb6', b: '#2f5a96', W: '#f5f5f5', D: '#4a3424',
   },
   parts: [
-    { role: 'leg-a', x: 1, y: 24, rows: ['rrrr', 'rrrr', 'rrrr', 'rrrr', 'DDDD', 'DDDD'] },
-    { role: 'leg-b', x: 5, y: 24, rows: ['rrrr', 'rrrr', 'rrrr', 'rrrr', 'DDDD', 'DDDD'] },
+    { role: 'leg-a', x: 1, y: 24, rows: ['BBBB', 'BBBB', 'BBBB', 'bBBB', 'DDDD', 'DDDD'] },
+    { role: 'leg-b', x: 5, y: 24, rows: ['BBBB', 'BBBB', 'BBBB', 'BBBb', 'DDDD', 'DDDD'] },
     {
       role: 'body',
       x: 1,
       y: 10,
-      rows: [...fill(8, 7, 'R'), 'rrrrrrrr', ...fill(8, 6, 'R')],
+      rows: ['WWWWWWWW', 'WBWWWWBW', 'WBWWWWBW', 'BBBBBBBB', 'BBBYYBBB', 'BBBBBBBB', 'BBBBBBBB', 'bBBBBBBb', 'BBBBBBBB', 'BBBBBBBB', 'BBBBBBBB', 'BBBBBBBB', 'bbbbbbbb', 'BBBBBBBB'],
     },
-    // Braços cruzados (uma parte só)
-    { role: 'detail', x: 0, y: 13, rows: ['AAAAAAAAAA', 'AASSSSSSAA', 'AAAAAAAAAA', '.AAAAAAAA.'] },
+    { role: 'arm-a', x: 0, y: 10, rows: ['W', 'W', 'W', 'W', 'S', 'S', 'S'] },
+    { role: 'arm-b', x: 9, y: 10, rows: ['W', 'W', 'W', 'W', 'S', 'S', 'S'] },
     {
       role: 'head',
       x: 1,
       y: 0,
-      rows: ['ssssssss', 'SSSSSSSS', 'SSSSSSSS', 'SbbSSbbS', 'SWgSSgWS', 'SSSnnSSS', 'SSSnnSSS', 'SSSnnSSS', 'SSSSSSSS', 'sSSSSSSs'],
+      rows: ['.YYYYYY.', 'yYYYYYYy', 'SSSSSSSS', 'SKSSSSKS', 'SSSSSSSS', 'SSSssSSS', 'SmmmmmmS', 'SSSSSSSS', 'SSSSSSSS', 'sSSSSSSs'],
+      children: [{ role: 'detail', x: 0, y: 1, rows: ['YYYYYYYYYY'] }],
     },
   ],
   special: [],
 };
 
+// Estourinho: bombinha redonda e simpática com pavio aceso (personagem própria)
 const CREEPER: MobDef = {
-  label: 'Creeper',
+  label: 'Estourinho',
   view: 'front',
   width: 8,
   height: 26,
-  palette: { a: '#4caf3c', b: '#3d8f2f', c: '#73d05f', k: '#151515', d: '#2b5e22' },
+  palette: {
+    a: '#2b2d42', b: '#4a4e69', W: '#ffffff', k: '#151515', R: '#ff8fa3', f: '#8a5a2b', Y: '#ffd23f', O: '#ff7b25',
+    c: '#f4a259', d: '#c97c3a', L: '#bc4b51', l: '#8f3a3e',
+  },
   parts: [
-    { role: 'leg-a', x: 0, y: 20, rows: [...mottle(4, 5, 'aabbc', 3), 'dddd'] },
-    { role: 'leg-b', x: 4, y: 20, rows: [...mottle(4, 5, 'aabbc', 9), 'dddd'] },
-    { role: 'body', x: 0, y: 8, rows: mottle(8, 12, 'aaabbc', 7) },
+    { role: 'leg-a', x: 1, y: 21, rows: ['LL', 'LL', 'LL', 'LL', 'll'] },
+    { role: 'leg-b', x: 5, y: 21, rows: ['LL', 'LL', 'LL', 'LL', 'll'] },
+    { role: 'body', x: 1, y: 13, rows: ['cccccc', 'cccccc', 'ccYYcc', 'cccccc', 'dccccd', 'cccccc', 'cccccc', 'dddddd'] },
     {
       role: 'head',
       x: 0,
-      y: 0,
-      rows: ['abacabba', 'bcabbacb', 'akkbbkka', 'bkkabkkb', 'cabkkabc', 'abkkkkba', 'bakkkkab', 'abkbbkba'],
+      y: 4,
+      rows: ['..aaaa..', '.abbaaa.', 'abaaaaaa', 'aWkaaWka', 'aWWaaWWa', 'aRaaaaRa', '.aakkaa.', '..aaaa..', '...aa...'],
+      children: [{ role: 'detail', x: 3, y: 0, rows: ['.YO.', '..Y.', '..f.', '.f..'] }],
     },
   ],
   special: ['fuse'],

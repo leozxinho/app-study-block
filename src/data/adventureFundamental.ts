@@ -40,15 +40,15 @@ interface WorldTheme {
 }
 
 const WORLDS: WorldTheme[] = [
-  { name: 'Vila', unit: 'porco', who: 'Steve', item: 'maçãs', words: ['CASA', 'VACA', 'GATO'], long: 'JANELA' },
-  { name: 'Floresta', unit: 'lobo', who: 'Alex', item: 'folhas', words: ['FOLHA', 'FLOR', 'SAPO'], long: 'ABELHA' },
+  { name: 'Vila', unit: 'porco', who: 'Téo', item: 'maçãs', words: ['CASA', 'VACA', 'GATO'], long: 'JANELA' },
+  { name: 'Floresta', unit: 'lobo', who: 'Lia', item: 'folhas', words: ['FOLHA', 'FLOR', 'SAPO'], long: 'ABELHA' },
   { name: 'Mina', unit: 'diamante', who: 'O minerador', item: 'pedras', words: ['MINA', 'BOLO', 'MAPA'], long: 'MACACO' },
   { name: 'Deserto', unit: 'ouro', who: 'O explorador', item: 'cactos', itemMasc: true, words: ['CAMELO', 'SOL', 'TATU'], long: 'CAMELO' },
   { name: 'Oceano', unit: 'pedra', who: 'O mergulhador', item: 'conchas', words: ['PEIXE', 'PATO', 'BOLA'], long: 'BALEIA' },
   { name: 'Neve', unit: 'ovelha', who: 'A pinguim Lila', item: 'bolas de neve', words: ['NEVE', 'LUA', 'OVO'], long: 'BANANA' },
-  { name: 'Nether', unit: 'zumbi', who: 'O guerreiro', item: 'chamas', words: ['FOGO', 'LOBO', 'PORCO'], long: 'GALINHA' },
+  { name: 'Reino de Fogo', unit: 'zumbi', who: 'O guerreiro', item: 'chamas', words: ['FOGO', 'LOBO', 'PORCO'], long: 'GALINHA' },
   { name: 'Castelo', unit: 'esqueleto', who: 'O rei', item: 'moedas', words: ['ESCUDO', 'CASTELO', 'GATO'], long: 'CASTELO' },
-  { name: 'End', unit: 'creeper', who: 'O herói', item: 'cristais', itemMasc: true, words: ['LUA', 'OVELHA', 'PEIXE'], long: 'ESCUDO' },
+  { name: 'Reino das Estrelas', unit: 'estourinho', who: 'O herói', item: 'cristais', itemMasc: true, words: ['LUA', 'OVELHA', 'PEIXE'], long: 'ESCUDO' },
   { name: 'Grande Desafio', unit: 'galinha', who: 'A turma', item: 'estrelas', words: ['ESCOLA', 'GALINHA', 'BANANA'], long: 'ESCOLA' },
 ];
 

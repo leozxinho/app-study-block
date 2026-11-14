@@ -17,14 +17,14 @@ export interface MathUnit {
   plural: string;
   mob?: MobType;
   block?: BlockKind;
-  /** Mobs finos (creeper) aparecem um pouco maiores */
+  /** Mobs finos (estourinho) aparecem um pouco maiores */
   sizeFactor?: number;
   /** Palavra feminina (as ovelhas, as galinhas) */
   fem?: boolean;
 }
 
 export const MATH_UNITS: (MathUnit & { keys: string[] })[] = [
-  { key: 'creeper', keys: ['creeper', 'creepers'], singular: 'creeper', plural: 'creepers', mob: 'creeper', sizeFactor: 1.3 },
+  { key: 'estourinho', keys: ['estourinho', 'estourinhos', 'creeper', 'creepers'], singular: 'estourinho', plural: 'estourinhos', mob: 'creeper', sizeFactor: 1.3 },
   { key: 'porco', keys: ['porco', 'porcos', 'porquinho', 'porquinhos'], singular: 'porco', plural: 'porcos', mob: 'pig' },
   { key: 'ovelha', keys: ['ovelha', 'ovelhas'], singular: 'ovelha', plural: 'ovelhas', mob: 'sheep' , fem: true },
   { key: 'galinha', keys: ['galinha', 'galinhas'], singular: 'galinha', plural: 'galinhas', mob: 'chicken' , fem: true },
@@ -41,7 +41,7 @@ export const MATH_UNITS: (MathUnit & { keys: string[] })[] = [
   { key: 'bloco', keys: ['bloco', 'blocos'], singular: 'bloco', plural: 'blocos', block: 'grama' },
 ];
 
-const DEFAULT_UNITS = ['porco', 'creeper', 'ovelha', 'galinha'];
+const DEFAULT_UNITS = ['porco', 'estourinho', 'ovelha', 'galinha'];
 
 /** Unidade citada na pergunta (expressão mais longa ganha: "blocos de ouro" > "blocos"). */
 export function findMathUnit(text: string): MathUnit | null {
@@ -73,7 +73,7 @@ export function unitByKey(key: string): MathUnit {
 
 const name = (u: MathUnit, n: number) => (n === 1 ? u.singular : u.plural);
 
-/** Pergunta no formato que o parser entende ("2 creepers + 3 creepers = ?"). */
+/** Pergunta no formato que o parser entende ("2 estourinhos + 3 estourinhos = ?"). */
 export function formatMathMobsQuestion(p: MathProblem, u: MathUnit): string {
   switch (p.op) {
     case '+':

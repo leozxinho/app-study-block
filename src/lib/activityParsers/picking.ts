@@ -221,7 +221,7 @@ const THEMES: { keys: string[]; items: Omit<MatchItem, 'id'>[] }[] = [
   { keys: ['villager', 'villagers', 'morador', 'moradores', 'aldeao', 'aldeoes'], items: [
     { icon: '👨‍🌾', name: 'Fazendeiro', hint: 'usa chapéu de palha' }, { icon: '🧙', name: 'Mago', hint: 'tem barba e chapéu pontudo' },
     { icon: '👷', name: 'Construtor', hint: 'usa capacete amarelo' }, { icon: '🧑‍🍳', name: 'Cozinheiro', hint: 'usa chapéu branco' } ] },
-  { keys: ['ghast', 'ghasts', 'fantasma', 'fantasmas', 'olho', 'olhos', 'enderman', 'endermen'], items: [
+  { keys: ['fantasminha', 'fantasminhas', 'sombrio', 'sombrios', 'ghast', 'ghasts', 'fantasma', 'fantasmas', 'olho', 'olhos', 'enderman', 'endermen'], items: [
     { icon: '👻', name: 'Fantasma', hint: 'é branco e flutua' }, { icon: '👀', name: 'Olhos', hint: 'são dois olhinhos' },
     { icon: '🔮', name: 'Bola mágica', hint: 'é roxa e redonda' }, { icon: '🦇', name: 'Morcego', hint: 'tem asas pretas' } ] },
   { keys: ['cor', 'cores'], items: [
@@ -264,11 +264,11 @@ export interface MemoryIcon {
 const MEMORY_THEMES: { keys: string[]; icons: MemoryIcon[] }[] = [
   { keys: ['floresta', 'bosque'], icons: [{ icon: '🌳', name: 'Árvore' }, { icon: '🍄', name: 'Cogumelo' }, { icon: '🦋', name: 'Borboleta' }, { icon: '🐺', name: 'Lobo' }, { icon: '🌸', name: 'Flor' }, { icon: '🍃', name: 'Folha' }] },
   { keys: ['castelo', 'rei', 'cavaleiro'], icons: [{ icon: '👑', name: 'Coroa' }, { icon: '🛡️', name: 'Escudo' }, { icon: '⚔️', name: 'Espadas' }, { icon: '🏰', name: 'Castelo' }, { icon: '🗝️', name: 'Chave' }, { icon: '💰', name: 'Tesouro' }] },
-  { keys: ['end'], icons: [{ icon: '🐉', name: 'Dragão' }, { icon: '🟣', name: 'Pérola' }, { icon: '👾', name: 'Criatura' }, { icon: '🌌', name: 'Céu do End' }, { icon: '🔮', name: 'Cristal' }, { icon: '⭐', name: 'Estrela' }] },
+  { keys: ['reino das estrelas', 'end'], icons: [{ icon: '🐉', name: 'Dragão' }, { icon: '🟣', name: 'Pérola' }, { icon: '👾', name: 'Criatura' }, { icon: '🌌', name: 'Céu estrelado' }, { icon: '🔮', name: 'Cristal' }, { icon: '⭐', name: 'Estrela' }] },
   { keys: ['oceano', 'mar', 'praia'], icons: [{ icon: '🐟', name: 'Peixe' }, { icon: '🐙', name: 'Polvo' }, { icon: '🐚', name: 'Concha' }, { icon: '🦀', name: 'Caranguejo' }, { icon: '🐬', name: 'Golfinho' }, { icon: '🌊', name: 'Onda' }] },
   { keys: ['neve', 'gelo', 'montanha', 'montanhas'], icons: [{ icon: '❄️', name: 'Floco' }, { icon: '⛄', name: 'Boneco de neve' }, { icon: '🐧', name: 'Pinguim' }, { icon: '🧤', name: 'Luvas' }, { icon: '🧊', name: 'Gelo' }, { icon: '🏔️', name: 'Montanha' }] },
   { keys: ['deserto'], icons: [{ icon: '🌵', name: 'Cacto' }, { icon: '🐫', name: 'Camelo' }, { icon: '🦂', name: 'Escorpião' }, { icon: '🔺', name: 'Pirâmide' }, { icon: '☀️', name: 'Sol' }, { icon: '🏜️', name: 'Duna' }] },
-  { keys: ['nether', 'fogo', 'lava'], icons: [{ icon: '🔥', name: 'Fogo' }, { icon: '🌋', name: 'Vulcão' }, { icon: '👻', name: 'Fantasma' }, { icon: '🟧', name: 'Magma' }, { icon: '🧪', name: 'Poção' }, { icon: '💀', name: 'Caveira' }] },
+  { keys: ['reino de fogo', 'nether', 'fogo', 'lava'], icons: [{ icon: '🔥', name: 'Fogo' }, { icon: '🌋', name: 'Vulcão' }, { icon: '👻', name: 'Fantasma' }, { icon: '🟧', name: 'Magma' }, { icon: '🧪', name: 'Poção' }, { icon: '💀', name: 'Caveira' }] },
   { keys: ['mina', 'minerio', 'minerios', 'bioma', 'biomas'], icons: [{ icon: '💎', name: 'Diamante' }, { icon: '⛏️', name: 'Picareta' }, { icon: '🪨', name: 'Pedra' }, { icon: '🟨', name: 'Ouro' }, { icon: '💚', name: 'Esmeralda' }, { icon: '🛒', name: 'Carrinho' }] },
 ];
 

@@ -17,8 +17,8 @@ const SLOTS: { id: SkinSlot; label: string; icon: string }[] = [
 ];
 
 const CHARACTERS: { id: PlayerCharacter; label: string }[] = [
-  { id: 'steve', label: 'Steve' },
-  { id: 'alex', label: 'Alex' },
+  { id: 'steve', label: 'Téo' },
+  { id: 'alex', label: 'Lia' },
   { id: 'luna', label: 'Luna' },
   { id: 'faisca', label: 'Faísca' },
 ];

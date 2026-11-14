@@ -43,7 +43,7 @@ test('cada grupo da conta mostra o próprio item', () => {
   const pick = (q: string) => findMathUnitPair(q, unitByKey('diamante')).map((u) => u.key);
   assert.deepEqual(pick('2 esmeraldas + 3 rubis = quantas gemas?'), ['esmeralda', 'redstone']);
   assert.deepEqual(pick('2 porcos + 3 porcos = ?'), ['porco', 'porco']);
-  assert.deepEqual(pick('4 creepers + 2 = ?'), ['creeper', 'creeper']);
+  assert.deepEqual(pick('4 estourinhos + 2 = ?'), ['estourinho', 'estourinho']);
   assert.deepEqual(pick('Quanto é 9 + 4?'), ['diamante', 'diamante']);
   assert.deepEqual(pick('5 ovelhas - 2 ovelhas = ?'), ['ovelha', 'ovelha']);
 });

@@ -64,8 +64,8 @@ export const ADVENTURE_WORLDS: World[] = [
   },
   {
     id: 'world-7',
-    name: 'Reino do Nether',
-    description: 'Entre no Nether e supere os desafios de fogo!',
+    name: 'Reino de Fogo',
+    description: 'Entre no Reino de Fogo e supere os desafios de fogo!',
     theme: 'nether',
     icon: '🔥',
     bgColor: 'from-red-500 to-orange-700',
@@ -84,8 +84,8 @@ export const ADVENTURE_WORLDS: World[] = [
   },
   {
     id: 'world-9',
-    name: 'Reino do End',
-    description: 'Chegue ao End e enfrente os últimos mistérios!',
+    name: 'Reino das Estrelas',
+    description: 'Chegue ao Reino das Estrelas e enfrente os últimos mistérios!',
     theme: 'end',
     icon: '🐉',
     bgColor: 'from-indigo-800 to-purple-900',

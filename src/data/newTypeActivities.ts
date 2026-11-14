@@ -87,13 +87,13 @@ export const NEW_TYPE_ACTIVITIES: Activity[] = [
   // Fácil (Pré-Escola): + e − até 5 · Médio (1º e 2º ano): + e − até 10, × até 3x3
   // Difícil (3º ao 5º ano): todas, × até 5x5 (máx. 20 mobs), ÷ exata
   // Adição
-  make('mm-add-1', 'pre-escola-1', 'facil', 'math-mobs', 'matematica', 'Soma dos Creepers', 'Os creepers se juntam: quantos ficaram?', 'Some os creepers: 2 creepers + 3 creepers = ?', 80),
+  make('mm-add-1', 'pre-escola-1', 'facil', 'math-mobs', 'matematica', 'Soma dos Estourinhos', 'Os estourinhos se juntam: quantos ficaram?', 'Some os estourinhos: 2 estourinhos + 3 estourinhos = ?', 80),
   make('mm-add-2', 'pre-escola-1', 'facil', 'math-mobs', 'matematica', 'Porquinhos Juntos', 'Os porcos chegam dos dois lados!', '1 porco + 4 porcos = ?', 81),
   make('mm-add-3', 'fundamental-1', 'medio', 'math-mobs', 'matematica', 'Rebanho de Ovelhas', 'Junte os dois grupos de ovelhas!', '6 ovelhas + 4 ovelhas = ?', 80),
   make('mm-add-4', 'fundamental-2', 'dificil', 'math-mobs', 'matematica', 'Galinheiro Cheio', 'Muitas galinhas para somar!', '9 galinhas + 8 galinhas = ?', 81),
   // Subtração
   make('mm-sub-1', 'pre-escola-1', 'facil', 'math-mobs', 'matematica', 'Porcos que Saíram', 'Alguns porcos foram embora!', '5 porcos - 2 porcos = ?', 82),
-  make('mm-sub-2', 'pre-escola-1', 'facil', 'math-mobs', 'matematica', 'Creeper Sumiu!', 'Um creeper virou fumaça!', '4 creepers - 1 creeper = ?', 83),
+  make('mm-sub-2', 'pre-escola-1', 'facil', 'math-mobs', 'matematica', 'Estourinho Sumiu!', 'Um estourinho virou fumaça!', '4 estourinhos - 1 estourinho = ?', 83),
   make('mm-sub-3', 'fundamental-1', 'medio', 'math-mobs', 'matematica', 'Ovelhas no Pasto', 'Quantas ovelhas sobraram?', '9 ovelhas - 4 ovelhas = ?', 82),
   make('mm-sub-4', 'fundamental-2', 'dificil', 'math-mobs', 'matematica', 'Diamantes Gastos', 'Quantos diamantes sobraram no baú?', '15 diamantes - 7 diamantes = ?', 83),
   // Multiplicação

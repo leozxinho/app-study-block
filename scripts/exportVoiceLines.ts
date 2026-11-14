@@ -4,7 +4,7 @@
  * Gera docs/audio/falas-perguntas.csv: arquivo, faixa etária, texto que será falado e onde é usado.
  * Perguntas iguais em atividades diferentes viram um arquivo só.
  */
-import { writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { ADVENTURE_ACTIVITIES } from '../src/data/adventureActivities';
 import { EXTRA_CONTENT } from '../src/data/extraContent';
 import { NEW_TYPE_ACTIVITIES } from '../src/data/newTypeActivities';
@@ -31,9 +31,26 @@ for (const [text, { ages, ids }] of lines) {
   n++;
   rows.push([`voz/perguntas/q-${String(n).padStart(4, '0')}.mp3`, csv([...ages].join(', ')), csv(text), csv(ids.join(' '))].join(';'));
 }
-// O CSV das perguntas já foi gravado (q-0001...q-0673): não reescreve para não trocar os nomes.
-if (process.argv.includes('--perguntas')) writeFileSync('docs/audio/falas-perguntas.csv', rows.join('\n') + '\n');
-console.log(process.argv.includes('--perguntas') ? `${n} perguntas exportadas para docs/audio/falas-perguntas.csv` : `${n} perguntas conferidas (falas-perguntas.csv não foi reescrito; use --perguntas para regerar)`);
+// O CSV das perguntas já foi gravado (q-0001...): não reescreve para não trocar os nomes.
+// Sem --perguntas, só acrescenta no fim os textos novos, com os próximos números (q-0674, q-0675...).
+const QUESTIONS_CSV = 'docs/audio/falas-perguntas.csv';
+if (process.argv.includes('--perguntas')) {
+  writeFileSync(QUESTIONS_CSV, rows.join('\n') + '\n');
+  console.log(`${n} perguntas exportadas para ${QUESTIONS_CSV}`);
+} else {
+  const current = readFileSync(QUESTIONS_CSV, 'utf8');
+  const known = new Set([...current.matchAll(/^[^;]+;"[^"]*";"((?:[^"]|"")*)"/gm)].map((m) => m[1].replace(/""/g, '"')));
+  let last = Math.max(0, ...[...current.matchAll(/q-(\d{4})\.mp3/g)].map((m) => Number(m[1])));
+  const added: string[] = [];
+  for (const [text, { ages, ids }] of lines) {
+    // Relógio e leitura: a resposta fica entre [colchetes] e não é falada (essas atividades têm vozes próprias)
+    if (known.has(text) || text.includes('[')) continue;
+    last++;
+    added.push([`voz/perguntas/q-${String(last).padStart(4, '0')}.mp3`, csv([...ages].join(', ')), csv(text), csv(ids.join(' '))].join(';'));
+  }
+  if (added.length) writeFileSync(QUESTIONS_CSV, current.replace(/\n*$/, '\n') + added.join('\n') + '\n');
+  console.log(`${n} perguntas conferidas; ${added.length} novas acrescentadas no fim de ${QUESTIONS_CSV}`);
+}
 
 // =====================================================================
 // Rodadas: variações fixas de cada atividade (src/lib/activityParsers/rounds.ts, variantPool)

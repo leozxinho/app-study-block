@@ -96,7 +96,7 @@ export const WORLD_THEMES: WorldTheme[] = [
     sky: 'from-red-950 via-red-800 to-orange-700',
     ground: 'repeating-linear-gradient(90deg, #7a1f1f 0 14px, #5e1616 14px 16px)',
     dark: true,
-    boss: { type: 'creeper', name: 'Creeper de Fogo', filter: 'hue-rotate(260deg) saturate(2)' },
+    boss: { type: 'creeper', name: 'Estourinho de Fogo', filter: 'hue-rotate(260deg) saturate(2)' },
     stickers: s('🔥:Fogo|🌋:Vulcão|💀:Caveira|🟥:Pedra vermelha|🧨:Dinamite|⚔️:Espadas|🛡️:Escudo|🍖:Carne|🪔:Lamparina|🌑:Portal'),
   },
   {
@@ -116,7 +116,7 @@ export const WORLD_THEMES: WorldTheme[] = [
     sky: 'from-black via-indigo-950 to-purple-900',
     ground: 'linear-gradient(#e6e2a8 0 30%, #cfc98d 30%)',
     dark: true,
-    boss: { type: 'enderman', name: 'Enderman Gigante' },
+    boss: { type: 'enderman', name: 'Sombrio Gigante' },
     stickers: s('🌌:Galáxia|✨:Brilho|🟣:Pérola|🌙:Lua|⭐:Estrela|🔮:Cristal|🚀:Foguete|🪐:Planeta|☄️:Cometa|🐉:Dragão do Fim'),
   },
   {
@@ -125,7 +125,7 @@ export const WORLD_THEMES: WorldTheme[] = [
     trailBg: 'from-yellow-100 to-amber-200',
     sky: 'from-yellow-300 via-amber-200 to-orange-100',
     ground: 'linear-gradient(#f6d32d 0 30%, #e5a50a 30%)',
-    boss: { type: 'creeper', name: 'Rei Creeper', filter: 'hue-rotate(40deg) saturate(1.6)' },
+    boss: { type: 'creeper', name: 'Rei Estourinho', filter: 'hue-rotate(40deg) saturate(1.6)' },
     stickers: s('🏆:Troféu|🎉:Festa|🎖️:Medalha|🥇:Ouro|🎁:Presente|🎈:Balão|🎂:Bolo|🎆:Fogos|🎺:Trompete|👑:Coroa de rei'),
   },
 ];
