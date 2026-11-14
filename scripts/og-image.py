@@ -1,6 +1,6 @@
 # Gera public/og-image.png (arte original):  python3 scripts/og-image.py public/og-image.png
 # Arte original do og-image do MineLearn: céu, sol, blocos com letras e números, nome em pixel.
-import random, sys
+import sys
 from PIL import Image, ImageDraw, ImageFont
 W, H = 1200, 630
 out = sys.argv[1]
@@ -19,16 +19,9 @@ def cloud(x, y, w):
     for i in range(1, w - 1):
         d.rectangle([x + i * 30, y - 30, x + i * 30 + 30, y], fill=(255, 255, 255))
 cloud(80, 90, 5); cloud(640, 60, 4)
-# chão: faixa verde + terra em pixels
-rnd = random.Random(7)
-S = 30
-for x in range(0, W, S):
-    for y in range(H - 150, H, S):
-        if y == H - 150:
-            c = rnd.choice([(96, 178, 70), (84, 160, 60), (110, 190, 80)])
-        else:
-            c = rnd.choice([(150, 100, 60), (135, 88, 52), (165, 112, 68)])
-        d.rectangle([x, y, x + S - 1, y + S - 1], fill=c)
+# chão liso (gramado claro e faixa mais escura), sem textura de blocos
+d.rectangle([0, H - 150, W, H], fill=(120, 200, 110))
+d.rectangle([0, H - 110, W, H], fill=(96, 176, 92))
 # texto em pixel: desenha pequeno e amplia sem suavizar
 def pixel_text(text, size, scale, color, shadow):
     font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', size)

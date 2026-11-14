@@ -1,8 +1,16 @@
 import { MinecraftButton } from '../components/ui/MinecraftButton';
-import { Mob } from '../components/mobs/Mob';
 import { ItemArt } from '../components/activities/shared/ItemArt';
 import { AGE_GROUPS } from '../lib/constants';
 import { FAQ, PRODUCT, formatBRL } from '../config/product';
+
+/** Blocos do topo (arte própria: letras e números, como no og-image). */
+const HERO_BLOCKS = [
+  { text: '1', color: 'bg-red-500' },
+  { text: 'A', color: 'bg-blue-500' },
+  { text: '+', color: 'bg-amber-500' },
+  { text: 'B', color: 'bg-purple-500' },
+  { text: '3', color: 'bg-emerald-600' },
+];
 
 const STEPS = [
   { icon: '👨‍👧', title: 'Crie sua conta', text: 'Você cria o login e a senha de cada criança na Área dos Pais.' },
@@ -48,10 +56,15 @@ export function LandingPage() {
               </MinecraftButton>
             </div>
           </div>
-          <div className="flex justify-center items-end gap-4" aria-hidden="true">
-            <Mob type="alex" size={110} animation="celebrate" />
-            <Mob type="pig" size={70} animation="idle" />
-            <Mob type="creeper" size={80} animation="jump" />
+          <div className="flex justify-center items-end gap-2 sm:gap-3" aria-hidden="true">
+            {HERO_BLOCKS.map((b, i) => (
+              <span
+                key={b.text}
+                className={`${b.color} w-14 h-14 sm:w-20 sm:h-20 flex items-center justify-center font-minecraft text-xl sm:text-3xl text-white border-b-8 border-r-4 border-black/25 shadow-lg ${i % 2 ? 'mb-6' : ''}`}
+              >
+                {b.text}
+              </span>
+            ))}
           </div>
         </div>
         <div className="absolute inset-x-0 bottom-0 h-6 bg-minecraft-green" aria-hidden="true" />
