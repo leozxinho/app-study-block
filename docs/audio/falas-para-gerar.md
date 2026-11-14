@@ -13,3 +13,5 @@ nesses textos (ou toca a gravação antiga, nos arquivos fixos).
    - `voz/mundos/mundo-07.mp3` e `voz/mundos/mundo-09.mp3` (Reino de Fogo e Reino das Estrelas).
 
 Depois de gerar, rode `npm run audio` e `npm run check:activities` (a linha "voz do aparelho" deve voltar a 0%).
+
+4. **Nome do app (MineLearn → StudyBlock):** `voz/pais/boas-vindas.mp3` ("Bem-vindo ao StudyBlock!", texto já trocado em `falas-voz-suave.csv`).

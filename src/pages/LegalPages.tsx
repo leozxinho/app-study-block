@@ -4,7 +4,7 @@ import { PRODUCT } from '../config/product';
 
 // Política de privacidade (/privacidade) e termos de uso (/termos).
 // Textos em linguagem simples, escritos para a LGPD (Lei 13.709/2018) e o Código de Defesa do Consumidor.
-// Os dados de quem responde pelo MineLearn vêm de src/config/product.ts.
+// Os dados de quem responde pelo StudyBlock vêm de src/config/product.ts.
 
 const updatedAt = new Date(`${PRODUCT.legalUpdatedAt}T12:00:00`).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
 const owner = PRODUCT.legalName || `os responsáveis pelo ${PRODUCT.name}`;

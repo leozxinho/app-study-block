@@ -28,7 +28,7 @@ const FEATURES = [
   { icon: '🎯', title: 'Se adapta à criança', text: 'Acertou tudo? As próximas ficam mais difíceis. Errou muito? Mais fáceis.' },
 ];
 
-/** Página para os pais conhecerem o MineLearn (vendas). Fica em "/" e é pré-renderizada no build. */
+/** Página para os pais conhecerem o StudyBlock (vendas). Fica em "/" e é pré-renderizada no build. */
 export function LandingPage() {
   const price = PRODUCT.monthlyPrice;
 

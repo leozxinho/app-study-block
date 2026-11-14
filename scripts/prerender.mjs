@@ -14,7 +14,7 @@ import { dirname, resolve } from 'node:path';
 import { loadEnv } from 'vite';
 
 const env = loadEnv('production', process.cwd(), 'VITE_');
-const FALLBACK = 'https://minelearn.app';
+const FALLBACK = 'https://studyblock.com.br';
 const site = (env.VITE_SITE_URL || process.env.VITE_SITE_URL || FALLBACK).replace(/\/+$/, '');
 if (!env.VITE_SITE_URL && !process.env.VITE_SITE_URL) {
   console.warn(`⚠️  VITE_SITE_URL não definido: usando ${FALLBACK} no canonical, og:url e sitemap.`);
@@ -48,7 +48,7 @@ function seoFor(page) {
   ];
   if (page.path === '/') {
     tags.push(
-      jsonLd({ '@context': 'https://schema.org', '@type': 'WebSite', name: 'MineLearn', url: `${site}/`, inLanguage: 'pt-BR', description: ssr.SITE_DESCRIPTION }),
+      jsonLd({ '@context': 'https://schema.org', '@type': 'WebSite', name: 'StudyBlock', url: `${site}/`, inLanguage: 'pt-BR', description: ssr.SITE_DESCRIPTION }),
       jsonLd({
         '@context': 'https://schema.org',
         '@type': 'FAQPage',

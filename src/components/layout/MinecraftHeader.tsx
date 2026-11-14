@@ -30,7 +30,7 @@ export function MinecraftHeader({ studentName, showNav = true }: MinecraftHeader
             aria-label="Início"
           >
             <span className="text-2xl" aria-hidden="true">⛏️</span>
-            <span className="font-minecraft text-sm text-white hidden sm:block">MineLearn</span>
+            <span className="font-minecraft text-sm text-white hidden sm:block">StudyBlock</span>
           </button>
 
           {showNav && (

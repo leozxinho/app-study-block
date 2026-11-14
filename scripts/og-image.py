@@ -1,5 +1,5 @@
 # Gera public/og-image.png (arte original):  python3 scripts/og-image.py public/og-image.png
-# Arte original do og-image do MineLearn: céu, sol, blocos com letras e números, nome em pixel.
+# Arte original do og-image do StudyBlock: céu, sol, blocos com letras e números, nome em pixel.
 import sys
 from PIL import Image, ImageDraw, ImageFont
 W, H = 1200, 630
@@ -11,7 +11,7 @@ for y in range(H):
     t = y / H
     d.line([(0, y), (W, y)], fill=(int(120 + 60 * t), int(190 + 40 * t), int(240 + 10 * t)))
 # sol quadrado
-d.rectangle([1010, 50, 1110, 150], fill=(255, 214, 64)); d.rectangle([1025, 65, 1095, 135], fill=(255, 232, 120))
+d.rectangle([1070, 24, 1160, 114], fill=(255, 214, 64)); d.rectangle([1084, 38, 1146, 100], fill=(255, 232, 120))
 # nuvens de blocos
 def cloud(x, y, w):
     for i in range(w):
@@ -35,7 +35,7 @@ def pixel_text(text, size, scale, color, shadow):
     big = small.resize((w * scale, h * scale), Image.NEAREST)
     sh = Image.new('RGBA', big.size, shadow + (0,)); sh.putalpha(big.split()[3])
     return big, sh
-title, tsh = pixel_text('MineLearn', 22, 6, (255, 255, 255), (40, 40, 40))
+title, tsh = pixel_text('StudyBlock', 22, 6, (255, 255, 255), (40, 40, 40))
 tx = (W - title.width) // 2
 img.paste(tsh, (tx + 10, 105 + 10), tsh); img.paste(title, (tx, 105), title)
 sub, ssh = pixel_text('aprender jogando', 13, 4, (34, 58, 120), (255, 255, 255))

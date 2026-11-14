@@ -1,9 +1,9 @@
 /**
- * Dados comerciais do MineLearn (landing em "/" e assinatura).
+ * Dados comerciais do StudyBlock (landing em "/" e assinatura).
  * Preencha quando decidir os valores. Enquanto o preço for null, a página mostra "em breve".
  */
 export const PRODUCT = {
-  name: 'MineLearn',
+  name: 'StudyBlock',
   /** Preço mensal em reais (ex.: 19.9). null = ainda não definido */
   monthlyPrice: null as number | null,
   /** Preço anual em reais (ex.: 179). null = sem plano anual. Com valor, o servidor precisa do segredo STRIPE_PRICE_YEARLY */
@@ -14,7 +14,7 @@ export const PRODUCT = {
   maxChildren: 2,
   /** E-mail de contato exibido na página e usado para pedidos de privacidade (LGPD). Preencha antes de publicar. */
   contactEmail: '',
-  /** Quem responde pelo MineLearn (nome da empresa ou da pessoa) e CNPJ/CPF: aparecem na política e nos termos. */
+  /** Quem responde pelo StudyBlock (nome da empresa ou da pessoa) e CNPJ/CPF: aparecem na política e nos termos. */
   legalName: '',
   legalDocument: '',
   /** Cidade/UF do responsável (foro dos termos) */

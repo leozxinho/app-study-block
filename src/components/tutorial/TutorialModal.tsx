@@ -31,7 +31,7 @@ function VideoOrIntro() {
       <div className="w-full aspect-video rounded-md overflow-hidden pixel-border bg-black">
         <iframe
           src={video.src}
-          title="Vídeo: como funciona o MineLearn"
+          title="Vídeo: como funciona o StudyBlock"
           className="w-full h-full"
           allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
@@ -40,7 +40,7 @@ function VideoOrIntro() {
     );
   }
   if (video?.kind === 'file') {
-    return <video src={video.src} controls className="w-full rounded-md pixel-border bg-black" aria-label="Vídeo: como funciona o MineLearn" />;
+    return <video src={video.src} controls className="w-full rounded-md pixel-border bg-black" aria-label="Vídeo: como funciona o StudyBlock" />;
   }
   return (
     <div className="flex items-end justify-center gap-4 py-2">
@@ -53,7 +53,7 @@ function VideoOrIntro() {
 
 const STEPS: Step[] = [
   {
-    title: 'Bem-vindo ao MineLearn!',
+    title: 'Bem-vindo ao StudyBlock!',
     text: 'Uma plataforma de atividades educativas em um mundo de blocos. Veja em 1 minuto como a criança joga e como você acompanha.',
     visual: <VideoOrIntro />,
   },
@@ -146,7 +146,7 @@ export function TutorialModal({ open, onClose, userName }: TutorialModalProps) {
   };
 
   return (
-    <Modal open={open} onClose={close} title="Tutorial: como funciona o MineLearn" maxWidth="max-w-lg">
+    <Modal open={open} onClose={close} title="Tutorial: como funciona o StudyBlock" maxWidth="max-w-lg">
       <div className="p-6 sm:p-8">
         {step === 0 && userName && <p className="font-body text-sm text-gray-700 mb-1">Olá, {userName}!</p>}
         <AnimatePresence mode="wait">

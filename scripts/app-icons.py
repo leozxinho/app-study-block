@@ -1,4 +1,4 @@
-# Gera os ícones do app (arte original: bloco azul com "M" em pixel, no céu):
+# Gera os ícones do app (arte original: bloco azul com "S" de StudyBlock em pixel, no céu):
 #   python3 scripts/app-icons.py public/icons
 import sys
 from PIL import Image, ImageDraw
@@ -6,8 +6,8 @@ from PIL import Image, ImageDraw
 OUT = sys.argv[1]
 SKY = (135, 206, 235)
 BLUE, DARK, LIGHT = (70, 130, 220), (46, 90, 160), (120, 170, 240)
-# "M" em grade 7x7 (1 = pixel branco)
-M = ['1000001', '1100011', '1010101', '1001001', '1000001', '1000001', '1000001']
+# "S" em grade 7x7 (1 = pixel branco)
+M = ['0111110', '1100011', '1100000', '0111110', '0000011', '1100011', '0111110']
 
 def icon(size: int, block_ratio: float) -> Image.Image:
     img = Image.new('RGB', (size, size), SKY)

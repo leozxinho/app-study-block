@@ -92,7 +92,7 @@ export function StartPage() {
                   <p role="alert" className="font-body bg-amber-50 border-2 border-amber-300 rounded-lg p-3 text-gray-900">
                     {subscription.failed
                       ? '📡 Não deu para conferir a assinatura. Veja a internet e abra o app de novo.'
-                      : '🔒 A assinatura do MineLearn venceu. Peça para o seu responsável renovar na Área dos Pais.'}
+                      : '🔒 A assinatura do StudyBlock venceu. Peça para o seu responsável renovar na Área dos Pais.'}
                   </p>
                 ) : (
                 <MinecraftButton variant="gold" size="xl" fullWidth onClick={() => navigate('/adventure')}>

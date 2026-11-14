@@ -1,4 +1,4 @@
-/* MineLearn — service worker (app instalável e funcionando sem internet no que já foi aberto).
+/* StudyBlock — service worker (app instalável e funcionando sem internet no que já foi aberto).
  * - Páginas: rede primeiro; sem internet, usa o app.html guardado (o index.html é a landing, sem o app).
  * - Arquivos do build (/assets) e ícones: guardados na 1ª vez (nunca mudam de nome).
  * - Áudios (/audio): guardados quando tocam pela 1ª vez; o índice manifest.json sempre da rede.

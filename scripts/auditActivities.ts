@@ -1,5 +1,5 @@
 /**
- * Auditoria das atividades do MineLearn.
+ * Auditoria das atividades do StudyBlock.
  *
  *   npx tsx scripts/auditActivities.ts                 → imprime os problemas
  *   npx tsx scripts/auditActivities.ts --md out.md     → também gera o relatório em Markdown
@@ -311,7 +311,7 @@ function toMarkdown(rows: Row[], adventure: Issue[], notes: string[], showAll: b
     return (wa ? SEV_ORDER[wa] : 9) - (wb ? SEV_ORDER[wb] : 9) || a.activity.id.localeCompare(b.activity.id);
   });
   const lines = [
-    '# Auditoria de atividades — MineLearn', '',
+    '# Auditoria de atividades — StudyBlock', '',
     `Gerado em ${new Date().toLocaleString('pt-BR')} por \`npx tsx scripts/auditActivities.ts\`.`, '',
     ...notes.map((n) => `- ${n}`),
     `- Tarefa = uma resposta da criança (escolher, colocar uma peça, achar um par). Mínimo: ${MIN_TASKS} por atividade (a 1ª rodada é a pergunta original; as outras são variações).`,
@@ -352,7 +352,7 @@ async function main() {
   const C = { red: '\x1b[31m', yellow: '\x1b[33m', gray: '\x1b[90m', bold: '\x1b[1m', reset: '\x1b[0m' };
   const color: Record<Severity, string> = { alta: C.red, média: C.yellow, baixa: C.gray };
 
-  console.log(`${C.bold}Auditoria de atividades — MineLearn${C.reset}`);
+  console.log(`${C.bold}Auditoria de atividades — StudyBlock${C.reset}`);
   console.log(supa.note);
   console.log(`\n${C.bold}Aventura${C.reset}`);
   if (!adventure.length) console.log('  OK: todas as fases apontam para atividades existentes.');
