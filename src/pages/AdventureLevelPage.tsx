@@ -32,6 +32,41 @@ import { ActivityRenderer } from '../components/activities/ActivityRenderer';
  * uma atividade, registra acertos e erros, sem mexer nas fases nem nas estrelas).
  * Ao ir para a próxima fase, a tela começa do zero (estado novo para cada fase).
  */
+/** Treino: pelo menos tantos exercícios por tópico. */
+const PRACTICE_MIN = 10;
+
+/**
+ * Exercícios do treino: as rodadas da atividade e, para chegar a PRACTICE_MIN, rodadas de atividades
+ * do mesmo tipo nas fases vizinhas (até 10 antes e 10 depois) da mesma faixa, ou em qualquer fase da faixa;
+ * sem nenhuma, rodadas novas da própria atividade (os números e as opções são sorteados de novo).
+ */
+async function practiceRounds(a: Activity, ageGroup: string, levelNumber: number): Promise<Activity[]> {
+  const adaptive = getAdaptiveLevel();
+  const rounds = buildRounds(a, adaptive);
+  const own = rounds.length;
+  const levels = generateAdventureLevels(ageGroup);
+  const sameType = async (radius: number) => {
+    const ids = levels
+      .filter((l) => Math.abs(l.levelNumber - levelNumber) <= radius)
+      .flatMap((l) => l.activityIds)
+      .filter((id, i, all) => id !== a.id && all.indexOf(id) === i);
+    return (await Promise.all(ids.map((id) => activityService.getActivityById(id)))).filter(
+      (o): o is Activity => o !== null && o.activity_type === a.activity_type
+    );
+  };
+  let near = await sameType(10);
+  if (near.length === 0) near = await sameType(levels.length);
+  const sources = near.length > 0 ? near : [a];
+  for (let i = 0; rounds.length < PRACTICE_MIN * 2 && i < 50; i++) rounds.push(...buildRounds(sources[i % sources.length], adaptive));
+  // Evita a mesma pergunta duas vezes seguidas (troca por uma diferente mais adiante)
+  for (let i = 1; i < rounds.length; i++) {
+    if (rounds[i].question !== rounds[i - 1].question) continue;
+    const j = rounds.findIndex((r, k) => k > i && r.question !== rounds[i - 1].question);
+    if (j > 0) [rounds[i], rounds[j]] = [rounds[j], rounds[i]];
+  }
+  return rounds.slice(0, Math.max(PRACTICE_MIN, own));
+}
+
 export function AdventureLevelPage() {
   const { levelNumber, activityId } = useParams<{ levelNumber: string; activityId: string }>();
   return <AdventureLevel key={activityId ?? levelNumber} />;
@@ -119,7 +154,7 @@ function AdventureLevel() {
       try {
         if (practiceId) {
           const a = await activityService.getActivityById(baseActivityId(practiceId));
-          setActivities(a ? buildRounds(a, getAdaptiveLevel()) : []);
+          setActivities(a ? await practiceRounds(a, ageGroup, levelNumber) : []);
           setStep(0);
           return;
         }
@@ -238,11 +273,12 @@ function AdventureLevel() {
     const levelAfter = progressService.getLocalStats().level;
     const worldUnlocked = result.worldCompleted ? gameStatsService.recordWorldCompleted() : [];
     // Troféus de fases e conquista de nível dependem da fase recém-concluída e do XP somado
+    // A meta do dia (e o XP do baú) entra antes de conferir as conquistas
+    const daily = gameStatsService.recordLevelDone();
     const afterLevel = gameStatsService.checkNewAchievements();
     const earned = [...unlocked, ...worldUnlocked, ...afterLevel].filter(
       (a, i, all) => all.findIndex((b) => b.id === a.id) === i
     );
-    const daily = gameStatsService.recordLevelDone();
 
     // O que aparece animado no modal, nesta ordem
     const highlights: RewardHighlight[] = [];
