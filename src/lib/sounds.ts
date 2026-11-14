@@ -41,7 +41,7 @@ export function subscribeMuted(listener: () => void): () => void {
   return () => listeners.delete(listener);
 }
 
-/** [silenciado, mudar] — atualiza todos os componentes que usam. */
+/** [silenciado, mudar]: atualiza todos os componentes que usam. */
 export function useMuted(): [boolean, (value: boolean) => void] {
   const value = useSyncExternalStore(subscribeMuted, isMuted, isMuted);
   return [value, setMuted];

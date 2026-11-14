@@ -4,9 +4,9 @@ import type { MathOp, MathProblem } from '../lib/mathGenerator';
 import { NEW_TYPE_ACTIVITIES } from './newTypeActivities';
 
 // =============================================
-// AVENTURA DO ENSINO FUNDAMENTAL — 100 fases por faixa
-//   fundamental-1: 1º e 2º ano (6–7 anos), dificuldade "médio"
-//   fundamental-2: 3º ao 5º ano (8–10 anos), dificuldade "difícil"
+// AVENTURA DO ENSINO FUNDAMENTAL: 100 fases por faixa
+//   fundamental-1: 1º e 2º ano (6-7 anos), dificuldade "médio"
+//   fundamental-2: 3º ao 5º ano (8-10 anos), dificuldade "difícil"
 // As perguntas são geradas a partir de modelos por mundo, com números FIXOS
 // (semente), então são sempre as mesmas. A auditoria confere todas.
 // =============================================

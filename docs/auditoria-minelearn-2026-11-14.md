@@ -1,4 +1,4 @@
-# Auditoria MineLearn — 14/11/2026
+# Auditoria MineLearn: 14/11/2026
 
 Feita no ambiente local (`http://localhost:5173`), lendo o código que o Vite
 serve e jogando no navegador. Os dados locais foram restaurados depois dos testes.

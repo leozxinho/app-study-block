@@ -71,7 +71,7 @@ const ICONS: { keys: string[]; icon: CountIcon }[] = [
 
 /** Faixa pedida na pergunta: "(2-4)", "(5)", "(1 ou 2)", "(1, 2 ou 3)". */
 export function parseCountHint(question: string): [number, number] | null {
-  const range = question.match(/\((\d+)\s*[-–]\s*(\d+)\)/);
+  const range = question.match(/\((\d+)\s*[-\u2013]\s*(\d+)\)/);
   if (range) return [Math.min(+range[1], +range[2]), Math.max(+range[1], +range[2])];
   const list = question.match(/\(((?:\s*\d+\s*(?:,|ou|e)?)+)\)/);
   if (list) {

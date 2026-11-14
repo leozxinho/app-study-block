@@ -184,7 +184,7 @@ export function inspect(a: Activity): Inspection {
       return { meta: p, summary: p.word, problems };
     }
     default:
-      return { meta: { recognized: false, note: `tipo "${a.activity_type}" sem parser` }, summary: '—', problems };
+      return { meta: { recognized: false, note: `tipo "${a.activity_type}" sem parser` }, summary: '-', problems };
   }
 }
 
@@ -204,9 +204,9 @@ function auditActivity(a: Activity, source: string): Row {
 
   if (!RENDERED_TYPES.includes(a.activity_type)) {
     add('alta', `tipo "${a.activity_type}" não tem componente (cai em MultipleChoice)`);
-    return { source, activity: a, tasks: 0, rounds: 0, generated: '—', issues };
+    return { source, activity: a, tasks: 0, rounds: 0, generated: '-', issues };
   }
-  if (!a.question?.trim()) return { source, activity: a, tasks: 0, rounds: 0, generated: '—', issues };
+  if (!a.question?.trim()) return { source, activity: a, tasks: 0, rounds: 0, generated: '-', issues };
 
   let generated = '';
   let tasks = 0;
@@ -311,12 +311,12 @@ function toMarkdown(rows: Row[], adventure: Issue[], notes: string[], showAll: b
     return (wa ? SEV_ORDER[wa] : 9) - (wb ? SEV_ORDER[wb] : 9) || a.activity.id.localeCompare(b.activity.id);
   });
   const lines = [
-    '# Auditoria de atividades — StudyBlock', '',
+    '# Auditoria de atividades: StudyBlock', '',
     `Gerado em ${new Date().toLocaleString('pt-BR')} por \`npx tsx scripts/auditActivities.ts\`.`, '',
     ...notes.map((n) => `- ${n}`),
     `- Tarefa = uma resposta da criança (escolher, colocar uma peça, achar um par). Mínimo: ${MIN_TASKS} por atividade (a 1ª rodada é a pergunta original; as outras são variações).`,
     '', '## Aventura (fases → atividades)', '',
-    ...(adventure.length ? adventure.map((g) => `- **${g.sev}** — ${esc(g.msg)}`) : ['- Nenhum problema: todas as fases apontam para atividades existentes.']),
+    ...(adventure.length ? adventure.map((g) => `- **${g.sev}**: ${esc(g.msg)}`) : ['- Nenhum problema: todas as fases apontam para atividades existentes.']),
     '', '## Atividades', '',
     '| ID | Título | Tipo | Nº de tarefas | O que o componente gera | Problemas encontrados | Gravidade |',
     '|---|---|---|---|---|---|---|',
@@ -325,7 +325,7 @@ function toMarkdown(rows: Row[], adventure: Issue[], notes: string[], showAll: b
     const w = worst(r);
     if (!w && !showAll) continue;
     const probs = r.issues.length ? r.issues.map((i) => `(${i.sev}) ${i.msg}`).join('<br>') : 'OK';
-    lines.push(`| ${r.activity.id} | ${esc(r.activity.title)} | ${r.activity.activity_type} | ${r.tasks} (${r.rounds} rodada${r.rounds > 1 ? 's' : ''}) | ${esc(r.generated)} | ${esc(probs)} | ${w ?? '—'} |`);
+    lines.push(`| ${r.activity.id} | ${esc(r.activity.title)} | ${r.activity.activity_type} | ${r.tasks} (${r.rounds} rodada${r.rounds > 1 ? 's' : ''}) | ${esc(r.generated)} | ${esc(probs)} | ${w ?? '-'} |`);
   }
   return lines.join('\n') + '\n';
 }
@@ -352,7 +352,7 @@ async function main() {
   const C = { red: '\x1b[31m', yellow: '\x1b[33m', gray: '\x1b[90m', bold: '\x1b[1m', reset: '\x1b[0m' };
   const color: Record<Severity, string> = { alta: C.red, média: C.yellow, baixa: C.gray };
 
-  console.log(`${C.bold}Auditoria de atividades — StudyBlock${C.reset}`);
+  console.log(`${C.bold}Auditoria de atividades: StudyBlock${C.reset}`);
   console.log(supa.note);
   console.log(`\n${C.bold}Aventura${C.reset}`);
   if (!adventure.length) console.log('  OK: todas as fases apontam para atividades existentes.');

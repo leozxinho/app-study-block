@@ -47,7 +47,7 @@ function LegalLayout({ title, children }: { title: string; children: ReactNode }
 export function LegalFooter() {
   return (
     <footer className="bg-minecraft-dark-green text-white/90 font-body text-sm text-center py-6 px-4">
-      <p>{PRODUCT.name} — aprender jogando.</p>
+      <p>{PRODUCT.name}: aprender jogando.</p>
       {PRODUCT.contactEmail && <p className="mt-1">Contato: {PRODUCT.contactEmail}</p>}
       <p className="mt-2 flex justify-center gap-4">
         <Link to="/privacidade" className="underline">

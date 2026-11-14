@@ -5,19 +5,19 @@ import { PUBLIC_PAGES, SITE_DESCRIPTION } from '../../config/pages';
 /** Título e descrição de cada tela. Só "/" (a landing) é indexada; as telas do jogo e dos pais não. */
 const META: { path: RegExp; title: string; description?: string; index?: boolean }[] = [
   ...PUBLIC_PAGES.map((p) => ({ path: new RegExp(`^${p.path}$`), title: p.title, description: p.description, index: true })),
-  { path: /^\/login$/, title: 'Entrar — StudyBlock' },
-  { path: /^\/inicio$/, title: 'Início — StudyBlock' },
-  { path: /^\/adventure\/\d+$/, title: 'Fase — StudyBlock' },
-  { path: /^\/adventure$/, title: 'Mapa da aventura — StudyBlock' },
-  { path: /^\/responsavel$/, title: 'Área dos Pais — StudyBlock' },
-  { path: /^\/loja$/, title: 'Loja — StudyBlock' },
-  { path: /^\/album$/, title: 'Álbum — StudyBlock' },
-  { path: /^\/casa$/, title: 'Casinha — StudyBlock' },
-  { path: /^\/relampago$/, title: 'Relâmpago — StudyBlock' },
-  { path: /^\/treino$/, title: 'Treino — StudyBlock' },
-  { path: /^\/treino\/.+$/, title: 'Treinando — StudyBlock' },
-  { path: /^\/dashboard$/, title: 'Meu painel — StudyBlock' },
-  { path: /^\/select-age$/, title: 'Escolher a idade — StudyBlock' },
+  { path: /^\/login$/, title: 'Entrar | StudyBlock' },
+  { path: /^\/inicio$/, title: 'Início | StudyBlock' },
+  { path: /^\/adventure\/\d+$/, title: 'Fase | StudyBlock' },
+  { path: /^\/adventure$/, title: 'Mapa da aventura | StudyBlock' },
+  { path: /^\/responsavel$/, title: 'Área dos Pais | StudyBlock' },
+  { path: /^\/loja$/, title: 'Loja | StudyBlock' },
+  { path: /^\/album$/, title: 'Álbum | StudyBlock' },
+  { path: /^\/casa$/, title: 'Casinha | StudyBlock' },
+  { path: /^\/relampago$/, title: 'Relâmpago | StudyBlock' },
+  { path: /^\/treino$/, title: 'Treino | StudyBlock' },
+  { path: /^\/treino\/.+$/, title: 'Treinando | StudyBlock' },
+  { path: /^\/dashboard$/, title: 'Meu painel | StudyBlock' },
+  { path: /^\/select-age$/, title: 'Escolher a idade | StudyBlock' },
 ];
 
 function setMeta(name: string, content: string) {

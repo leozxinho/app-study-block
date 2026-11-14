@@ -108,7 +108,7 @@ export function ShadowMatchActivity({ activity, onCorrect, onWrong }: ActivityPr
                 onClick={() => tap('mob', m)}
                 disabled={done}
                 aria-pressed={isSel}
-                aria-label={`${MOBS[m].label}${done ? ' — ligado à sombra' : ''}`}
+                aria-label={`${MOBS[m].label}${done ? ', ligado à sombra' : ''}`}
                 className={`
                   ${OPTION_BASE} drag-handle ${cell}
                   ${done ? 'bg-green-100' : isSel ? 'bg-amber-200 ring-4 ring-minecraft-lapis' : 'bg-sky-50 hover:bg-sky-100'}

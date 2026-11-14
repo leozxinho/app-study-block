@@ -1,7 +1,7 @@
 =====================================================================
-MINELEARN — ROTEIRO DE ÁUDIO (sons, músicas e falas)
+MINELEARN: ROTEIRO DE ÁUDIO (sons, músicas e falas)
 =====================================================================
-Versão 1 — 13/11/2026
+Versão 1, 13/11/2026
 
 Este roteiro lista TODO o áudio que o MineLearn usa hoje e o que falta
 criar, com nome de arquivo, onde toca, duração e direção para quem vai
@@ -29,8 +29,8 @@ SUMÁRIO
  3. Efeitos sonoros da interface e do jogo
  4. Sons dos mobs e personagens
  5. Músicas
- 6. Falas — elenco de vozes
- 7. Falas — roteiro completo
+ 6. Falas: elenco de vozes
+ 7. Falas: roteiro completo
  8. Ordem de produção sugerida
  9. Como colocar os arquivos no jogo
 10. Checklist de entrega
@@ -90,7 +90,7 @@ Volume (normalização):
 
 Corte e silêncio:
   - Efeitos e falas: sem silêncio no começo (máx. 20 ms). Fim com
-    fade curto (30–80 ms), sem clique.
+    fade curto (30-80 ms), sem clique.
   - Músicas em LOOP: emenda perfeita (ponto de loop sem clique, sem
     "rabo" de reverb cortado). Entregar a versão loop e, quando pedido,
     uma versão com final.
@@ -123,7 +123,7 @@ Formato de cada item:
 sfx/clique-1..3.mp3
   Onde: toque em botões, em itens para contar, na loja, na casinha,
         ao montar palavras e crafting (é o som mais repetido do jogo).
-  Duração: 60–120 ms.
+  Duração: 60-120 ms.
   Direção: "tec" de bloco de madeira macio + leve brilho. Agradável
            mesmo tocando 30 vezes por minuto.
 
@@ -146,14 +146,14 @@ sfx/transicao-pergunta.mp3
 
 sfx/acerto-1..3.mp3
   Onde: resposta certa (todas as atividades).
-  Duração: 500–700 ms.
+  Duração: 500-700 ms.
   Direção: arpejo maior subindo (dó-mi-sol-dó) com glockenspiel +
            marimba, final brilhante. A criança precisa SENTIR que
            acertou. 3 variações em alturas diferentes.
 
 sfx/erro-1..2.mp3
   Onde: resposta errada.
-  Duração: 400–500 ms.
+  Duração: 400-500 ms.
   Direção: "boing" fofo descendo (dois tons), madeira/borracha.
            NUNCA buzina ou "erro de sistema". Não pode desanimar.
 
@@ -170,9 +170,9 @@ sfx/resposta-brilha.mp3
 sfx/conta-1..3.mp3
   Onde: cada item contado na animação (1, 2, 3...), na contagem e nas
         contas. Toca a cada 0,28 s, até 20 vezes seguidas.
-  Duração: 100–150 ms.
+  Duração: 100-150 ms.
   Direção: "pop" de bolha/bloco com afinação. IDEAL: entregar como
-           ESCALA — conta-01.mp3 a conta-20.mp3 subindo meio tom a cada
+           ESCALA: conta-01.mp3 a conta-20.mp3 subindo meio tom a cada
            número (a contagem "sobe" junto com a música). Se não der,
            3 variações.
 
@@ -186,15 +186,15 @@ sfx/fileira-completa.mp3
            o pop da contagem.
 
 sfx/fumaca.mp3
-  Onde: subtração — os itens que saem viram fumaça.
+  Onde: subtração, os itens que saem viram fumaça.
   Duração: 600 ms. Direção: "puf" macio de nuvem (não explosão).
 
 sfx/entrar-cercado.mp3
-  Onde: divisão — cada item pula para dentro de um cercado.
+  Onde: divisão, cada item pula para dentro de um cercado.
   Duração: 200 ms. Direção: pulinho + "tóc" na madeira da cerca.
 
 sfx/grupos-juntam.mp3
-  Onde: soma — os dois grupos voam e se juntam.
+  Onde: soma, os dois grupos voam e se juntam.
   Duração: 500 ms. Direção: "zuuum" curto convergindo + clique.
 
 --- 3.4 Blocos e ferramentas ---------------------------------------
@@ -202,7 +202,7 @@ sfx/grupos-juntam.mp3
 sfx/quebrar-bloco-1..3.mp3
   Onde: mineração (contas), crafting pronto, memória (par encontrado),
         arrastar e soltar, casinha (apagar bloco).
-  Duração: 250–400 ms. Direção: bloco rachando + pedrinhas caindo.
+  Duração: 250-400 ms. Direção: bloco rachando + pedrinhas caindo.
            Satisfatório, não agressivo.
 
 sfx/colocar-bloco-1..3.mp3
@@ -312,7 +312,7 @@ sfx/combo.mp3
 --- 3.7 Abertura (creeper) -----------------------------------------
 
 sfx/creeper-passos.mp3
-  Onde: abertura — creeper andando até o meio. Duração: loop 1 s.
+  Onde: abertura, creeper andando até o meio. Duração: loop 1 s.
   Direção: passinhos na grama, fofos.
 
 sfx/creeper-chiado.mp3
@@ -359,7 +359,7 @@ ovelha, vaca, galinha, lobo, morador).
 5. MÚSICAS
 =====================================================================
 Regras para todas:
-  - Loop de 60–120 s, emenda perfeita.
+  - Loop de 60-120 s, emenda perfeita.
   - Tocam POR BAIXO das falas (o jogo abaixa a música quando alguém
     fala). Por isso: melodia simples, sem voz cantada nos loops, região
     médio-aguda livre para a fala.
@@ -370,13 +370,13 @@ Regras para todas:
 --- 5.1 Telas gerais -----------------------------------------------
 
 musica/tema-principal.mp3  (tela inicial, entrar, início)
-  BPM 100–110, Dó maior. Loop 90 s. É a "cara" do MineLearn: melodia
+  BPM 100-110, Dó maior. Loop 90 s. É a "cara" do MineLearn: melodia
   assobiável, otimista, marimba + ukulele + baixo de 8 bits + palmas.
   Entregar também: tema-principal-curto.mp3 (15 s com final) para
   vídeos e divulgação.
 
 musica/abertura-creeper.mp3  (abertura com o creeper)
-  8–10 s, sem loop: passos em pizzicato, suspense cômico crescendo e
+  8-10 s, sem loop: passos em pizzicato, suspense cômico crescendo e
   corte no "BUM" (o efeito da explosão entra por cima). Termina
   emendando no tema principal.
 
@@ -399,30 +399,30 @@ musica/area-dos-pais.mp3  (opcional; Área dos Pais)
 --- 5.2 Um tema por mundo (tela das fases) -------------------------
 Mesma melodia-base curta ("motivo do MineLearn", 4 notas) aparecendo
 em cada tema com outra roupagem; assim os mundos soam diferentes mas
-da mesma família. Andamento 80–95 BPM (calmo para pensar).
+da mesma família. Andamento 80-95 BPM (calmo para pensar).
 
-  musica/mundo-01-vila.mp3        Vila Inicial — campo, manhã: violão,
+  musica/mundo-01-vila.mp3        Vila Inicial, campo, manhã: violão,
                                   flauta, galinhas ao fundo (bem baixo).
-  musica/mundo-02-floresta.mp3    Floresta — madeiras, kalimba,
+  musica/mundo-02-floresta.mp3    Floresta, madeiras, kalimba,
                                   passarinhos, mistério leve e alegre.
-  musica/mundo-03-mina.mp3        Mina dos Números — eco de caverna,
+  musica/mundo-03-mina.mp3        Mina dos Números, eco de caverna,
                                   marimba grave, gotas d'água ritmadas,
                                   picaretas como percussão.
-  musica/mundo-04-deserto.mp3     Deserto — escala "arábica" suave,
+  musica/mundo-04-deserto.mp3     Deserto, escala "arábica" suave,
                                   alaúde/oud leve, chocalho, sol quente.
-  musica/mundo-05-oceano.mp3      Oceano — ondas, steel drum,
+  musica/mundo-05-oceano.mp3      Oceano, ondas, steel drum,
                                   bolhas, balanço de maré.
-  musica/mundo-06-neve.mp3        Montanhas de Neve — sinos de trenó,
+  musica/mundo-06-neve.mp3        Montanhas de Neve, sinos de trenó,
                                   celesta, pizzicato "de frio".
-  musica/mundo-07-nether.mp3      Reino do Nether — "perigo cômico":
+  musica/mundo-07-nether.mp3      Reino do Nether, "perigo cômico":
                                   tuba, fagote, órgão de brinquedo,
                                   tom menor brincalhão (NADA de terror).
-  musica/mundo-08-castelo.mp3     Castelo dos Desafios — medieval:
+  musica/mundo-08-castelo.mp3     Castelo dos Desafios, medieval:
                                   alaúde, flauta doce, tamborim de
                                   marcha, trompetes leves.
-  musica/mundo-09-end.mp3         Reino do End — espacial: sintetizador
+  musica/mundo-09-end.mp3         Reino do End, espacial: sintetizador
                                   suave, pads, estrelas tilintando.
-  musica/mundo-10-grande.mp3      Grande Desafio — mistura de todos os
+  musica/mundo-10-grande.mp3      Grande Desafio, mistura de todos os
                                   temas anteriores, mais épico (ainda
                                   calmo o bastante para pensar).
 
@@ -434,14 +434,14 @@ musica/prova-chefe.mp3  (prova contra o chefe, fase 10 de cada mundo)
   Ideal: 1 versão por chefe com o instrumento do mundo por cima
   (prova-chefe-01.mp3 ... -10.mp3). Se não der, 1 versão só.
 
-musica/vitoria.mp3  (fim de fase — modal com estrelas)
-  6–8 s, sem loop: jingle de vitória com o motivo do MineLearn.
+musica/vitoria.mp3  (fim de fase, modal com estrelas)
+  6-8 s, sem loop: jingle de vitória com o motivo do MineLearn.
 
 musica/vitoria-chefe.mp3  (venceu o chefe / mundo concluído)
-  10–12 s, sem loop: versão grande da vitória.
+  10-12 s, sem loop: versão grande da vitória.
 
-musica/revanche.mp3  (chefe venceu — tela de revanche)
-  5 s, sem loop: "ah, quase!" — triste DE BRINCADEIRA, termina subindo
+musica/revanche.mp3  (chefe venceu, tela de revanche)
+  5 s, sem loop: "ah, quase!", triste DE BRINCADEIRA, termina subindo
   (sensação de "vamos de novo!").
 
 musica/minijogo.mp3  (pegar diamantes, 8 s de jogo)
@@ -453,30 +453,30 @@ musica/relampago.mp3  (desafio relâmpago, 60 s)
   10 s, fica mais intenso.
 
 musica/mundo-desbloqueado.mp3  (mundo novo abrindo)
-  5–6 s, sem loop: abertura de portal + o tema do mundo NOVO
+  5-6 s, sem loop: abertura de portal + o tema do mundo NOVO
   aparecendo no final (dá vontade de entrar).
 
 
 =====================================================================
-6. FALAS — ELENCO DE VOZES
+6. FALAS: ELENCO DE VOZES
 =====================================================================
 Quatro vozes, todas humanas e naturais, pt-BR:
 
- A) NARRADORA (ou narrador) — voz adulta, calorosa, de professora
+ A) NARRADORA (ou narrador), voz adulta, calorosa, de professora
     querida / contadora de histórias. Lê as PERGUNTAS, os números e
     as instruções. Fala devagar, sorrindo, bem articulada.
     É a voz mais usada do jogo (centenas de falas).
 
- B) MASCOTE — a "voz do personagem" da criança: jovem (pode ser
+ B) MASCOTE: a "voz do personagem" da criança: jovem (pode ser
     adulto com voz jovem), animada, de amigo que torce junto.
     Comemora acertos e encoraja nos erros.
 
- C) CHEFES — um ator versátil fazendo os 10 chefes com vozes
+ C) CHEFES: um ator versátil fazendo os 10 chefes com vozes
     caricatas diferentes (zumbi sonolento, esqueleto que chacoalha,
     múmia que fala devagar, rei creeper metido...). Engraçados,
     nunca assustadores.
 
- D) NARRAÇÃO PARA OS PAIS — voz adulta tranquila para o tutorial e
+ D) NARRAÇÃO PARA OS PAIS: voz adulta tranquila para o tutorial e
     vídeos (pode ser a mesma da narradora em tom mais "conversa").
 
 Direção de gravação:
@@ -497,137 +497,137 @@ Sobre usar voz sintética de boa qualidade (opcional):
 
 
 =====================================================================
-7. FALAS — ROTEIRO COMPLETO
+7. FALAS: ROTEIRO COMPLETO
 =====================================================================
-Formato: ARQUIVO — "texto" — (voz) — direção
+Formato: ARQUIVO, "texto", (voz), direção
 
---- 7.1 Mascote: acertos (voz B) — hoje existem 6, sugiro 12 -------
-voz/mascote/acerto-01.mp3 — "Isso aí!"           — festa curta
-voz/mascote/acerto-02.mp3 — "Mandou bem!"        — orgulho
-voz/mascote/acerto-03.mp3 — "Você é demais!"     — admiração
-voz/mascote/acerto-04.mp3 — "Uhuu! Acertou!"     — pulando
-voz/mascote/acerto-05.mp3 — "Que craque!"        — impressionado
-voz/mascote/acerto-06.mp3 — "Show de bola!"      — descontraído
-voz/mascote/acerto-07.mp3 — "Arrasou!"           — (novo)
-voz/mascote/acerto-08.mp3 — "Boa! Continua assim!" — (novo)
-voz/mascote/acerto-09.mp3 — "Acertou em cheio!"  — (novo)
-voz/mascote/acerto-10.mp3 — "Que inteligente!"   — (novo)
-voz/mascote/acerto-11.mp3 — "É isso mesmo!"      — (novo)
-voz/mascote/acerto-12.mp3 — "Você aprende rápido!" — (novo)
+--- 7.1 Mascote: acertos (voz B), hoje existem 6, sugiro 12 -------
+voz/mascote/acerto-01.mp3, "Isso aí!", festa curta
+voz/mascote/acerto-02.mp3, "Mandou bem!", orgulho
+voz/mascote/acerto-03.mp3, "Você é demais!", admiração
+voz/mascote/acerto-04.mp3, "Uhuu! Acertou!", pulando
+voz/mascote/acerto-05.mp3, "Que craque!", impressionado
+voz/mascote/acerto-06.mp3, "Show de bola!", descontraído
+voz/mascote/acerto-07.mp3, "Arrasou!", (novo)
+voz/mascote/acerto-08.mp3, "Boa! Continua assim!", (novo)
+voz/mascote/acerto-09.mp3, "Acertou em cheio!", (novo)
+voz/mascote/acerto-10.mp3, "Que inteligente!", (novo)
+voz/mascote/acerto-11.mp3, "É isso mesmo!", (novo)
+voz/mascote/acerto-12.mp3, "Você aprende rápido!", (novo)
 
---- 7.2 Mascote: erros (voz B) — hoje existem 4, sugiro 8 ----------
+--- 7.2 Mascote: erros (voz B), hoje existem 4, sugiro 8 ----------
 Tom: carinhoso, sem decepção. Nunca dizer "errado".
-voz/mascote/erro-01.mp3 — "Quase! Tenta de novo."
-voz/mascote/erro-02.mp3 — "Calma, você consegue!"
-voz/mascote/erro-03.mp3 — "Olha a dica!"
-voz/mascote/erro-04.mp3 — "Não desiste!"
-voz/mascote/erro-05.mp3 — "Hum... vamos olhar de novo?"        (novo)
-voz/mascote/erro-06.mp3 — "Tá pertinho!"                         (novo)
-voz/mascote/erro-07.mp3 — "Errar faz parte. Bora de novo!"       (novo)
-voz/mascote/erro-08.mp3 — "Vamos juntos? Olha com calma."        (novo)
+voz/mascote/erro-01.mp3, "Quase! Tenta de novo."
+voz/mascote/erro-02.mp3, "Calma, você consegue!"
+voz/mascote/erro-03.mp3, "Olha a dica!"
+voz/mascote/erro-04.mp3, "Não desiste!"
+voz/mascote/erro-05.mp3, "Hum... vamos olhar de novo?"        (novo)
+voz/mascote/erro-06.mp3, "Tá pertinho!"                         (novo)
+voz/mascote/erro-07.mp3, "Errar faz parte. Bora de novo!"       (novo)
+voz/mascote/erro-08.mp3, "Vamos juntos? Olha com calma."        (novo)
 
 --- 7.3 Mascote: momentos (voz B) ---------------------------------
-voz/mascote/inicio-fase.mp3        — "Bora pra mais uma fase!"
-voz/mascote/proxima.mp3            — "Muito bem! Próxima!"
-voz/mascote/fase-concluida.mp3     — "Fase concluída! Olha suas estrelas!"
-voz/mascote/tres-estrelas.mp3      — "Três estrelas! Perfeito!"
-voz/mascote/subiu-nivel.mp3        — "Você subiu de nível!"
-voz/mascote/nova-figurinha.mp3     — "Ganhou uma figurinha nova!"
-voz/mascote/recorde.mp3            — "Novo recorde!"
-voz/mascote/ofensiva.mp3           — "Sua ofensiva aumentou! Volta amanhã pra continuar!"
-voz/mascote/meta-cumprida.mp3      — "Meta do dia cumprida! Abre o baú!"
-voz/mascote/mundo-concluido.mp3    — "Você terminou o mundo inteiro!"
-voz/mascote/fim-aventura.mp3       — "Você terminou a aventura! Você é uma lenda!"
-voz/mascote/voz-ligada.mp3         — "Voz ligada!"
-voz/mascote/minijogo.mp3           — "Minijogo! Pegue os diamantes!"
-voz/mascote/minijogo-fim.mp3       — "Olha quantos diamantes você pegou!"
-voz/mascote/relampago-comeca.mp3   — "Três, dois, um... já!"
-voz/mascote/relampago-fim.mp3      — "Fim do tempo!"
-voz/mascote/combo.mp3              — "Combo! Vale dobrado!"
-voz/mascote/loja-comprou.mp3       — "Ficou muito estiloso!"
-voz/mascote/casa.mp3               — "Que casa linda!"
+voz/mascote/inicio-fase.mp3, "Bora pra mais uma fase!"
+voz/mascote/proxima.mp3, "Muito bem! Próxima!"
+voz/mascote/fase-concluida.mp3, "Fase concluída! Olha suas estrelas!"
+voz/mascote/tres-estrelas.mp3, "Três estrelas! Perfeito!"
+voz/mascote/subiu-nivel.mp3, "Você subiu de nível!"
+voz/mascote/nova-figurinha.mp3, "Ganhou uma figurinha nova!"
+voz/mascote/recorde.mp3, "Novo recorde!"
+voz/mascote/ofensiva.mp3, "Sua ofensiva aumentou! Volta amanhã pra continuar!"
+voz/mascote/meta-cumprida.mp3, "Meta do dia cumprida! Abre o baú!"
+voz/mascote/mundo-concluido.mp3, "Você terminou o mundo inteiro!"
+voz/mascote/fim-aventura.mp3, "Você terminou a aventura! Você é uma lenda!"
+voz/mascote/voz-ligada.mp3, "Voz ligada!"
+voz/mascote/minijogo.mp3, "Minijogo! Pegue os diamantes!"
+voz/mascote/minijogo-fim.mp3, "Olha quantos diamantes você pegou!"
+voz/mascote/relampago-comeca.mp3, "Três, dois, um... já!"
+voz/mascote/relampago-fim.mp3, "Fim do tempo!"
+voz/mascote/combo.mp3, "Combo! Vale dobrado!"
+voz/mascote/loja-comprou.mp3, "Ficou muito estiloso!"
+voz/mascote/casa.mp3, "Que casa linda!"
 
 --- 7.4 Conquistas e troféus (voz B, animada) ----------------------
 Uma fala com o nome de cada uma (toca quando é desbloqueada).
-voz/conquistas/primeiro-bloco.mp3      — "Conquista: Primeiro Bloco!"
-voz/conquistas/coletor-estrelas.mp3    — "Conquista: Coletor de Estrelas!"
-voz/conquistas/explorador.mp3          — "Conquista: Explorador!"
-voz/conquistas/mestre-construtor.mp3   — "Conquista: Mestre Construtor!"
-voz/conquistas/primeiro-crafting.mp3   — "Conquista: Primeiro Crafting!"
-voz/conquistas/dez-seguidos.mp3        — "Conquista: Dez acertos seguidos!"
-voz/conquistas/mundo-completo.mp3      — "Conquista: Mundo Completo!"
-voz/conquistas/tres-dias.mp3           — "Conquista: Três dias seguidos!"
-voz/conquistas/trofeu-fases-5.mp3      — "Troféu de Bronze!"
-voz/conquistas/trofeu-fases-10.mp3     — "Troféu de Prata!"
-voz/conquistas/trofeu-fases-25.mp3     — "Troféu de Ouro!"
-voz/conquistas/trofeu-fases-50.mp3     — "Troféu de Diamante!"
-voz/conquistas/trofeu-fases-100.mp3    — "Lenda da Aventura!"
-voz/conquistas/perfeito-3.mp3          — "Conquista: Mira Certeira!"
-voz/conquistas/perfeito-10.mp3         — "Conquista: Estrela Brilhante!"
+voz/conquistas/primeiro-bloco.mp3, "Conquista: Primeiro Bloco!"
+voz/conquistas/coletor-estrelas.mp3, "Conquista: Coletor de Estrelas!"
+voz/conquistas/explorador.mp3, "Conquista: Explorador!"
+voz/conquistas/mestre-construtor.mp3, "Conquista: Mestre Construtor!"
+voz/conquistas/primeiro-crafting.mp3, "Conquista: Primeiro Crafting!"
+voz/conquistas/dez-seguidos.mp3, "Conquista: Dez acertos seguidos!"
+voz/conquistas/mundo-completo.mp3, "Conquista: Mundo Completo!"
+voz/conquistas/tres-dias.mp3, "Conquista: Três dias seguidos!"
+voz/conquistas/trofeu-fases-5.mp3, "Troféu de Bronze!"
+voz/conquistas/trofeu-fases-10.mp3, "Troféu de Prata!"
+voz/conquistas/trofeu-fases-25.mp3, "Troféu de Ouro!"
+voz/conquistas/trofeu-fases-50.mp3, "Troféu de Diamante!"
+voz/conquistas/trofeu-fases-100.mp3, "Lenda da Aventura!"
+voz/conquistas/perfeito-3.mp3, "Conquista: Mira Certeira!"
+voz/conquistas/perfeito-10.mp3, "Conquista: Estrela Brilhante!"
 
---- 7.5 Mundos (voz A) — ao entrar/desbloquear ---------------------
-voz/mundos/mundo-01.mp3 — "Bem-vindo à Vila Inicial!"
-voz/mundos/mundo-02.mp3 — "Bem-vindo à Floresta!"
-voz/mundos/mundo-03.mp3 — "Bem-vindo à Mina dos Números!"
-voz/mundos/mundo-04.mp3 — "Bem-vindo ao Deserto!"
-voz/mundos/mundo-05.mp3 — "Bem-vindo ao Oceano!"
-voz/mundos/mundo-06.mp3 — "Bem-vindo às Montanhas de Neve!"
-voz/mundos/mundo-07.mp3 — "Bem-vindo ao Reino de Fogo!"
-voz/mundos/mundo-08.mp3 — "Bem-vindo ao Castelo dos Desafios!"
-voz/mundos/mundo-09.mp3 — "Bem-vindo ao Reino das Estrelas!"
-voz/mundos/mundo-10.mp3 — "Bem-vindo ao Grande Desafio!"
-voz/mundos/desbloqueado.mp3 — "Um mundo novo foi desbloqueado!"
+--- 7.5 Mundos (voz A), ao entrar/desbloquear ---------------------
+voz/mundos/mundo-01.mp3, "Bem-vindo à Vila Inicial!"
+voz/mundos/mundo-02.mp3, "Bem-vindo à Floresta!"
+voz/mundos/mundo-03.mp3, "Bem-vindo à Mina dos Números!"
+voz/mundos/mundo-04.mp3, "Bem-vindo ao Deserto!"
+voz/mundos/mundo-05.mp3, "Bem-vindo ao Oceano!"
+voz/mundos/mundo-06.mp3, "Bem-vindo às Montanhas de Neve!"
+voz/mundos/mundo-07.mp3, "Bem-vindo ao Reino de Fogo!"
+voz/mundos/mundo-08.mp3, "Bem-vindo ao Castelo dos Desafios!"
+voz/mundos/mundo-09.mp3, "Bem-vindo ao Reino das Estrelas!"
+voz/mundos/mundo-10.mp3, "Bem-vindo ao Grande Desafio!"
+voz/mundos/desbloqueado.mp3, "Um mundo novo foi desbloqueado!"
 
---- 7.6 Números e contas (voz A) — peças para montar frases --------
+--- 7.6 Números e contas (voz A), peças para montar frases --------
 Usadas na contagem ("1, 2, 3... São 5!") e para ler contas que mudam a
 cada partida (as contas são sorteadas, não dá para gravar inteiras).
 Gravar com entonação neutra, para emendar.
 
-Números — contando (ritmo de contagem, um pouco animado):
-  voz/numeros/contando-01.mp3 ... contando-20.mp3  — "um" ... "vinte"
-Números — neutros (para frases e respostas), de 0 a 100:
-  voz/numeros/n-000.mp3 ... n-100.mp3  — "zero" ... "cem"
-  (Dica: gravar 0–20, as dezenas 30, 40... 100 e "e"; o resto o jogo
+Números: contando (ritmo de contagem, um pouco animado):
+  voz/numeros/contando-01.mp3 ... contando-20.mp3, "um" ... "vinte"
+Números: neutros (para frases e respostas), de 0 a 100:
+  voz/numeros/n-000.mp3 ... n-100.mp3, "zero" ... "cem"
+  (Dica: gravar 0-20, as dezenas 30, 40... 100 e "e"; o resto o jogo
   monta: "trinta" + "e" + "dois". Mas gravar inteiro soa melhor.)
 Total da contagem:
-  voz/numeros/sao-01.mp3 ... sao-20.mp3  — "É um!", "São dois!" ... "São vinte!"
+  voz/numeros/sao-01.mp3 ... sao-20.mp3, "É um!", "São dois!" ... "São vinte!"
 Palavras das contas:
-  voz/contas/quanto-e.mp3        — "Quanto é"
-  voz/contas/mais.mp3            — "mais"
-  voz/contas/menos.mp3           — "menos"
-  voz/contas/vezes.mp3           — "vezes"
-  voz/contas/dividido-por.mp3    — "dividido por"
-  voz/contas/igual-a.mp3         — "é igual a"
-  voz/contas/igual-quanto.mp3    — "é igual a quanto?"
-  voz/contas/fileiras-de.mp3     — "fileiras de"
-  voz/contas/cercados.mp3        — "cercados"
-  voz/contas/saem.mp3            — "saem"
+  voz/contas/quanto-e.mp3, "Quanto é"
+  voz/contas/mais.mp3, "mais"
+  voz/contas/menos.mp3, "menos"
+  voz/contas/vezes.mp3, "vezes"
+  voz/contas/dividido-por.mp3, "dividido por"
+  voz/contas/igual-a.mp3, "é igual a"
+  voz/contas/igual-quanto.mp3, "é igual a quanto?"
+  voz/contas/fileiras-de.mp3, "fileiras de"
+  voz/contas/cercados.mp3, "cercados"
+  voz/contas/saem.mp3, "saem"
 Exemplo de montagem: [quanto-e] [n-009] [mais] [n-004] → "Quanto é nove mais quatro?"
                      No acerto: [n-009] [mais] [n-004] [igual-a] [n-013]
 
---- 7.7 Prova do chefe (voz C) — 10 chefes --------------------------
+--- 7.7 Prova do chefe (voz C), 10 chefes --------------------------
 Para CADA chefe (01 a 10), 12 falas. Arquivos em voz/chefes/NN/.
 Os nomes: 01 Zumbi da Vila, 02 Arqueiro da Floresta, 03 Esqueleto
 da Mina, 04 Múmia do Deserto, 05 Afogado do Mar, 06 Errante do Gelo,
 07 Creeper de Fogo, 08 Cavaleiro Zumbi, 09 Enderman Gigante,
 10 Rei Creeper.
 
-  apresenta.mp3   — "Eu sou o <NOME>! Você acha que sabe tudo deste mundo?"
+  apresenta.mp3, "Eu sou o <NOME>! Você acha que sabe tudo deste mundo?"
                     (cada chefe com a personalidade dele)
-  ponto-1..4.mp3  — risadas quando ganha ponto:
+  ponto-1..4.mp3, risadas quando ganha ponto:
                     "Hahaha! Ponto meu!" / "Errou! Hehehe!" /
                     "Hohoho! Essa é minha!" / "Muahaha!"
                     (cada chefe ri do seu jeito)
-  ai-1..4.mp3     — quando a criança acerta:
+  ai-1..4.mp3, quando a criança acerta:
                     "Ai! Ponto seu!" / "Uou! Acertou!" /
                     "Grrr! Essa doeu!" / "Nããão!"
-  derrota.mp3     — chefe perdeu: "Nããão! Você venceu! Pode passar..."
-  vitoria.mp3     — chefe ganhou: "Ganhei! Mas volta pra revanche, hein?"
-  empate.mp3      — "Empate! Ninguém passa... ainda!"
+  derrota.mp3, chefe perdeu: "Nããão! Você venceu! Pode passar..."
+  vitoria.mp3, chefe ganhou: "Ganhei! Mas volta pra revanche, hein?"
+  empate.mp3, "Empate! Ninguém passa... ainda!"
 
 Narradora (voz A), comum a todos:
-  voz/chefes/prova-regras.mp3 — "Prova do mundo! Acertou de primeira, ponto seu. Errou, ponto do chefe."
-  voz/chefes/revanche.mp3     — "Vamos de revanche? Olha as dicas e tenta de novo!"
+  voz/chefes/prova-regras.mp3, "Prova do mundo! Acertou de primeira, ponto seu. Errou, ponto do chefe."
+  voz/chefes/revanche.mp3, "Vamos de revanche? Olha as dicas e tenta de novo!"
 
 --- 7.8 Perguntas das atividades (voz A) ---------------------------
 673 perguntas fixas, listadas em docs/audio/falas-perguntas.csv:
@@ -641,33 +641,33 @@ Narradora (voz A), comum a todos:
 
 Perguntas geradas na hora (contas sorteadas, "Quanto dá a conta?",
 sequências) usam as peças da seção 7.6 e as frases abaixo:
-  voz/frases/quanto-da-conta.mp3   — "Quanto dá a conta?"
-  voz/frases/toque-cada-item.mp3   — "Toque em cada item para contar!"
-  voz/frases/complete-sequencia.mp3 — "Complete a sequência!"
-  voz/frases/qual-proximo.mp3      — "Qual vem depois?"
-  voz/frases/ordene.mp3            — "Coloque em ordem!"
-  voz/frases/monte-palavra.mp3     — "Monte a palavra!"
-  voz/frases/ligue-sombra.mp3      — "Ligue cada um à sua sombra!"
-  voz/frases/copie-construcao.mp3  — "Copie a construção!"
-  voz/frases/memoria.mp3           — "Encontre os pares!"
-  voz/frases/crafting.mp3          — "Monte a receita na mesa de trabalho!"
-  voz/frases/dica.mp3              — "Olha a dica!"
-  voz/frases/resposta-brilha.mp3   — "A resposta certa está brilhando. Toque nela!"
+  voz/frases/quanto-da-conta.mp3, "Quanto dá a conta?"
+  voz/frases/toque-cada-item.mp3, "Toque em cada item para contar!"
+  voz/frases/complete-sequencia.mp3, "Complete a sequência!"
+  voz/frases/qual-proximo.mp3, "Qual vem depois?"
+  voz/frases/ordene.mp3, "Coloque em ordem!"
+  voz/frases/monte-palavra.mp3, "Monte a palavra!"
+  voz/frases/ligue-sombra.mp3, "Ligue cada um à sua sombra!"
+  voz/frases/copie-construcao.mp3, "Copie a construção!"
+  voz/frases/memoria.mp3, "Encontre os pares!"
+  voz/frases/crafting.mp3, "Monte a receita na mesa de trabalho!"
+  voz/frases/dica.mp3, "Olha a dica!"
+  voz/frases/resposta-brilha.mp3, "A resposta certa está brilhando. Toque nela!"
 
 Ao gerar novas atividades, rode o script de exportação de novo: as
 perguntas novas ganham número novo no fim da lista.
 
 --- 7.9 Boas-vindas e tutorial para os pais (voz D) -----------------
-voz/pais/boas-vindas.mp3 — "Bem-vindo ao MineLearn!"
-voz/pais/tutorial-0.mp3 — "Uma plataforma de atividades educativas em um mundo de blocos. Veja em um minuto como a criança joga e como você acompanha."
-voz/pais/tutorial-1.mp3 — "Na Área dos Pais, cadastre cada criança com nome, idade, login e senha. A criança entra com o login dela e as atividades se ajustam à idade."
-voz/pais/tutorial-2.mp3 — "São cem fases em dez mundos. Cada fase tem pelo menos cinco perguntas, e a criança ganha até três estrelas conforme acerta de primeira."
-voz/pais/tutorial-3.mp3 — "Errou? Aparece uma dica. Errou de novo? A resposta certa brilha. O mascote comemora os acertos e anima nos erros."
-voz/pais/tutorial-4.mp3 — "Cada atividade dá XP. Com XP, a criança sobe de nível, desbloqueia conquistas e compra roupas e chapéus para o personagem na loja."
-voz/pais/tutorial-5.mp3 — "Na Área dos Pais você vê o progresso de cada criança: fases, estrelas, dias seguidos jogando e resultados por tipo de atividade. O som pode ser desligado no topo das atividades."
+voz/pais/boas-vindas.mp3, "Bem-vindo ao MineLearn!"
+voz/pais/tutorial-0.mp3, "Uma plataforma de atividades educativas em um mundo de blocos. Veja em um minuto como a criança joga e como você acompanha."
+voz/pais/tutorial-1.mp3, "Na Área dos Pais, cadastre cada criança com nome, idade, login e senha. A criança entra com o login dela e as atividades se ajustam à idade."
+voz/pais/tutorial-2.mp3, "São cem fases em dez mundos. Cada fase tem pelo menos cinco perguntas, e a criança ganha até três estrelas conforme acerta de primeira."
+voz/pais/tutorial-3.mp3, "Errou? Aparece uma dica. Errou de novo? A resposta certa brilha. O mascote comemora os acertos e anima nos erros."
+voz/pais/tutorial-4.mp3, "Cada atividade dá XP. Com XP, a criança sobe de nível, desbloqueia conquistas e compra roupas e chapéus para o personagem na loja."
+voz/pais/tutorial-5.mp3, "Na Área dos Pais você vê o progresso de cada criança: fases, estrelas, dias seguidos jogando e resultados por tipo de atividade. O som pode ser desligado no topo das atividades."
 
 Para a criança (voz B), na primeira vez que entra:
-voz/mascote/ola-crianca.mp3 — "Oi! Eu vou jogar com você. Toca no botão amarelo pra começar a aventura!"
+voz/mascote/ola-crianca.mp3, "Oi! Eu vou jogar com você. Toca no botão amarelo pra começar a aventura!"
 
 
 =====================================================================
@@ -675,7 +675,7 @@ voz/mascote/ola-crianca.mp3 — "Oi! Eu vou jogar com você. Toca no botão amar
 =====================================================================
 Do que mais muda a experiência para o que menos muda:
 
- Lote 1 — o essencial (já troca tudo que é robótico no dia a dia)
+ Lote 1: o essencial (já troca tudo que é robótico no dia a dia)
    - Efeitos: clique, acerto, erro, conta-01..20, conta-final,
      estrela-1..3, xp-somando, quebrar-bloco, conquista.
    - Mascote: 7.1, 7.2 e 7.3.
@@ -683,20 +683,20 @@ Do que mais muda a experiência para o que menos muda:
      palavras das contas).
    - Músicas: tema-principal, mapa-aventura, vitoria.
 
- Lote 2 — perguntas e mundos
+ Lote 2: perguntas e mundos
    - Perguntas: as do berçário, maternal e pré-escola primeiro (são as
      faixas que dependem da voz), depois o resto do CSV.
    - Músicas dos 10 mundos.
    - Falas dos mundos (7.5).
 
- Lote 3 — momentos especiais
+ Lote 3: momentos especiais
    - Chefes (7.7), prova-chefe, vitoria-chefe, revanche.
    - Minijogo e relâmpago (efeitos e músicas).
    - Conquistas (7.4), baú, figurinha, recorde, ofensiva.
 
- Lote 4 — acabamento
+ Lote 4: acabamento
    - Mobs (seção 4), abertura do creeper, loja, álbum/casa,
-     tutorial dos pais, números 21–100.
+     tutorial dos pais, números 21-100.
 
 
 =====================================================================

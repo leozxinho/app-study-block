@@ -573,7 +573,7 @@ export function getPartOrigin(part: PartDef): [number, number] {
 }
 
 // =============================================
-// Skins do jogador (Steve/Alex): cores de roupa e chapéu — só visual
+// Skins do jogador (Steve/Alex): cores de roupa e chapéu, só visual
 // =============================================
 
 export type PlayerCharacter = 'steve' | 'alex' | 'luna' | 'faisca';

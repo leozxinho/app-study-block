@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Gera os MP3 das falas do MineLearn com as vozes da ElevenLabs:
-narradora/mascote/pais com "MineLearn – Narradora" e os chefes com uma voz grave própria.
+narradora/mascote/pais com "MineLearn - Narradora" e os chefes com uma voz grave própria.
 
 Chave da API (uma vez): crie o arquivo .env.local na raiz do projeto com a linha
   ELEVENLABS_API_KEY=sua-chave              # ElevenLabs > Configurações > API Keys
@@ -19,9 +19,9 @@ Na raiz do projeto:
   python3 scripts/gerar_vozes_elevenlabs.py docs/audio/falas-voz-suave.csv --secao 7.1 --limite 2000
 
 Opções:
-  --voz NOME        voz da narradora/mascote/pais (padrão: "MineLearn – Narradora")
+  --voz NOME        voz da narradora/mascote/pais (padrão: "MineLearn - Narradora")
   --voz-chefes NOME voz dos chefes (linhas com voz "C-..."), nome ou voice_id
-                    (padrão: "MineLearn – Chefão"; sem ela na conta, o script avisa)
+                    (padrão: "MineLearn - Chefão"; sem ela na conta, o script avisa)
   --grave-chefes F  engrossa a voz dos chefes com o ffmpeg (1 = sem mudança;
                     0.85 = uns 3 semitons mais grave; padrão 0.85). Não muda a velocidade.
   --listar-vozes    mostra as vozes da conta (nome, gênero, idade, sotaque) e sai
@@ -44,8 +44,8 @@ import argparse, csv, json, os, shutil, subprocess, sys, time, urllib.request, u
 
 p = argparse.ArgumentParser()
 p.add_argument("csv", nargs="?")
-p.add_argument("--voz", default="MineLearn – Narradora")
-p.add_argument("--voz-chefes", default="MineLearn – Chefão")
+p.add_argument("--voz", default="MineLearn - Narradora")
+p.add_argument("--voz-chefes", default="MineLearn - Chefão")
 p.add_argument("--grave-chefes", type=float, default=0.85)
 p.add_argument("--listar-vozes", action="store_true")
 p.add_argument("--modelo", default="eleven_multilingual_v2")
@@ -124,11 +124,13 @@ if a.simular: sys.exit(0)
 
 # ---- vozes e saldo ----
 dados, _ = chamar("GET", "/v1/voices")
-vozes = {v["name"].strip(): v["voice_id"] for v in json.loads(dados)["voices"]}
+# Nome sem diferença entre os tipos de traço (hífen, meia-risca e travessão)
+traco = lambda n: n.strip().replace("\u2013", "-").replace("\u2014", "-")
+vozes = {traco(v["name"]): v["voice_id"] for v in json.loads(dados)["voices"]}
 ids = set(vozes.values())
 
 def achar_voz(nome, para):
-    if nome in vozes: return vozes[nome]
+    if traco(nome) in vozes: return vozes[traco(nome)]
     if nome in ids: return nome                       # voice_id direto
     sys.exit(f'Voz "{nome}" ({para}) não encontrada. Rode --listar-vozes para ver as da conta.\n'
              f'Vozes na conta: {", ".join(sorted(vozes))}')
@@ -136,7 +138,7 @@ def achar_voz(nome, para):
 def eh_chefe(r): return r.get("voz", "").startswith("C")
 
 VOICE_ID = achar_voz(a.voz, "narradora") if any(not eh_chefe(r) for r in pendentes) else None
-CHEFE_ID = achar_voz(a.voz_chefes, "chefes — use --voz-chefes") if any(eh_chefe(r) for r in pendentes) else None
+CHEFE_ID = achar_voz(a.voz_chefes, "chefes, use --voz-chefes") if any(eh_chefe(r) for r in pendentes) else None
 if CHEFE_ID: print(f'Chefes: voz "{a.voz_chefes}" ({CHEFE_ID}), engrossada x{a.grave_chefes}.')
 dados, _ = chamar("GET", "/v1/user/subscription")
 sub = json.loads(dados)
@@ -160,7 +162,7 @@ for r in pendentes:
     if gasto + custo > teto:
         print(f"Parei antes de passar do limite ({teto:,} créditos)."); break
     vel = r.get("velocidade", "0%").replace("%", "")
-    speed = max(0.7, min(1.2, 1 + float(vel or 0) / 100))      # API aceita 0,7–1,2
+    speed = max(0.7, min(1.2, 1 + float(vel or 0) / 100))      # API aceita 0,7-1,2
     chefe = eh_chefe(r)
     estilo = 0.55 if chefe else 0.35 if r["voz"].startswith("B") else 0.15   # chefe teatral, mascote animada
     estabilidade = 0.4 if chefe else 0.55

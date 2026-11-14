@@ -31,12 +31,12 @@ export function graphemes(s: string): string[] {
 
 /** É um símbolo/emoji (não é letra, número, espaço ou pontuação comum)? */
 export function isSymbol(g: string): boolean {
-  return !/^[\p{L}\p{N}\s.,;:!?¿¡'"()[\]{}\-–—+=*/\\#@%&]$/u.test(g) && g.trim() !== '';
+  return !/^[\p{L}\p{N}\s.,;:!?¿¡'"()[\]{}\-\u2013\u2014+=*/\\#@%&]$/u.test(g) && g.trim() !== '';
 }
 
 /** Tira do enunciado as dicas entre parênteses com números: "Quantas? (1-3)" → "Quantas?" */
 export function stripNumberHints(question: string): string {
-  return question.replace(/\s*\((?:\s*\d+\s*(?:[-–,]|ou|e)?\s*)+\)/gi, '').trim();
+  return question.replace(/\s*\((?:\s*\d+\s*(?:[-\u2013,]|ou|e)?\s*)+\)/gi, '').trim();
 }
 
 const VOWELS = 'AEIOUÁÉÍÓÚÂÊÔÃÕÀ';

@@ -1,8 +1,8 @@
 =====================================================================
-MINELEARN — ROTEIRO DE ÁUDIO, PARTE 2
+MINELEARN: ROTEIRO DE ÁUDIO, PARTE 2
 Efeitos no ChipTone + falas com voz suave
 =====================================================================
-Versão 1 — 13/11/2026
+Versão 1, 13/11/2026
 Complementa o "ROTEIRO DE ÁUDIO" v1 (mesmos nomes de arquivo, pastas,
 volumes e regras). Aqui está o COMO fazer.
 
@@ -19,9 +19,9 @@ SUMÁRIO
  A. O que o ChipTone faz e o que não faz
  B. Como trabalhar no ChipTone (fluxo)
  C. Receitas de cada efeito
- D. A voz suave — escolha da voz
+ D. A voz suave, escolha da voz
  E. Direção da voz suave (por faixa de idade)
- F. O CSV de falas — colunas e correções feitas no texto
+ F. O CSV de falas, colunas e correções feitas no texto
  G. Gerando as falas (passo a passo)
  H. Checklist
 
@@ -29,7 +29,7 @@ SUMÁRIO
 =====================================================================
 A. O QUE O CHIPTONE FAZ E O QUE NÃO FAZ
 =====================================================================
-ChipTone (SFB Games — https://sfbgames.itch.io/chiptone) é um gerador
+ChipTone (SFB Games, https://sfbgames.itch.io/chiptone) é um gerador
 gratuito de EFEITOS SONOROS para jogos. Roda no navegador, no Windows e
 no macOS.
 
@@ -77,11 +77,11 @@ B. COMO TRABALHAR NO CHIPTONE (FLUXO)
 
 Regras de ouro para crianças (valem para todas as receitas):
   - Onda: prefira TRIÂNGULO e SENOIDE (macias). QUADRADA só com
-    duty 25–50% e volume baixo. Evite DENTE DE SERRA puro (áspera).
+    duty 25-50% e volume baixo. Evite DENTE DE SERRA puro (áspera).
   - Frequência principal entre 300 e 1.500 Hz. Agudos acima de 2.000 Hz
     só em brilhos curtos, e com volume baixo.
-  - Ataque nunca zero absoluto (2–5 ms) para não estalar.
-  - Ligue o filtro passa-baixa (corte por volta de 4–6 kHz) para tirar
+  - Ataque nunca zero absoluto (2-5 ms) para não estalar.
+  - Ligue o filtro passa-baixa (corte por volta de 4-6 kHz) para tirar
     o "chiado digital".
   - Variações -1/-2/-3: mesma receita, mude a frequência em +/-2
     semitons (ou ~6%). Nada mais.
@@ -105,7 +105,7 @@ Mi5=659  Sol5=784  Dó6=1047  Mi6=1319  Sol6=1568
 
 --- C.1 Interface ---------------------------------------------------
 
-sfx/clique-1..3 (60–120 ms)   ← o som mais repetido do jogo
+sfx/clique-1..3 (60-120 ms)   ← o som mais repetido do jogo
   Começo: "blip"/seleção
   Onda: triângulo
   Frequência: 700 Hz → 600 Hz (deslize curto para baixo)
@@ -131,23 +131,23 @@ sfx/som-ligado (300 ms)
   Envelope: 3 / 100 / 120 ms. Ouvido: "tu-dlim" simpático.
 
 sfx/transicao-pergunta (300 ms)
-  Onda: ruído. Filtro passa-banda/passa-baixa 1–2 kHz.
+  Onda: ruído. Filtro passa-banda/passa-baixa 1-2 kHz.
   Envelope: 60 / 80 / 160 ms (sobe e desce: "fsssh").
   Volume: 40% dos outros. Ouvido: papel deslizando, quase sem notar.
 
 --- C.2 Respostas ---------------------------------------------------
 
-sfx/acerto-1..3 (500–700 ms)   ← precisa dar alegria
+sfx/acerto-1..3 (500-700 ms)   ← precisa dar alegria
   Começo: "coin"/moeda ou "powerup"
   Onda: triângulo (camada 1) + quadrada duty 25% bem baixa (camada 2)
-  Frequência / arpejo: Dó5 – Mi5 – Sol5 – Dó6, 90 ms cada nota
+  Frequência / arpejo: Dó5, Mi5, Sol5, Dó6, 90 ms cada nota
   Envelope: 3 / 300 / 250 ms
   Extra: vibrato leve só na última nota (5 Hz, profundidade pequena).
          Variações: -1 em Dó5, -2 em Ré5 (587-740-880-1175),
          -3 em Mi5 (659-831-988-1319).
   Ouvido: "ti-ri-ri-rim!" brilhante e curto, sem ficar estridente.
 
-sfx/erro-1..2 (400–500 ms)   ← nunca buzina
+sfx/erro-1..2 (400-500 ms)   ← nunca buzina
   Começo: "jump" invertido
   Onda: senoide ou triângulo (NUNCA quadrada ou serra)
   Frequência: 2 notas descendo, Mi4 (330) → Dó4 (262), com deslize
@@ -170,7 +170,7 @@ sfx/resposta-brilha (700 ms)
 
 --- C.3 Contagem e contas -------------------------------------------
 
-sfx/conta-01 ... conta-20 (100–150 ms) ← ESCALA (o ideal do v1)
+sfx/conta-01 ... conta-20 (100-150 ms) ← ESCALA (o ideal do v1)
   Começo: "blip"
   Onda: triângulo
   Frequência: conta-01 = Dó4 (262 Hz) e cada número sobe MEIO TOM
@@ -212,7 +212,7 @@ sfx/grupos-juntam (500 ms)
 
 --- C.4 Blocos e ferramentas ---------------------------------------
 
-sfx/quebrar-bloco-1..3 (250–400 ms)
+sfx/quebrar-bloco-1..3 (250-400 ms)
   Começo: "explosion"/"hit" curto
   Camada 1: ruído, passa-baixa 2,5 kHz, envelope 2 / 40 / 200 ms.
   Camada 2: quadrada duty 50%, 160 → 80 Hz, 60 ms, volume 40% (corpo).
@@ -254,7 +254,7 @@ sfx/subiu-nivel (1,5 s)
   leve. Onda: quadrada 50% (camada 1, 50%) + triângulo (camada 2).
 
 sfx/conquista (1,2 s)
-  "Fanfarra" 8-bit: Sol4 (curta) – Sol4 (curta) – Dó5 (longa).
+  "Fanfarra" 8-bit: Sol4 (curta), Sol4 (curta), Dó5 (longa).
   Quadrada duty 25% com passa-baixa 3 kHz (fica "metal leve").
   Fim: sininho igual a estrela-3.
 
@@ -329,7 +329,7 @@ sfx/combo (300 ms)
   Quadrada duty 25%, 500 → 1.500 Hz (deslize rápido), vibrato 20 Hz.
   "zing" elétrico. Volume 80%.
 
---- C.7 Abertura (creeper) — com cuidado ----------------------------
+--- C.7 Abertura (creeper), com cuidado ----------------------------
 
 sfx/creeper-passos (loop 1 s)
   4 passos: ruído passa-baixa 600 Hz, 40 ms cada, intervalo 250 ms,
@@ -344,7 +344,7 @@ sfx/creeper-chiado (1,2 s)
 sfx/creeper-explosao (1,5 s)
   "BUM" de desenho: ruído passa-baixa 1,5 kHz, ataque 5 ms, fim 700 ms
   + senoide 150 → 60 Hz baixinha (30%). Depois "confete": 6 cliques
-  agudos aleatórios (triângulo 1.500–2.500 Hz, 20 ms) e brilho final
+  agudos aleatórios (triângulo 1.500-2.500 Hz, 20 ms) e brilho final
   igual ao resposta-brilha. Sem grave forte.
 
 --- C.8 Ficam fora do ChipTone --------------------------------------
@@ -353,7 +353,7 @@ sfx/creeper-explosao (1,5 s)
 
 
 =====================================================================
-D. A VOZ SUAVE — ESCOLHA DA VOZ
+D. A VOZ SUAVE, ESCOLHA DA VOZ
 =====================================================================
 O que a voz precisa ter: feminina ou masculina adulta, calorosa, sem
 pressa, que pareça uma professora querida contando história. Nada de
@@ -432,7 +432,7 @@ Pronúncia já marcada no SSML (troca só o som, não o texto):
 
 
 =====================================================================
-F. O CSV DE FALAS — COLUNAS E CORREÇÕES FEITAS NO TEXTO
+F. O CSV DE FALAS, COLUNAS E CORREÇÕES FEITAS NO TEXTO
 =====================================================================
 docs/audio/falas-voz-suave.csv  (separador ";", UTF-8)
 
@@ -448,7 +448,7 @@ docs/audio/falas-voz-suave.csv  (separador ";", UTF-8)
   voz_azure       nome da voz Azure
   ssml_azure      SSML pronto para enviar ao Azure
 
-Totais: 1.031 falas = 673 perguntas + 141 números (contando, 0–100,
+Totais: 1.031 falas = 673 perguntas + 141 números (contando, 0-100,
 "São N!") + 120 falas de chefes (10 × 12) + 40 mascote + 15 conquistas
 + 12 frases + 11 mundos + 10 palavras das contas + 7 pais + 2 da
 narradora da prova.
@@ -512,7 +512,7 @@ G. GERANDO AS FALAS (PASSO A PASSO, AZURE)
 =====================================================================
 G2. GERANDO AS FALAS NA ELEVENLABS (VOZ ESCOLHIDA)
 =====================================================================
-Voz única para TODAS as falas: "MineLearn – Narradora", criada no
+Voz única para TODAS as falas: "MineLearn, Narradora", criada no
 Voice Design da conta (mulher jovem, pt-BR neutro, alegre e suave).
 Plano Starter: 40.000 créditos disponíveis em 13/11/2026.
 

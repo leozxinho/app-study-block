@@ -20,7 +20,7 @@ const STEPS = [
 ];
 
 const FEATURES = [
-  { icon: '🔊', title: 'Tudo falado', text: 'As perguntas são lidas em voz alta — perfeito para quem ainda não lê.' },
+  { icon: '🔊', title: 'Tudo falado', text: 'As perguntas são lidas em voz alta, perfeito para quem ainda não lê.' },
   { icon: '➕', title: 'Contas animadas', text: 'Somar, tirar, multiplicar e dividir com bichinhos que se movem e são contados.' },
   { icon: '⚔️', title: 'Prova do chefe', text: 'No fim de cada mundo, uma prova divertida com tudo o que a criança aprendeu.' },
   { icon: '🏆', title: 'Troféus e figurinhas', text: 'XP, estrelas, conquistas, álbum de figurinhas e roupas para o personagem.' },
@@ -46,7 +46,7 @@ export function LandingPage() {
           <div>
             <h1 className="font-minecraft text-2xl sm:text-3xl text-white drop-shadow-lg leading-snug">Seu filho aprende brincando num mundo de blocos</h1>
             <p className="font-body text-lg text-gray-900 mt-4">
-              Matemática, letras, cores e formas em uma aventura com voz, personagens e recompensas — feita para crianças de 0 a 10 anos estudarem em casa.
+              Matemática, letras, cores e formas em uma aventura com voz, personagens e recompensas, feita para crianças de 0 a 10 anos estudarem em casa.
             </p>
             <div className="flex flex-wrap gap-3 mt-6">
               <MinecraftButton variant="gold" size="lg" href="/login">

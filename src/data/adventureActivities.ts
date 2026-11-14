@@ -6623,7 +6623,7 @@ for (const a of MATH_MOBS_ADVENTURE) {
 
 // =============================================
 // ENSINO FUNDAMENTAL (novas faixas): 100 fases cada
-// 1º e 2º ano (6–7 anos) e 3º ao 5º ano (8–10 anos) — ver adventureFundamental.ts
+// 1º e 2º ano (6-7 anos) e 3º ao 5º ano (8-10 anos), ver adventureFundamental.ts
 // =============================================
 ADVENTURE_ACTIVITIES['fundamental-1'] = ADVENTURE_ACTIVITIES_FUNDAMENTAL_1;
 ADVENTURE_ACTIVITIES['fundamental-2'] = ADVENTURE_ACTIVITIES_FUNDAMENTAL_2;

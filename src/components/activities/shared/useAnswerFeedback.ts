@@ -121,12 +121,12 @@ export function optionStateClass(state: OptionState): string {
 export function optionStateLabel(state: OptionState): string {
   switch (state) {
     case 'correct':
-      return ' — certo!';
+      return ', certo!';
     case 'wrong':
     case 'eliminated':
-      return ' — não é essa';
+      return ', não é essa';
     case 'reveal':
-      return ' — resposta certa';
+      return ', resposta certa';
     default:
       return '';
   }

@@ -130,7 +130,7 @@ interface AdventureExtra {
 // Fases escolhidas pelo tema do mundo
 const ADVENTURE_EXTRAS: AdventureExtra[] = [
   {
-    level: 4, // Vila Inicial — Animais da Vila
+    level: 4, // Vila Inicial, Animais da Vila
     type: 'shadow-match',
     category: 'formas',
     title: 'Sombras da Vila',
@@ -142,7 +142,7 @@ const ADVENTURE_EXTRAS: AdventureExtra[] = [
     },
   },
   {
-    level: 9, // Vila Inicial — Montando Blocos
+    level: 9, // Vila Inicial, Montando Blocos
     type: 'build-pattern',
     category: 'coordenacao',
     title: 'Construa na Vila',

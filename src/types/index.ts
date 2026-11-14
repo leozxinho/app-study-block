@@ -7,8 +7,8 @@ export type AgeGroup =
   | 'maternal'
   | 'pre-escola-1'
   | 'pre-escola-2'
-  | 'fundamental-1' // 1º e 2º ano (6–7 anos)
-  | 'fundamental-2'; // 3º ao 5º ano (8–10 anos)
+  | 'fundamental-1' // 1º e 2º ano (6-7 anos)
+  | 'fundamental-2'; // 3º ao 5º ano (8-10 anos)
 
 export type ActivityCategory = 
   | 'matematica'

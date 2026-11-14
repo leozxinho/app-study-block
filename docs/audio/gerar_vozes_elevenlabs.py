@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Gera os MP3 de TODAS as falas do MineLearn com UMA voz da ElevenLabs
-("MineLearn – Narradora", criada no Voice Design).
+("MineLearn - Narradora", criada no Voice Design).
 
 Na raiz do projeto:
   export ELEVENLABS_API_KEY="sua-chave"      # ElevenLabs > Configurações > API Keys
@@ -10,7 +10,7 @@ Na raiz do projeto:
   python3 scripts/gerar_vozes_elevenlabs.py docs/audio/falas-voz-suave.csv --limite 30000
 
 Opções:
-  --voz NOME        nome da voz na sua conta (padrão: "MineLearn – Narradora")
+  --voz NOME        nome da voz na sua conta (padrão: "MineLearn - Narradora")
   --modelo ID       eleven_multilingual_v2 (padrão, 1 crédito/caractere)
                     eleven_flash_v2_5      (0,5 crédito/caractere, menos expressivo)
   --teste           só 8 falas variadas em public/audio/_teste/ (~250 créditos)
@@ -29,8 +29,8 @@ import argparse, csv, json, os, shutil, subprocess, sys, time, urllib.request, u
 
 p = argparse.ArgumentParser()
 p.add_argument("csv")
-p.add_argument("--voz", default="MineLearn – Narradora")
-p.add_argument("--voz-chefes", default="MineLearn – Chefão",
+p.add_argument("--voz", default="MineLearn - Narradora")
+p.add_argument("--voz-chefes", default="MineLearn - Chefão",
                help='voz das falas dos chefes (voz "C-chefes"); use "" para usar a narradora')
 p.add_argument("--modelo", default="eleven_multilingual_v2")
 p.add_argument("--saida", default="public/audio")
@@ -82,15 +82,17 @@ if a.simular: sys.exit(0)
 
 # ---- voz e saldo ----
 dados, _ = chamar("GET", "/v1/voices")
-vozes = {v["name"].strip(): v["voice_id"] for v in json.loads(dados)["voices"]}
-if a.voz not in vozes:
+# Nome sem diferença entre os tipos de traço (hífen, meia-risca e travessão)
+traco = lambda n: n.strip().replace("\u2013", "-").replace("\u2014", "-")
+vozes = {traco(v["name"]): v["voice_id"] for v in json.loads(dados)["voices"]}
+if traco(a.voz) not in vozes:
     sys.exit(f'Voz "{a.voz}" não encontrada. Vozes na conta: {", ".join(sorted(vozes))}')
-VOICE_ID = vozes[a.voz]
+VOICE_ID = vozes[traco(a.voz)]
 CHEFE_ID = VOICE_ID
 if a.voz_chefes and any(r["voz"].startswith("C") for r in pendentes):
-    if a.voz_chefes not in vozes:
+    if traco(a.voz_chefes) not in vozes:
         sys.exit(f'Voz dos chefes "{a.voz_chefes}" não encontrada. Vozes na conta: {", ".join(sorted(vozes))}')
-    CHEFE_ID = vozes[a.voz_chefes]
+    CHEFE_ID = vozes[traco(a.voz_chefes)]
     print(f'Chefes com a voz "{a.voz_chefes}" ({CHEFE_ID}).')
 dados, _ = chamar("GET", "/v1/user/subscription")
 sub = json.loads(dados)
@@ -106,7 +108,7 @@ for r in pendentes:
     if gasto + custo > teto:
         print(f"Parei antes de passar do limite ({teto:,} créditos)."); break
     vel = r.get("velocidade", "0%").replace("%", "")
-    speed = max(0.7, min(1.2, 1 + float(vel or 0) / 100))      # API aceita 0,7–1,2
+    speed = max(0.7, min(1.2, 1 + float(vel or 0) / 100))      # API aceita 0,7-1,2
     chefe = r["voz"].startswith("C")
     estilo = 0.5 if chefe else (0.35 if r["voz"].startswith("B") else 0.15)  # chefe teatral, mascote animada
     corpo = {"text": texto, "model_id": a.modelo,
