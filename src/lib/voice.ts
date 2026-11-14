@@ -81,6 +81,39 @@ function recordedFor(text: string, file?: string): string | null {
   return lineFile(speechText(text)) ?? lineFile(speechText(withoutHints(text)));
 }
 
+const OP_PIECE: Record<string, string> = { '+': 'mais', '-': 'menos', '×': 'vezes', x: 'vezes', '÷': 'dividido-por' };
+const numPiece = (n: string) => `voz/numeros/n-${n.padStart(3, '0')}.mp3`;
+const contaPiece = (name: string) => `voz/contas/${name}.mp3`;
+
+/**
+ * Conta sorteada montada com as peças gravadas (voz/numeros e voz/contas):
+ * "Quanto é 9 + 5?" → quanto-e, n-009, mais, n-005; "9 + 5 = ?" → n-009, mais, n-005, igual-quanto.
+ * null = não é um desses formatos. Quem chama confere se todas as peças existem.
+ */
+export function mathPieces(text: string): string[] | null {
+  const t = text.replace(/[\p{Extended_Pictographic}\u{FE0F}\u{200D}]/gu, '').replace(/\s+/g, ' ').trim();
+  const ask = t.match(/^Quanto é (\d{1,3}) ([+\-×x÷]) (\d{1,3})\?$/);
+  if (ask) return [contaPiece('quanto-e'), numPiece(ask[1]), contaPiece(OP_PIECE[ask[2]]), numPiece(ask[3])];
+  const eq = t.match(/^(\d{1,3}) ([+\-×x÷]) (\d{1,3}) = \?$/);
+  if (eq) return [numPiece(eq[1]), contaPiece(OP_PIECE[eq[2]]), numPiece(eq[3]), contaPiece('igual-quanto')];
+  return null;
+}
+
+/** Peças gravadas para o texto, só se TODAS existem. */
+function recordedPieces(text: string): string[] | null {
+  const pieces = mathPieces(text);
+  return pieces && pieces.every((f) => hasAudio(f)) ? pieces : null;
+}
+
+/** Toca várias falas gravadas emendadas (sem "a vez": a próxima fala interrompe, como speak). */
+function playRecordedList(list: string[]): void {
+  const next = (i: number) => {
+    if (i < list.length) playRecordedVoice(list[i], () => next(i + 1));
+    else playNextQueued();
+  };
+  next(0);
+}
+
 function playRecordedVoice(file: string, onEnd?: () => void): void {
   stopCurrent();
   const el = new Audio(audioUrl(file));
@@ -113,6 +146,12 @@ export function speak(text: string, { force = false, file }: { force?: boolean; 
   const recorded = recordedFor(text, file);
   if (recorded) {
     playRecordedVoice(recorded);
+    return;
+  }
+  // Sem a frase inteira gravada: tenta montar com as peças (contas sorteadas)
+  const pieces = recordedPieces(text);
+  if (pieces) {
+    playRecordedList(pieces);
     return;
   }
   if (!isVoiceSupported()) return;

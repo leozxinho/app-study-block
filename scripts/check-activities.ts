@@ -12,10 +12,12 @@
  */
 import { ADVENTURE_ACTIVITIES } from '../src/data/adventureActivities';
 import { generateAdventureLevels } from '../src/data/adventureWorlds';
-import { buildRounds, parseCounting, tasksPerRound, MIN_TASKS } from '../src/lib/activityParsers';
+import { buildRounds, parseCounting, parseWordBuilder, tasksPerRound, MIN_TASKS } from '../src/lib/activityParsers';
 import type { Adaptive } from '../src/lib/adaptive';
 import type { Activity } from '../src/types';
 import { inspect } from './auditActivities';
+import { readFileSync, existsSync } from 'node:fs';
+import { mathPieces, speechText } from '../src/lib/voice';
 
 const AGES = ['bercario', 'maternal', 'pre-escola-1', 'pre-escola-2', 'fundamental-1', 'fundamental-2'];
 const LEVELS: Adaptive[] = ['easier', 'normal', 'harder'];
@@ -43,6 +45,32 @@ function isFixed(a: Activity): boolean {
   return fixedCache.get(key)!;
 }
 
+// Voz gravada: mesmo critério de src/lib/voice.ts (frase inteira no manifest, ou montada com as peças)
+const manifest = existsSync('public/audio/manifest.json')
+  ? (JSON.parse(readFileSync('public/audio/manifest.json', 'utf8')) as { files: string[]; lines: Record<string, string> })
+  : { files: [], lines: {} };
+const audioFiles = new Set(manifest.files);
+const withoutHints = (t: string) => t.replace(/\s*\([^)]*\d[^)]*\)/g, '').trim();
+const wholeLine = (t: string) => [speechText(t), speechText(withoutHints(t))].some((k) => audioFiles.has(manifest.lines[k]));
+const voice = { whole: 0, pieces: 0, device: 0 };
+const deviceByFormat = new Map<string, number>();
+/** O que o cartão da atividade fala (igual aos componentes: alguns trocam ou limpam o texto). */
+function spokenText(r: Activity): string {
+  if (r.activity_type === 'math-mobs') return 'Quanto dá a conta?'; // MathMobsActivity: pergunta fixa
+  if (r.activity_type === 'word-builder') return parseWordBuilder(r).displayQuestion;
+  if (r.activity_type === 'counting') return parseCounting(r).displayQuestion;
+  return r.question;
+}
+function countVoice(r: Activity) {
+  const text = spokenText(r);
+  if (wholeLine(text)) return void voice.whole++;
+  const pieces = mathPieces(text);
+  if (pieces && pieces.every((f) => audioFiles.has(f))) return void voice.pieces++;
+  voice.device++;
+  const format = `${r.activity_type}: ${text.replace(/\d+/g, 'N')}`;
+  deviceByFormat.set(format, (deviceByFormat.get(format) ?? 0) + 1);
+}
+
 let rounds = 0;
 let phases = 0;
 for (const age of AGES) {
@@ -61,6 +89,7 @@ for (const age of AGES) {
           const list = buildRounds(a, adaptive);
           list.forEach((r, i) => {
             rounds++;
+            countVoice(r);
             tasks += tasksPerRound(r);
             inspect(r).problems.forEach((p) => add(where, `${adaptive}: "${r.question}": ${p}`));
             const twin = list.findIndex((o, j) => j < i && o.question === r.question);
@@ -79,6 +108,11 @@ for (const age of AGES) {
 }
 
 console.log(`Fases: ${phases} | rodadas conferidas: ${rounds} (${LEVELS.length} níveis × ${SAMPLES} montagens)`);
+const pct = (n: number) => `${((100 * n) / rounds).toFixed(1)}%`;
+console.log(`Voz da pergunta: gravada inteira ${voice.whole} (${pct(voice.whole)}) | montada com peças ${voice.pieces} (${pct(voice.pieces)}) | voz do aparelho ${voice.device} (${pct(voice.device)})`);
+if (process.argv.includes('--voz')) {
+  [...deviceByFormat].sort((a, b) => b[1] - a[1]).forEach(([f, n]) => console.log(`    ${n} × ${f}`));
+}
 if (!problems.size) console.log('OK: nenhum problema.');
 for (const [where, msgs] of problems) {
   console.log(`✗ ${where}`);
