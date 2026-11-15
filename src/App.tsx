@@ -7,6 +7,7 @@ import { ProgressGate } from './components/ui/ProgressGate';
 import { BlockLoader } from './components/ui/BlockLoader';
 import { authService } from './services/authService';
 import { MusicRouter } from './components/ui/MusicRouter';
+import { FullscreenRouter } from './components/ui/FullscreenRouter';
 import { ScreenTimeGuard } from './components/ui/ScreenTimeGuard';
 import { SubscriptionGuard } from './components/ui/SubscriptionGuard';
 import { loadAudioIndex } from './lib/audio/library';
@@ -60,6 +61,7 @@ function App() {
       <Router basename={ROUTER_BASENAME}>
         <RouteMeta />
         <MusicRouter />
+        <FullscreenRouter />
         <ScreenTimeGuard />
         <SubscriptionGuard />
         <ProgressGate>

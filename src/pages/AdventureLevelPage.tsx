@@ -10,6 +10,7 @@ import { MobMascot } from '../components/mobs';
 import { MuteButton } from '../components/ui/MuteButton';
 import { VoiceButton } from '../components/ui/VoiceButton';
 import { MusicButton } from '../components/ui/MusicButton';
+import { FullscreenButton } from '../components/ui/FullscreenButton';
 import { BossBattle, BossDefeat, type BossEvent } from '../components/adventure/BossBattle';
 import { DiamondRush } from '../components/adventure/DiamondRush';
 import { playVoiceSequence } from '../lib/voice';
@@ -495,6 +496,7 @@ function AdventureLevel() {
             <MusicButton className="land:w-10 land:h-10" />
             <VoiceButton className="land:w-10 land:h-10" />
             <MuteButton className="land:w-10 land:h-10" />
+            <FullscreenButton className="land:w-10 land:h-10" />
           </div>
         </div>
       </motion.div>

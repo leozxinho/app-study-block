@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { LogOut } from 'lucide-react';
 import { DailyStatus } from '../ui/DailyStatus';
 import { MusicButton } from '../ui/MusicButton';
+import { FullscreenButton } from '../ui/FullscreenButton';
 import { KidTabBar } from './KidTabBar';
 
 interface MinecraftHeaderProps {
@@ -37,6 +38,7 @@ export function MinecraftHeader({ studentName, showNav = true }: MinecraftHeader
             <div className="flex items-center gap-2">
               <DailyStatus />
               <MusicButton />
+              <FullscreenButton />
             </div>
           )}
 

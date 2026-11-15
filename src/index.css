@@ -538,3 +538,12 @@ body.has-tabbar { padding-bottom: calc(68px + env(safe-area-inset-bottom)); }
 @media (prefers-reduced-motion: reduce) {
   .hero-hop { animation: none; }
 }
+
+/* Altura real da tela no celular: 100vh conta a barra do navegador e corta o fim da tela; 100dvh não. */
+.min-h-screen { min-height: 100vh; min-height: 100dvh; }
+
+/* viewport-fit=cover: de lado, o recorte da câmera fica na lateral; o conteúdo não entra embaixo dele. */
+#root {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
