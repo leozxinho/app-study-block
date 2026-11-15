@@ -122,7 +122,7 @@ export function PrivacyPage() {
       <ul>
         <li><strong>Firebase (Google)</strong>: login e banco de dados das contas e do progresso.</li>
         <li><strong>Stripe</strong>: pagamento da assinatura.</li>
-        <li><strong>Vercel</strong>: hospedagem do site.</li>
+        <li><strong>GitHub Pages (GitHub)</strong>: hospedagem do site.</li>
         <li><strong>Google</strong>: login com Google (se você escolher) e as fontes de letra do site.</li>
       </ul>
       <p>

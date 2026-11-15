@@ -9,7 +9,7 @@ fases, XP, troféus, ofensiva, meta do dia e chefes. O responsável cria a conta
 - React 18 + TypeScript + Vite, Tailwind CSS, Framer Motion
 - Firebase: Authentication (e-mail/senha, Google, 2FA por app autenticador) e Firestore
 - Cloud Functions só para cobrança (Stripe), quando ativada
-- Site publicado no GitHub Pages (`.github/workflows/pages.yml`); também roda na Vercel (`vercel.json`)
+- Site publicado no GitHub Pages (`.github/workflows/pages.yml`)
 
 ## Rodar no computador
 

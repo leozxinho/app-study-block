@@ -1,5 +1,5 @@
 /**
- * Pasta onde o site está publicado: "/" (domínio próprio, Vercel) ou "/app-study-block/" (GitHub Pages).
+ * Pasta onde o site está publicado: "/" (domínio próprio) ou "/app-study-block/" (GitHub Pages).
  * Vem de VITE_BASE_PATH no build (vite.config.ts). Use para caminhos de arquivos em public/ e links de fora do router.
  */
 export const BASE_URL = import.meta.env.BASE_URL;

@@ -4,8 +4,8 @@
  * - dist/index.html, dist/privacidade/index.html, dist/termos/index.html → HTML estático com título,
  *   descrição, canonical e og:* de cada página (a landing também com JSON-LD). Vão sem o JavaScript
  *   do app (só HTML + CSS; os botões são links).
- * - dist/app.html   → o shell vazio de antes (noindex), servido para as outras rotas do app
- *   (vercel.json e public/_redirects), para não piscar a landing no jogo.
+ * - dist/app.html e dist/404.html → o shell vazio do app (noindex). O GitHub Pages entrega o 404.html
+ *   nas outras rotas (/inicio, /responsavel...), e o React Router abre a tela certa.
  * - dist/sitemap.xml e dist/robots.txt com o domínio de VITE_SITE_URL.
  */
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
