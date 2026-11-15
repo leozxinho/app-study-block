@@ -30,7 +30,7 @@ export function isFirebaseConfigured(): boolean {
   );
 }
 
-/** Domínio interno do e-mail das contas de criança (nenhum e-mail é enviado). Também conferido no firestore.rules. */
+/** Domínio interno do e-mail das contas de criança (nenhum e-mail é enviado). Também conferido no firebase/firestore.rules. */
 export const CHILD_EMAIL_DOMAIN = import.meta.env.VITE_CHILD_EMAIL_DOMAIN || 'crianca.minelearn.app';
 export const childEmail = (username: string) => `${username}@${CHILD_EMAIL_DOMAIN}`;
 export const isChildEmail = (email: string | null | undefined) => !!email && email.endsWith(`@${CHILD_EMAIL_DOMAIN}`);

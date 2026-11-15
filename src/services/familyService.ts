@@ -1,6 +1,6 @@
 /**
  * Área dos Pais: crianças do responsável logado, cadastro, "liberar tudo" e "zerar".
- * Com Firebase (plano Spark, sem Cloud Functions), o firestore.rules confere o vínculo responsável → criança:
+ * Com Firebase (plano Spark, sem Cloud Functions), o firebase/firestore.rules confere o vínculo responsável → criança:
  * a ficha children/{id} (gravada pela própria conta da criança) aponta o responsável, e o responsável
  * confirma a criança em guardians/{id}.childIds (no máximo 2). Só vale quem está nos dois lugares.
  * Sem Firebase (demonstração), os dados ficam neste navegador.

@@ -2,7 +2,7 @@
  * Modo local (sem Firebase): responsáveis e crianças guardados neste navegador (localStorage).
  * O progresso de cada criança fica em src/lib/store (adapter local), também no localStorage.
  * Serve para testar o fluxo; NÃO é seguro (qualquer um com acesso ao aparelho vê os dados).
- * Com Firebase, tudo isso vem do servidor (ver functions/ e firestore.rules).
+ * Com Firebase, tudo isso vem do servidor (ver functions/ e firebase/firestore.rules).
  */
 import { readJSON, writeJSON } from '../lib/storage';
 import type { AgeGroup } from '../types';

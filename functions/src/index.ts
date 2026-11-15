@@ -1,6 +1,6 @@
 /**
  * Cloud Functions do StudyBlock: só a assinatura (Stripe). Exigem o plano Blaze.
- * O cadastro das crianças, o zerar e os ajustes rodam sem servidor (firestore.rules), no plano Spark.
+ * O cadastro das crianças, o zerar e os ajustes rodam sem servidor (firebase/firestore.rules), no plano Spark.
  *
  * - createCheckout: abre o pagamento; customerPortal: cartão, faturas, cancelar;
  * - stripeWebhook: recebe os avisos do Stripe e grava subscriptions/{responsável}.

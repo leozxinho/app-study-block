@@ -62,7 +62,7 @@ function appNameFor(user: FirebaseUser): string {
 /**
  * Usuário do app a partir do Firebase. Conta de criança = e-mail no domínio interno
  * (só o responsável cria, na Área dos Pais); nome e faixa etária vêm da ficha children/{uid}.
- * Quem libera o quê é o firestore.rules, não esta função.
+ * Quem libera o quê é o firebase/firestore.rules, não esta função.
  */
 async function fromFirebase(user: FirebaseUser): Promise<User> {
   const isChild = isChildEmail(user.email);

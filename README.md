@@ -1,51 +1,54 @@
+# StudyBlock
 
-# React + TypeScript + Vite
+Jogo educativo para crianças estudarem em casa, acompanhado pelos pais. Estilo Duolingo, com mundos,
+fases, XP, troféus, ofensiva, meta do dia e chefes. O responsável cria a conta de cada criança
+(até 2) e acompanha o progresso na Área dos Pais.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Tecnologias
 
-Currently, two official plugins are available:
+- React 18 + TypeScript + Vite, Tailwind CSS, Framer Motion
+- Firebase: Authentication (e-mail/senha, Google, 2FA por app autenticador) e Firestore
+- Cloud Functions só para cobrança (Stripe), quando ativada
+- Deploy do site na Vercel (`vercel.json`)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Rodar no computador
 
-## Expanding the ESLint configuration
+Requisitos: Node 22.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```sh
+npm install
+cp .env.example .env   # preencha com a configuração do app web do Firebase
+npm run dev            # http://localhost:5173
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+Sem as variáveis `VITE_FIREBASE_*`, o app roda em **modo local**: contas e progresso ficam só no navegador.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Scripts
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+| Comando | O que faz |
+| --- | --- |
+| `npm run dev` | servidor de desenvolvimento |
+| `npm run build` | manifesto de áudio, checagem de tipos, build e pré-render das páginas públicas |
+| `npm run lint` | ESLint |
+| `npm run check:activities` | confere as atividades do jogo |
+| `npm run audio` | refaz `public/audio/manifest.json` |
+| `npm run vozes:*` | gera as falas com ElevenLabs (precisa de `ELEVENLABS_API_KEY` no `.env.local`) |
+
+## Pastas
+
+| Pasta | Conteúdo |
+| --- | --- |
+| `src/` | app (páginas, componentes, serviços, dados das atividades) |
+| `public/` | arquivos servidos como estão (áudios, ícones) |
+| `firebase/` | regras e índices do Firestore |
+| `functions/` | Cloud Functions (Stripe) |
+| `scripts/` | build, auditoria das atividades e geração de vozes |
+| `docs/` | guias e auditorias |
+
+## Firebase
+
+Configuração, regras de acesso, 2FA e cobrança: [docs/firebase.md](docs/firebase.md).
+
+```sh
+firebase deploy --only firestore   # publica firebase/firestore.rules
 ```

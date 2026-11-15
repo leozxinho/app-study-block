@@ -14,7 +14,7 @@ Só a cobrança (Stripe) usa Cloud Functions e exige o plano Blaze.
 | Progresso da criança | Firestore `childState/{uid}`: `state` (JSON), `settings`, `revision` |
 | Assinatura (quando ativar) | Firestore `subscriptions/{uid do responsável}` (só o webhook grava) |
 | Stripe | Cloud Functions em `functions/src/index.ts` (Blaze) |
-| Regras de acesso | `firestore.rules` |
+| Regras de acesso | `firebase/firestore.rules` |
 
 Conta de criança = e-mail `<login>@crianca.minelearn.app` (nenhum e-mail é enviado). O responsável cria
 a conta numa instância descartável do Firebase (não perde a própria sessão); a conta da criança grava a
@@ -44,7 +44,7 @@ No Stripe (Developers > Webhooks), aponte para a URL da função `stripeWebhook`
 
 ## Mudar o domínio das crianças
 
-`VITE_CHILD_EMAIL_DOMAIN` (app), `CHILD_EMAIL_DOMAIN` (functions/.env) e as duas linhas marcadas em `firestore.rules`.
+`VITE_CHILD_EMAIL_DOMAIN` (app), `CHILD_EMAIL_DOMAIN` (functions/.env) e as duas linhas marcadas em `firebase/firestore.rules`.
 
 ## Verificação em duas etapas (responsável, opcional)
 

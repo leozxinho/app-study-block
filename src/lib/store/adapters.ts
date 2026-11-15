@@ -59,7 +59,7 @@ export function docFromRecord(record: ChildStateRecord | undefined): AccountDoc 
 
 /**
  * Documento da conta no Firestore: childState/{id da criança}.
- * As regras (firestore.rules) deixam a criança gravar só a própria linha, só os campos
+ * As regras (firebase/firestore.rules) deixam a criança gravar só a própria linha, só os campos
  * state/revision/updatedAt e só com a revisão + 1. Os ajustes do responsável ficam no campo
  * settings, que a criança não consegue mudar.
  * Grava só se a revisão não mudou desde a leitura; se mudou (responsável zerou, outro aparelho
