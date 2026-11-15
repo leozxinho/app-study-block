@@ -20,6 +20,9 @@ if (!env.VITE_SITE_URL && !process.env.VITE_SITE_URL) {
   console.warn(`⚠️  VITE_SITE_URL não definido: usando ${FALLBACK} no canonical, og:url e sitemap.`);
 }
 
+// Pasta do site (igual ao base do vite.config.ts): "/" ou "/app-study-block/" no GitHub Pages
+const BASE = `/${(process.env.VITE_BASE_PATH || env.VITE_BASE_PATH || '/').replace(/^\/+|\/+$/g, '')}/`.replace(/^\/\/$/, '/');
+
 const ssr = await import(pathToFileURL(resolve('dist-ssr/prerender.js')).href);
 const html = readFileSync('dist/index.html', 'utf8');
 if (!html.includes('<!--app-->') || !html.includes('<!--seo-->')) throw new Error('dist/index.html sem os marcadores <!--app--> / <!--seo-->');
@@ -60,10 +63,15 @@ function seoFor(page) {
 }
 
 // Shell das outras rotas: sem conteúdo e fora do buscador
-writeFileSync('dist/app.html', html.replace('<!--seo-->', '<meta name="robots" content="noindex" />').replace('<!--app-->', ''));
+const appShell = html.replace('<!--seo-->', '<meta name="robots" content="noindex" />').replace('<!--app-->', '');
+writeFileSync('dist/app.html', appShell);
+// GitHub Pages não tem reescrita de rotas: endereço desconhecido (/inicio, /responsavel...) cai no 404.html,
+// que é o próprio app (o React Router abre a tela certa). .nojekyll: publica as pastas como estão.
+writeFileSync('dist/404.html', appShell);
+writeFileSync('dist/.nojekyll', '');
 
 // As páginas públicas não precisam do JavaScript do app: sem o script, não baixam React, router, Firebase etc.
-const appScript = /\s*<script type="module"[^>]*src="\/assets\/[^"]+\.js"><\/script>/;
+const appScript = /\s*<script type="module"[^>]*src="[^"]*\/assets\/[^"]+\.js"><\/script>/;
 if (!appScript.test(html)) throw new Error('script do app não encontrado no dist/index.html');
 
 // Landing: sem o app, a música de entrada toca por este script (os navegadores só deixam depois do 1º toque).
@@ -74,7 +82,7 @@ const LANDING_MUSIC = `
         try {
           if (localStorage.getItem('minelearn_music') === 'off' || localStorage.getItem('minelearn_muted') === '1') return;
         } catch (e) {}
-        var music = new Audio('/audio/musica/entrada.mp3');
+        var music = new Audio('${BASE}audio/musica/entrada.mp3');
         music.loop = true;
         music.volume = 0.4;
         var start = function () {

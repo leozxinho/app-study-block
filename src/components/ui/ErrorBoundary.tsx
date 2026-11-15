@@ -30,7 +30,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
         <p className="text-white text-lg max-w-md">Vamos voltar para o começo e tentar de novo.</p>
         <button
           type="button"
-          onClick={() => window.location.assign('/')}
+          onClick={() => window.location.assign(import.meta.env.BASE_URL)}
           className="font-minecraft text-sm px-6 py-3 bg-brand-green hover:bg-brand-dark-green text-white border-b-4 border-brand-dark-green"
         >
           Recomeçar

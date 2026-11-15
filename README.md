@@ -9,7 +9,7 @@ fases, XP, troféus, ofensiva, meta do dia e chefes. O responsável cria a conta
 - React 18 + TypeScript + Vite, Tailwind CSS, Framer Motion
 - Firebase: Authentication (e-mail/senha, Google, 2FA por app autenticador) e Firestore
 - Cloud Functions só para cobrança (Stripe), quando ativada
-- Deploy do site na Vercel (`vercel.json`)
+- Site publicado no GitHub Pages (`.github/workflows/pages.yml`); também roda na Vercel (`vercel.json`)
 
 ## Rodar no computador
 
@@ -44,6 +44,16 @@ Sem as variáveis `VITE_FIREBASE_*`, o app roda em **modo local**: contas e prog
 | `functions/` | Cloud Functions (Stripe) |
 | `scripts/` | build, auditoria das atividades e geração de vozes |
 | `docs/` | guias e auditorias |
+
+## Publicar (GitHub Pages)
+
+Cada push na `main` gera o site e publica em `https://leozxinho.github.io/app-study-block/`
+(workflow `.github/workflows/pages.yml`). A configuração do Firebase do build vem de `.env.production`.
+
+- O site fica na pasta `/app-study-block/`: o build usa `VITE_BASE_PATH` (ver `src/lib/base.ts`).
+- Rotas do app (`/inicio`, `/responsavel`...) abrem pelo `404.html`, que é o próprio app.
+- Domínio próprio: em *Settings > Secrets and variables > Actions > Variables*, crie `VITE_BASE_PATH=/`
+  e `VITE_SITE_URL=https://seu-dominio`, e configure o domínio em *Settings > Pages*.
 
 ## Firebase
 

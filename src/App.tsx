@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { ROUTER_BASENAME } from './lib/base';
 import { MotionConfig } from 'framer-motion';
 import { RouteMeta } from './components/ui/RouteMeta';
 import { ProgressGate } from './components/ui/ProgressGate';
@@ -56,7 +57,7 @@ function HomeRoute() {
 function App() {
   return (
     <MotionConfig reducedMotion="never">
-      <Router>
+      <Router basename={ROUTER_BASENAME}>
         <RouteMeta />
         <MusicRouter />
         <ScreenTimeGuard />

@@ -146,7 +146,7 @@ export const authService = {
 
     const { user } = await createUserWithEmailAndPassword(authOf(GUARDIAN_APP), email, password);
     await updateProfile(user, { displayName: name });
-    await sendEmailVerification(user, { url: `${window.location.origin}/responsavel` }).catch(() => {});
+    await sendEmailVerification(user, { url: `${window.location.origin}${import.meta.env.BASE_URL}responsavel` }).catch(() => {});
     await setActiveAccount(GUARDIAN_APP);
     return switchAccount(await fromFirebase(user));
   },
@@ -325,7 +325,7 @@ export const authService = {
   async resendVerification(): Promise<void> {
     const user = activeAuth()?.currentUser;
     if (!user) throw new Error('Entre na conta do responsável.');
-    await sendEmailVerification(user, { url: `${window.location.origin}/responsavel` });
+    await sendEmailVerification(user, { url: `${window.location.origin}${import.meta.env.BASE_URL}responsavel` });
   },
 
   /**

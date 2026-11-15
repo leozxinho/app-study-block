@@ -11,7 +11,7 @@ interface AudioManifest {
   lines: Record<string, string>;
 }
 
-const BASE = '/audio/';
+const BASE = `${import.meta.env.BASE_URL}audio/`;
 let files = new Set<string>();
 let lines: Record<string, string> = {};
 let loading: Promise<void> | null = null;
