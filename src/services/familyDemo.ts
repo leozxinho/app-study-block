@@ -7,7 +7,7 @@
 import { readJSON, writeJSON } from '../lib/storage';
 import type { AgeGroup } from '../types';
 
-const KEY = 'minelearn_demo_family';
+const KEY = 'studyblock_demo_family';
 
 export interface DemoGuardian {
   id: string;

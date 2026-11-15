@@ -6,7 +6,7 @@
  */
 export const TUTORIAL_VIDEO_URL = '';
 
-const KEY = (userId: string) => `minelearn_tutorial_seen:${userId}`;
+const KEY = (userId: string) => `studyblock_tutorial_seen:${userId}`;
 
 export function hasSeenTutorial(userId: string): boolean {
   try {

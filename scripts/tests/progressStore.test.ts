@@ -8,7 +8,6 @@ import {
   type AccountDoc,
   type StoreAdapter,
 } from '../../src/lib/store/progressStore.ts';
-import { importLegacyKeys } from '../../src/lib/store/legacy.ts';
 
 /** Adaptador em memória que registra as gravações. */
 function memoryAdapter(initial: Record<string, AccountDoc> = {}) {
@@ -122,42 +121,4 @@ test('documento estranho no adaptador conta como vazio', async () => {
   const store = createProgressStore({ local: local.adapter });
   await store.activate(null);
   assert.equal(store.read('progress', 'nada'), 'nada');
-});
-
-/** Storage em memória (formato do localStorage). */
-function memoryStorage(entries: Record<string, string>): Storage {
-  const map = new Map(Object.entries(entries));
-  const storage = {
-    getItem: (k: string) => map.get(k) ?? null,
-    setItem: (k: string, v: string) => void map.set(k, v),
-    removeItem: (k: string) => void map.delete(k),
-    clear: () => map.clear(),
-    key: (i: number) => [...map.keys()][i] ?? null,
-    get length() {
-      return map.size;
-    },
-  };
-  return new Proxy(storage, { ownKeys: () => [...map.keys()], getOwnPropertyDescriptor: () => ({ enumerable: true, configurable: true }) }) as unknown as Storage;
-}
-
-test('dados antigos viram fatias da primeira conta e as chaves antigas somem', async () => {
-  const storage = memoryStorage({
-    minecraft_edu_progress: JSON.stringify({ xp: 120 }),
-    minelearn_game_stats: JSON.stringify({ playDays: ['2026-11-01'] }),
-    'minecraft_edu_adventure_progress:maternal': JSON.stringify({ levels: { 1: { status: 'completed' } } }),
-    minelearn_worlds_unlocked: '1',
-    minecraft_edu_age_group: 'maternal',
-  });
-  const slices = importLegacyKeys(storage);
-  assert.deepEqual(slices?.progress, { xp: 120 });
-  assert.deepEqual((slices?.adventure as Record<string, unknown>).maternal, { levels: { 1: { status: 'completed' } } });
-  assert.deepEqual(slices?.settings, { unlockAll: true });
-  assert.equal(storage.getItem('minecraft_edu_progress'), null);
-  assert.equal(storage.getItem('minecraft_edu_age_group'), 'maternal', 'faixa escolhida continua');
-  assert.equal(importLegacyKeys(storage), null, 'só importa uma vez');
-
-  const local = memoryAdapter();
-  const store = createProgressStore({ local: local.adapter, importLegacy: () => slices });
-  await store.activate(null);
-  assert.deepEqual(store.read('progress', null), { xp: 120 });
 });

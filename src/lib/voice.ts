@@ -7,7 +7,7 @@ import { duckMusic } from './audio/music';
 // texto sem gravação toca uma frase gravada parecida (similarText) ou fica em silêncio.
 // Liga/desliga fica salvo neste navegador.
 
-const KEY = 'minelearn_voice';
+const KEY = 'studyblock_voice';
 const listeners = new Set<() => void>();
 
 function readPref(): boolean {

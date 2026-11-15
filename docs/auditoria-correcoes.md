@@ -1,7 +1,7 @@
 # Correções da auditoria de 14/11/2026
 
 Branch `fix/auditoria-2026-11`, com um commit por fase e sem push. A auditoria original está em
-`docs/auditoria-minelearn-2026-11-14.md`.
+`docs/auditoria-2026-11-14.md`.
 
 ## Commits
 
@@ -151,7 +151,7 @@ Todos estes passam:
    - Trocar os nomes exige regravar 27 falas e as apresentações dos chefes 7, 9 e 10 e dos mundos 7 e 9.
    - Os desenhos dos mobs (`mobSprites.ts`) também lembram o jogo.
    - O que é só código (`MinecraftButton`, `font-minecraft`, as chaves `minecraft_edu_*`) não aparece para o usuário. As chaves não devem ser renomeadas, porque isso apagaria o progresso salvo.
-2. **`VITE_SITE_URL`:** a variável foi criada no `.env.example` com `https://minelearn.app`, que é um palpite a partir do domínio das contas de criança. Configure o domínio real na Vercel. Sem ela, o build avisa e usa esse valor.
+2. **`VITE_SITE_URL`:** a variável foi criada no `.env.example` com `https://studyblock.com.br`, que é um palpite a partir do domínio das contas de criança. Configure o domínio real na Vercel. Sem ela, o build avisa e usa esse valor.
 3. ~~`tsx`~~: adicionado como devDependency; `npm run check:activities` usa o `tsx` do projeto.
 4. ~~Órfãos do player antigo~~: `ActivityProgress.tsx` e `RewardAnimation.tsx` apagados.
 5. **Relógio e leitura:** dados, parsers e componentes foram mantidos, mas não estão em nenhuma fase.

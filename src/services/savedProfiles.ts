@@ -5,7 +5,7 @@
  */
 import { readJSON, writeJSON } from '../lib/storage';
 
-const KEY = 'minelearn_saved_children';
+const KEY = 'studyblock_saved_children';
 const MAX = 8;
 
 export interface SavedProfile {

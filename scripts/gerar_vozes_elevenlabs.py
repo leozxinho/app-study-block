@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Gera os MP3 das falas do MineLearn com as vozes da ElevenLabs:
-narradora/mascote/pais com "MineLearn - Narradora" e os chefes com uma voz grave própria.
+Gera os MP3 das falas do StudyBlock com as vozes da ElevenLabs:
+narradora/mascote/pais com "StudyBlock - Narradora" e os chefes com uma voz grave própria.
 
 Chave da API (uma vez): crie o arquivo .env.local na raiz do projeto com a linha
   ELEVENLABS_API_KEY=sua-chave              # ElevenLabs > Configurações > API Keys
@@ -19,9 +19,9 @@ Na raiz do projeto:
   python3 scripts/gerar_vozes_elevenlabs.py docs/audio/falas-voz-suave.csv --secao 7.1 --limite 2000
 
 Opções:
-  --voz NOME        voz da narradora/mascote/pais (padrão: "MineLearn - Narradora")
+  --voz NOME        voz da narradora/mascote/pais (padrão: "StudyBlock - Narradora")
   --voz-chefes NOME voz dos chefes (linhas com voz "C-..."), nome ou voice_id
-                    (padrão: "MineLearn - Chefão"; sem ela na conta, o script avisa)
+                    (padrão: "StudyBlock - Chefão"; sem ela na conta, o script avisa)
   --grave-chefes F  engrossa a voz dos chefes com o ffmpeg (1 = sem mudança;
                     0.85 = uns 3 semitons mais grave; padrão 0.85). Não muda a velocidade.
   --listar-vozes    mostra as vozes da conta (nome, gênero, idade, sotaque) e sai
@@ -44,8 +44,8 @@ import argparse, csv, json, os, shutil, subprocess, sys, time, urllib.request, u
 
 p = argparse.ArgumentParser()
 p.add_argument("csv", nargs="?")
-p.add_argument("--voz", default="MineLearn - Narradora")
-p.add_argument("--voz-chefes", default="MineLearn - Chefão")
+p.add_argument("--voz", default="StudyBlock - Narradora")
+p.add_argument("--voz-chefes", default="StudyBlock - Chefão")
 p.add_argument("--grave-chefes", type=float, default=0.85)
 p.add_argument("--listar-vozes", action="store_true")
 p.add_argument("--modelo", default="eleven_multilingual_v2")

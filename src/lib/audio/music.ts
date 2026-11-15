@@ -9,7 +9,7 @@ import { isMuted, subscribeMuted } from '../sounds';
  * Sem o arquivo (ou com som/música desligados), fica em silêncio.
  */
 
-const KEY = 'minelearn_music';
+const KEY = 'studyblock_music';
 const VOLUME = 0.4;
 const DUCKED = 0.1;
 const FADE_MS = 500;

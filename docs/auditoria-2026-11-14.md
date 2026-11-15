@@ -1,4 +1,4 @@
-# Auditoria MineLearn: 14/11/2026
+# Auditoria StudyBlock: 14/11/2026
 
 Feita no ambiente local (`http://localhost:5173`), lendo o código que o Vite
 serve e jogando no navegador. Os dados locais foram restaurados depois dos testes.
@@ -33,7 +33,7 @@ serve e jogando no navegador. Os dados locais foram restaurados depois dos teste
 1. **SEO: a página pública não é lida pelo Google.**
    - O HTML entregue é só `<div id="root"></div>`: todo o texto da landing
      aparece via JavaScript.
-   - O `<title>` é "MineLearn" em todas as rotas.
+   - O `<title>` é "StudyBlock" em todas as rotas.
    - Faltam `canonical` e `og:image`.
    - Não existe `sitemap.xml` (a URL devolve o HTML do app), e o `robots.txt`
      não aponta para um sitemap.

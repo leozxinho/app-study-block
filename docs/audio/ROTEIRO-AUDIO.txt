@@ -1,9 +1,9 @@
 =====================================================================
-MINELEARN: ROTEIRO DE ÁUDIO (sons, músicas e falas)
+STUDYBLOCK: ROTEIRO DE ÁUDIO (sons, músicas e falas)
 =====================================================================
 Versão 1, 13/11/2026
 
-Este roteiro lista TODO o áudio que o MineLearn usa hoje e o que falta
+Este roteiro lista TODO o áudio que o StudyBlock usa hoje e o que falta
 criar, com nome de arquivo, onde toca, duração e direção para quem vai
 produzir (músico, sonoplasta e locutores).
 
@@ -370,7 +370,7 @@ Regras para todas:
 --- 5.1 Telas gerais -----------------------------------------------
 
 musica/tema-principal.mp3  (tela inicial, entrar, início)
-  BPM 100-110, Dó maior. Loop 90 s. É a "cara" do MineLearn: melodia
+  BPM 100-110, Dó maior. Loop 90 s. É a "cara" do StudyBlock: melodia
   assobiável, otimista, marimba + ukulele + baixo de 8 bits + palmas.
   Entregar também: tema-principal-curto.mp3 (15 s com final) para
   vídeos e divulgação.
@@ -397,7 +397,7 @@ musica/area-dos-pais.mp3  (opcional; Área dos Pais)
   Sugestão: deixar desligada por padrão nessa área.
 
 --- 5.2 Um tema por mundo (tela das fases) -------------------------
-Mesma melodia-base curta ("motivo do MineLearn", 4 notas) aparecendo
+Mesma melodia-base curta ("motivo do StudyBlock", 4 notas) aparecendo
 em cada tema com outra roupagem; assim os mundos soam diferentes mas
 da mesma família. Andamento 80-95 BPM (calmo para pensar).
 
@@ -435,7 +435,7 @@ musica/prova-chefe.mp3  (prova contra o chefe, fase 10 de cada mundo)
   (prova-chefe-01.mp3 ... -10.mp3). Se não der, 1 versão só.
 
 musica/vitoria.mp3  (fim de fase, modal com estrelas)
-  6-8 s, sem loop: jingle de vitória com o motivo do MineLearn.
+  6-8 s, sem loop: jingle de vitória com o motivo do StudyBlock.
 
 musica/vitoria-chefe.mp3  (venceu o chefe / mundo concluído)
   10-12 s, sem loop: versão grande da vitória.
@@ -658,7 +658,7 @@ Ao gerar novas atividades, rode o script de exportação de novo: as
 perguntas novas ganham número novo no fim da lista.
 
 --- 7.9 Boas-vindas e tutorial para os pais (voz D) -----------------
-voz/pais/boas-vindas.mp3, "Bem-vindo ao MineLearn!"
+voz/pais/boas-vindas.mp3, "Bem-vindo ao StudyBlock!"
 voz/pais/tutorial-0.mp3, "Uma plataforma de atividades educativas em um mundo de blocos. Veja em um minuto como a criança joga e como você acompanha."
 voz/pais/tutorial-1.mp3, "Na Área dos Pais, cadastre cada criança com nome, idade, login e senha. A criança entra com o login dela e as atividades se ajustam à idade."
 voz/pais/tutorial-2.mp3, "São cem fases em dez mundos. Cada fase tem pelo menos cinco perguntas, e a criança ganha até três estrelas conforme acerta de primeira."

@@ -38,8 +38,6 @@ export interface StoreOptions {
   remote?: StoreAdapter | null;
   /** Espera antes de gravar no servidor, para juntar várias mudanças (ms). */
   remoteDelayMs?: number;
-  /** Importa dados de versões antigas (uma vez) quando a conta ainda não tem documento. */
-  importLegacy?: () => Record<string, unknown> | null;
   onError?: (action: string, error: unknown) => void;
 }
 
@@ -57,7 +55,7 @@ export function isAccountDoc(value: unknown): value is AccountDoc {
 }
 
 export function createProgressStore(options: StoreOptions) {
-  const { local, remote = null, remoteDelayMs = 800, importLegacy, onError = () => {} } = options;
+  const { local, remote = null, remoteDelayMs = 800, onError = () => {} } = options;
 
   let accountId = GUEST_ID;
   let doc: AccountDoc = emptyDoc();
@@ -126,8 +124,6 @@ export function createProgressStore(options: StoreOptions) {
       if (gen !== generation) return; // outra troca de conta começou no meio
       if (!isAccountDoc(found)) {
         found = emptyDoc();
-        const legacy = nextId === GUEST_ID ? importLegacy?.() : null;
-        if (legacy) found.slices = legacy;
         doc = found;
         loaded = true;
         status = 'ready';

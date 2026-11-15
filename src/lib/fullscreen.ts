@@ -8,7 +8,7 @@
  */
 import { useSyncExternalStore } from 'react';
 
-const PREF_KEY = 'minelearn_fullscreen';
+const PREF_KEY = 'studyblock_fullscreen';
 
 type FsDocument = Document & { webkitFullscreenElement?: Element | null; webkitExitFullscreen?: () => Promise<void> };
 type FsElement = HTMLElement & { webkitRequestFullscreen?: (options?: FullscreenOptions) => Promise<void> };

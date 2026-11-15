@@ -1,7 +1,7 @@
 import { doc, getDoc, runTransaction, serverTimestamp, type Firestore } from 'firebase/firestore';
 import { isAccountDoc, StoreConflictError, type AccountDoc, type StoreAdapter } from './progressStore';
 
-export const LOCAL_DOC_PREFIX = 'minelearn_state:';
+export const LOCAL_DOC_PREFIX = 'studyblock_state:';
 
 /** Documento da conta no navegador (uma chave por conta). */
 export function createLocalAdapter(storage: Storage | null = typeof localStorage === 'undefined' ? null : localStorage): StoreAdapter {

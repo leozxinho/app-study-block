@@ -5,7 +5,7 @@
  * Firebase e outros endereços externos não passam por aqui.
  * BASE = pasta do site ("/" ou "/app-study-block/" no GitHub Pages), tirada do escopo do service worker.
  */
-const VERSION = 'minelearn-v3';
+const VERSION = 'studyblock-v1';
 const BASE = new URL(self.registration.scope).pathname;
 const SHELL = [BASE + 'app.html', BASE + 'manifest.webmanifest', BASE + 'icons/icon-192.png'];
 

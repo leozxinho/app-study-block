@@ -16,7 +16,7 @@ Só a cobrança (Stripe) usa Cloud Functions e exige o plano Blaze.
 | Stripe | Cloud Functions em `functions/src/index.ts` (Blaze) |
 | Regras de acesso | `firebase/firestore.rules` |
 
-Conta de criança = e-mail `<login>@crianca.minelearn.app` (nenhum e-mail é enviado). O responsável cria
+Conta de criança = e-mail `<login>@crianca.studyblock.app` (nenhum e-mail é enviado). O responsável cria
 a conta numa instância descartável do Firebase (não perde a própria sessão); a conta da criança grava a
 ficha apontando o responsável, e o responsável confirma em `guardians`. As regras só aceitam o vínculo
 com os dois lados, então ninguém vira "criança" de outro responsável sem ele confirmar.

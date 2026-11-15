@@ -75,12 +75,12 @@ const appScript = /\s*<script type="module"[^>]*src="[^"]*\/assets\/[^"]+\.js"><
 if (!appScript.test(html)) throw new Error('script do app não encontrado no dist/index.html');
 
 // Landing: sem o app, a música de entrada toca por este script (os navegadores só deixam depois do 1º toque).
-// Respeita as escolhas salvas no app (minelearn_music = off, minelearn_muted = 1).
+// Respeita as escolhas salvas no app (studyblock_music = off, studyblock_muted = 1).
 const LANDING_MUSIC = `
     <script>
       (function () {
         try {
-          if (localStorage.getItem('minelearn_music') === 'off' || localStorage.getItem('minelearn_muted') === '1') return;
+          if (localStorage.getItem('studyblock_music') === 'off' || localStorage.getItem('studyblock_muted') === '1') return;
         } catch (e) {}
         var music = new Audio('${BASE}audio/musica/entrada.mp3');
         music.loop = true;

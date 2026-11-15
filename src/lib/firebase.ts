@@ -31,7 +31,7 @@ export function isFirebaseConfigured(): boolean {
 }
 
 /** Domínio interno do e-mail das contas de criança (nenhum e-mail é enviado). Também conferido no firebase/firestore.rules. */
-export const CHILD_EMAIL_DOMAIN = import.meta.env.VITE_CHILD_EMAIL_DOMAIN || 'crianca.minelearn.app';
+export const CHILD_EMAIL_DOMAIN = import.meta.env.VITE_CHILD_EMAIL_DOMAIN || 'crianca.studyblock.app';
 export const childEmail = (username: string) => `${username}@${CHILD_EMAIL_DOMAIN}`;
 export const isChildEmail = (email: string | null | undefined) => !!email && email.endsWith(`@${CHILD_EMAIL_DOMAIN}`);
 
@@ -54,7 +54,7 @@ export const GUARDIAN_APP = '[DEFAULT]';
 /** Instância de uma criança (pelo login, que já se sabe antes de entrar). */
 export const childAppName = (username: string) => `child:${username}`;
 
-const ACTIVE_KEY = 'minelearn_active_account';
+const ACTIVE_KEY = 'studyblock_active_account';
 
 function readActive(): string | null {
   try {

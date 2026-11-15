@@ -1,3 +1,5 @@
+// Primeiro: renomeia as preferências do nome antigo do app (antes de alguém ler o localStorage)
+import './lib/storageMigration'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'

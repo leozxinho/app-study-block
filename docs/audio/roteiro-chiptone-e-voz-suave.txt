@@ -1,5 +1,5 @@
 =====================================================================
-MINELEARN: ROTEIRO DE ÁUDIO, PARTE 2
+STUDYBLOCK: ROTEIRO DE ÁUDIO, PARTE 2
 Efeitos no ChipTone + falas com voz suave
 =====================================================================
 Versão 1, 13/11/2026
@@ -512,7 +512,7 @@ G. GERANDO AS FALAS (PASSO A PASSO, AZURE)
 =====================================================================
 G2. GERANDO AS FALAS NA ELEVENLABS (VOZ ESCOLHIDA)
 =====================================================================
-Voz única para TODAS as falas: "MineLearn, Narradora", criada no
+Voz única para TODAS as falas: "StudyBlock, Narradora", criada no
 Voice Design da conta (mulher jovem, pt-BR neutro, alegre e suave).
 Plano Starter: 40.000 créditos disponíveis em 13/11/2026.
 

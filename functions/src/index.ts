@@ -31,7 +31,7 @@ const STRIPE_PRICE_MONTHLY = defineString('STRIPE_PRICE_MONTHLY', { default: '' 
 const STRIPE_PRICE_YEARLY = defineString('STRIPE_PRICE_YEARLY', { default: '' });
 const TRIAL_DAYS = defineInt('TRIAL_DAYS', { default: 7 });
 // Mesmo domínio que o app usa no login da criança (VITE_CHILD_EMAIL_DOMAIN). Nenhum e-mail é enviado.
-const CHILD_EMAIL_DOMAIN = defineString('CHILD_EMAIL_DOMAIN', { default: 'crianca.minelearn.app' });
+const CHILD_EMAIL_DOMAIN = defineString('CHILD_EMAIL_DOMAIN', { default: 'crianca.studyblock.app' });
 
 /** Responsável logado (conta de criança não passa). Devolve o uid. */
 async function requireGuardian(req: CallableRequest, message = 'Só o responsável pode fazer isso.'): Promise<string> {

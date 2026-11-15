@@ -7,7 +7,7 @@ import { pickVariant, playBuffer, setAudioContextProvider } from './audio/librar
 
 export type SoundKind = 'correct' | 'wrong' | 'click' | 'break' | 'xp' | 'hiss' | 'explode' | 'star' | 'trophy' | 'levelup';
 
-const MUTE_KEY = 'minelearn_muted';
+const MUTE_KEY = 'studyblock_muted';
 
 // ---------- silenciar (salvo no localStorage) ----------
 

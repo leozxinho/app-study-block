@@ -18,13 +18,13 @@ service cloud.firestore {
 
     // Igual a VITE_CHILD_EMAIL_DOMAIN (se mudar o domínio, mude aqui e na expressão de hasChildEmail)
     function childDomain() {
-      return 'crianca.minelearn.app';
+      return 'crianca.studyblock.app';
     }
 
     function hasChildEmail() {
       return signedIn()
         && request.auth.token.email is string
-        && request.auth.token.email.matches('^[a-z0-9._-]{3,20}@crianca[.]minelearn[.]app$');
+        && request.auth.token.email.matches('^[a-z0-9._-]{3,20}@crianca[.]studyblock[.]app$');
     }
 
     function childPath(childId) {
