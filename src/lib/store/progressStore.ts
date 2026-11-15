@@ -4,10 +4,10 @@
  * Todo o estado de jogo da conta fica num documento só, dividido em "fatias"
  * (aventura, XP/atividades, estatísticas do jogo, ajustes). As telas leem de
  * forma síncrona da memória; a gravação vai para o adaptador da conta:
- * - visitante ou app sem Supabase: navegador (localStorage);
- * - conta logada com Supabase: tabela child_state (com gravação agrupada).
+ * - visitante ou app sem Firebase: navegador (localStorage);
+ * - conta logada com Firebase: Firestore, coleção childState (com gravação agrupada).
  *
- * Este arquivo não conhece Supabase nem React: recebe os adaptadores prontos.
+ * Este arquivo não conhece Firebase nem React: recebe os adaptadores prontos.
  */
 
 export type StoreStatus = 'loading' | 'ready' | 'error';
@@ -34,7 +34,7 @@ export interface StoreAdapter {
 export interface StoreOptions {
   /** Onde guardar o visitante e as contas quando não há servidor. */
   local: StoreAdapter;
-  /** Servidor (Supabase). Ausente = tudo no navegador. */
+  /** Servidor (Firebase). Ausente = tudo no navegador. */
   remote?: StoreAdapter | null;
   /** Espera antes de gravar no servidor, para juntar várias mudanças (ms). */
   remoteDelayMs?: number;

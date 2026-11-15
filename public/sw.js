@@ -2,7 +2,7 @@
  * - Páginas: rede primeiro; sem internet, usa o app.html guardado (o index.html é a landing, sem o app).
  * - Arquivos do build (/assets) e ícones: guardados na 1ª vez (nunca mudam de nome).
  * - Áudios (/audio): guardados quando tocam pela 1ª vez; o índice manifest.json sempre da rede.
- * Supabase e outros endereços externos não passam por aqui.
+ * Firebase e outros endereços externos não passam por aqui.
  */
 const VERSION = 'minelearn-v2';
 const SHELL = ['/app.html', '/manifest.webmanifest', '/icons/icon-192.png'];

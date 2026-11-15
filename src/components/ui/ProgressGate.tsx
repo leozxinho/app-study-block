@@ -5,7 +5,7 @@ import { MinecraftButton } from './MinecraftButton';
 
 /**
  * Mostra as telas só depois que o progresso da conta carregou
- * (no Supabase vem da internet). Trocar de conta remonta as telas com os dados novos.
+ * (no Firebase vem da internet). Trocar de conta remonta as telas com os dados novos.
  */
 export function ProgressGate({ children }: { children: ReactNode }) {
   const { status, accountId } = useStoreStatus();

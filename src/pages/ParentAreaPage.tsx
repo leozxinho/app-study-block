@@ -1,16 +1,17 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LogOut, Plus, RefreshCw } from 'lucide-react';
+import { ArrowLeft, LogOut, Plus, RefreshCw } from 'lucide-react';
 import { MinecraftButton } from '../components/ui/MinecraftButton';
 import { MinecraftCard } from '../components/ui/MinecraftCard';
 import { Modal } from '../components/ui/Modal';
 import { SubscriptionCard } from '../components/ui/SubscriptionCard';
+import { TwoFactorCard } from '../components/ui/TwoFactorCard';
 import { authService } from '../services/authService';
 import { familyService, type ChildAccount } from '../services/familyService';
 import { AGE_GROUPS } from '../lib/constants';
-import { canConfirmReset, RESET_WORD, strengths, validateChildInput, weekActivity, type ChildResult } from '../lib/family';
+import { canConfirmReset, MAX_CHILDREN, RESET_WORD, strengths, validateChildInput, weekActivity, type ChildResult } from '../lib/family';
 import { DEFAULT_SKIN, Mob, type PlayerSkin } from '../components/mobs';
-import { isSupabaseConfigured } from '../lib/supabase';
+import { isFirebaseConfigured } from '../lib/firebase';
 import type { User } from '../types';
 
 const TYPE_LABEL: Record<string, string> = {
@@ -59,7 +60,7 @@ function byType(results: ChildResult[]) {
 const field =
   'w-full px-3 py-2.5 pixel-border bg-gray-50 font-body text-base text-gray-900 focus:outline-none focus:ring-4 focus:ring-brand-lapis/50';
 
-function AddChildForm({ onCreated }: { onCreated: () => void }) {
+function AddChildForm({ onCreated, onCancel }: { onCreated: (name: string) => void; onCancel: () => void }) {
   const [name, setName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -79,11 +80,12 @@ function AddChildForm({ onCreated }: { onCreated: () => void }) {
     setSaving(true);
     try {
       await familyService.createChild(input);
+      const created = name.trim();
       setName('');
       setUsername('');
       setPassword('');
       setAgeGroup('');
-      onCreated();
+      onCreated(created);
     } catch (err) {
       setError((err as Error).message || 'Não deu certo. Tente de novo.');
     } finally {
@@ -134,9 +136,14 @@ function AddChildForm({ onCreated }: { onCreated: () => void }) {
         </label>
       </div>
       <p className="font-body text-xs text-gray-600">Anote o login e a senha: a criança usa os dois na aba "Sou criança".</p>
-      <MinecraftButton variant="success" size="md">
-        {saving ? '⏳ Criando…' : '✨ Criar conta da criança'}
-      </MinecraftButton>
+      <div className="flex flex-wrap gap-2">
+        <MinecraftButton variant="success" size="md" disabled={saving}>
+          {saving ? '⏳ Criando…' : '✨ Criar conta da criança'}
+        </MinecraftButton>
+        <MinecraftButton type="button" variant="secondary" size="md" onClick={onCancel} disabled={saving}>
+          Cancelar
+        </MinecraftButton>
+      </div>
     </form>
   );
 }
@@ -338,6 +345,91 @@ function ChildCard({
 }
 
 /** Área dos Pais: crianças do responsável, progresso, liberar mundos e zerar (irreversível). */
+/** Antes de usar a Área dos Pais, o responsável confirma o e-mail (as regras do banco também exigem). */
+function VerifyEmailScreen({
+  email,
+  onVerified,
+  onBack,
+  onLogout,
+}: {
+  email: string;
+  onVerified: () => void;
+  onBack: () => void;
+  onLogout: () => void;
+}) {
+  const [busy, setBusy] = useState(false);
+  const [note, setNote] = useState('');
+
+  const run = async (fn: () => Promise<void>) => {
+    setBusy(true);
+    setNote('');
+    try {
+      await fn();
+    } catch (err) {
+      const code = (err as { code?: string })?.code;
+      setNote(code === 'auth/too-many-requests' ? 'Muitos envios seguidos. Espere alguns minutos.' : 'Não deu certo. Tente de novo.');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-8">
+      <MinecraftCard>
+        <div className="p-6 max-w-md space-y-4 font-body text-gray-900 text-center">
+          <div className="text-4xl" aria-hidden="true">📧</div>
+          <h1 className="font-minecraft text-base">Confirme seu e-mail</h1>
+          <p className="text-sm">
+            Enviamos um link para <strong className="break-all">{email}</strong>. Abra o e-mail, toque no link e volte aqui.
+            Se não achar, veja a caixa de spam.
+          </p>
+          {note && (
+            <p role="status" className="text-sm bg-amber-50 border border-amber-300 rounded-md px-3 py-2">
+              {note}
+            </p>
+          )}
+          <div className="flex flex-col gap-2">
+            <MinecraftButton
+              variant="success"
+              size="md"
+              disabled={busy}
+              onClick={() =>
+                run(async () => {
+                  if (await authService.refreshVerification()) onVerified();
+                  else setNote('Ainda não confirmado. Toque no link do e-mail e tente de novo.');
+                })
+              }
+            >
+              ✅ Já confirmei
+            </MinecraftButton>
+            <MinecraftButton
+              variant="secondary"
+              size="md"
+              disabled={busy}
+              onClick={() =>
+                run(async () => {
+                  await authService.resendVerification();
+                  setNote('E-mail reenviado.');
+                })
+              }
+            >
+              Reenviar e-mail
+            </MinecraftButton>
+            <div className="flex gap-2 justify-center">
+              <MinecraftButton variant="info" size="sm" onClick={onBack}>
+                <ArrowLeft className="w-4 h-4 inline" aria-hidden="true" /> Voltar ao início
+              </MinecraftButton>
+              <MinecraftButton variant="secondary" size="sm" onClick={onLogout}>
+                <LogOut className="w-4 h-4 inline" aria-hidden="true" /> Sair
+              </MinecraftButton>
+            </div>
+          </div>
+        </div>
+      </MinecraftCard>
+    </div>
+  );
+}
+
 export function ParentAreaPage() {
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
@@ -349,6 +441,7 @@ export function ParentAreaPage() {
   const [typed, setTyped] = useState('');
   const [resetting, setResetting] = useState(false);
   const [message, setMessage] = useState('');
+  const [verified, setVerified] = useState<boolean | null>(null);
 
   const load = useCallback(async () => {
     setLoadError('');
@@ -368,7 +461,10 @@ export function ParentAreaPage() {
       else if (u.role === 'student') navigate('/inicio', { replace: true });
       else {
         setUser(u);
-        void load();
+        void authService.isEmailVerified().then((ok) => {
+          setVerified(ok);
+          if (ok) void load();
+        });
       }
     });
   }, [navigate, load]);
@@ -382,6 +478,12 @@ export function ParentAreaPage() {
     });
 
   const selectedChildren = (children ?? []).filter((c) => selected.has(c.id));
+  const canAdd = !!children && children.length < MAX_CHILDREN;
+  const openAdd = () => {
+    setMessage('');
+    setShowAdd(true);
+    window.scrollTo({ top: 0 });
+  };
 
   const confirmReset = async () => {
     if (!canConfirmReset(selectedChildren.length, typed)) return;
@@ -406,12 +508,29 @@ export function ParentAreaPage() {
     navigate('/');
   };
 
-  if (!user) return null;
+  if (!user || verified === null) return null;
+
+  if (!verified) {
+    return (
+      <VerifyEmailScreen
+        email={user.email}
+        onVerified={() => {
+          setVerified(true);
+          void load();
+        }}
+        onBack={() => navigate('/inicio')}
+        onLogout={logout}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between gap-3">
+      <header className="bg-white border-b border-gray-200 px-4 py-3 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3 min-w-0">
+          <MinecraftButton variant="info" size="sm" onClick={() => navigate('/inicio')}>
+            <ArrowLeft className="w-4 h-4 inline" aria-hidden="true" /> Voltar ao início
+          </MinecraftButton>
           <span className="text-2xl" aria-hidden="true">👨‍👧</span>
           <div className="min-w-0">
             <h1 className="font-minecraft text-sm sm:text-base text-gray-900">Área dos Pais</h1>
@@ -419,9 +538,6 @@ export function ParentAreaPage() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <MinecraftButton variant="secondary" size="sm" onClick={() => navigate('/inicio')}>
-            Início
-          </MinecraftButton>
           <MinecraftButton variant="secondary" size="sm" onClick={logout}>
             <LogOut className="w-4 h-4 inline" aria-hidden="true" /> Sair
           </MinecraftButton>
@@ -429,10 +545,10 @@ export function ParentAreaPage() {
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-6">
-        {!isSupabaseConfigured() && (
+        {!isFirebaseConfigured() && (
           <p className="p-3 bg-amber-50 border border-amber-300 rounded-md font-body text-sm text-amber-900">
             💡 <strong>Modo local:</strong> as contas e o progresso das crianças ficam salvos só neste aparelho.
-            Conecte o Supabase para a criança entrar de qualquer aparelho.
+            Conecte o Firebase para a criança entrar de qualquer aparelho.
           </p>
         )}
 
@@ -444,34 +560,44 @@ export function ParentAreaPage() {
 
         <SubscriptionCard />
 
-        <section aria-labelledby="kids-title" className="space-y-3">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <h2 id="kids-title" className="font-minecraft text-sm text-gray-800">
-              Minhas crianças {children ? `(${children.length})` : ''}
-            </h2>
-            <div className="flex gap-2">
-              <MinecraftButton variant="secondary" size="sm" onClick={() => void load()}>
-                <RefreshCw className="w-4 h-4 inline" aria-hidden="true" /> Atualizar
-              </MinecraftButton>
-              <MinecraftButton variant="success" size="sm" onClick={() => setShowAdd((v) => !v)}>
-                <Plus className="w-4 h-4 inline" aria-hidden="true" /> Adicionar criança
-              </MinecraftButton>
-            </div>
-          </div>
-
-          {showAdd && (
+        {showAdd ? (
+          <section aria-labelledby="add-title" className="space-y-3">
+            <MinecraftButton variant="secondary" size="sm" onClick={() => setShowAdd(false)}>
+              <ArrowLeft className="w-4 h-4 inline" aria-hidden="true" /> Voltar para minhas crianças
+            </MinecraftButton>
             <MinecraftCard>
-              <div className="p-4">
+              <div className="p-4 space-y-3">
+                <h2 id="add-title" className="font-minecraft text-sm text-gray-800">
+                  Cadastrar criança {children ? `(${children.length + 1} de ${MAX_CHILDREN})` : ''}
+                </h2>
                 <AddChildForm
-                  onCreated={() => {
+                  onCancel={() => setShowAdd(false)}
+                  onCreated={(name) => {
                     setShowAdd(false);
-                    setMessage('✅ Conta da criança criada. Ela já pode entrar na aba "Sou criança".');
+                    setMessage(`✅ Conta de ${name} criada. Ela já pode entrar na aba "Sou criança".`);
                     void load();
                   }}
                 />
               </div>
             </MinecraftCard>
-          )}
+          </section>
+        ) : (
+        <section aria-labelledby="kids-title" className="space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 id="kids-title" className="font-minecraft text-sm text-gray-800">
+              Minhas crianças {children ? `(${children.length} de ${MAX_CHILDREN})` : ''}
+            </h2>
+            <div className="flex gap-2">
+              <MinecraftButton variant="secondary" size="sm" onClick={() => void load()}>
+                <RefreshCw className="w-4 h-4 inline" aria-hidden="true" /> Atualizar
+              </MinecraftButton>
+              {canAdd && (
+                <MinecraftButton variant="success" size="sm" onClick={openAdd}>
+                  <Plus className="w-4 h-4 inline" aria-hidden="true" /> Adicionar criança
+                </MinecraftButton>
+              )}
+            </div>
+          </div>
 
           {loadError && (
             <p role="alert" className="p-3 bg-red-50 border border-red-300 rounded-md font-body text-sm text-red-800">
@@ -479,11 +605,11 @@ export function ParentAreaPage() {
             </p>
           )}
           {!children && !loadError && <p className="font-body text-sm text-gray-600">Carregando…</p>}
-          {children && children.length === 0 && !showAdd && (
+          {children && children.length === 0 && (
             <MinecraftCard>
               <div className="p-6 text-center">
                 <p className="font-body text-gray-800 mb-3">Nenhuma criança cadastrada ainda.</p>
-                <MinecraftButton variant="gold" size="md" onClick={() => setShowAdd(true)}>
+                <MinecraftButton variant="gold" size="md" onClick={openAdd}>
                   ✨ Criar a primeira conta
                 </MinecraftButton>
               </div>
@@ -494,11 +620,25 @@ export function ParentAreaPage() {
             {children?.map((c) => (
               <ChildCard key={c.id} child={c} selected={selected.has(c.id)} onToggleSelect={() => toggle(c.id)} onChanged={() => void load()} />
             ))}
+            {canAdd && children && children.length > 0 && (
+              <button
+                type="button"
+                onClick={openAdd}
+                className="min-h-[120px] rounded-md border-2 border-dashed border-gray-400 bg-white hover:bg-green-50 hover:border-green-500 flex flex-col items-center justify-center gap-1 p-4 font-body text-gray-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-lapis"
+              >
+                <Plus className="w-8 h-8 text-green-700" aria-hidden="true" />
+                <span className="font-bold">Cadastrar outra criança</span>
+                <span className="text-xs text-gray-600">Ainda cabe {MAX_CHILDREN - children.length}</span>
+              </button>
+            )}
           </div>
+          {children && !canAdd && (
+            <p className="font-body text-xs text-gray-600">Limite de {MAX_CHILDREN} crianças por conta atingido.</p>
+          )}
         </section>
+        )}
 
-
-        {children && children.length > 0 && (
+        {!showAdd && children && children.length > 0 && (
           <section aria-labelledby="reset-title" className="bg-white border-2 border-red-200 rounded-md p-4">
             <h2 id="reset-title" className="font-minecraft text-sm text-red-800 mb-1">Zerar progresso</h2>
             <p className="font-body text-sm text-gray-700 mb-3">
@@ -511,6 +651,7 @@ export function ParentAreaPage() {
           </section>
         )}
 
+        {!showAdd && <TwoFactorCard />}
       </main>
 
       <Modal

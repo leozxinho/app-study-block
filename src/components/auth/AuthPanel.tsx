@@ -1,10 +1,11 @@
 import { useState, type FormEvent } from 'react';
-import { Lock, Mail, User as UserIcon } from 'lucide-react';
+import { KeyRound, Lock, Mail, User as UserIcon } from 'lucide-react';
 import { MinecraftButton } from '../ui/MinecraftButton';
-import { authService } from '../../services/authService';
-import { forgetProfile, listSavedProfiles } from '../../services/savedProfiles';
+import { authService, TwoFactorRequiredError } from '../../services/authService';
+import type { MultiFactorResolver } from 'firebase/auth';
+import { listSavedProfiles } from '../../services/savedProfiles';
 import { DEFAULT_SKIN, Mob, type PlayerSkin } from '../mobs';
-import { isSupabaseConfigured } from '../../lib/supabase';
+import { isFirebaseConfigured } from '../../lib/firebase';
 
 type Tab = 'entrar' | 'criar' | 'crianca';
 
@@ -14,14 +15,22 @@ interface AuthPanelProps {
   initialTab?: Tab;
 }
 
-/** Traduz os erros mais comuns do Supabase. */
+/** Traduz os erros mais comuns do Firebase (e os do modo local). */
 function friendlyError(err: unknown): string {
-  const msg = (err as { message?: string })?.message ?? '';
+  const { code = '', message: msg = '' } = (err ?? {}) as { code?: string; message?: string };
+  if (/auth\/(invalid-credential|wrong-password|user-not-found|invalid-email|user-disabled)/.test(code)) return 'Login ou senha incorretos.';
+  if (code === 'auth/email-already-in-use') return 'Esse e-mail já tem acesso. Use a aba "Entrar".';
+  if (code === 'auth/weak-password') return 'A senha precisa ter pelo menos 6 caracteres.';
+  if (code === 'auth/operation-not-allowed') return 'Esse jeito de entrar ainda não foi ativado no Firebase.';
+  if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') return 'A janela do Google foi fechada antes de terminar.';
+  if (code === 'auth/too-many-requests') return 'Muitas tentativas. Espere um pouco e tente de novo.';
+  if (code === 'auth/invalid-verification-code' || code === 'auth/missing-code')
+    return 'Código incorreto. Digite o código que aparece agora no app autenticador.';
+  if (code === 'auth/network-request-failed') return 'Sem internet. Confira a conexão e tente de novo.';
   if (/invalid login credentials/i.test(msg)) return 'Login ou senha incorretos.';
   if (/already registered|already exists/i.test(msg)) return 'Esse e-mail já tem acesso. Use a aba "Entrar".';
   if (/password.*(6|characters)/i.test(msg)) return 'A senha precisa ter pelo menos 6 caracteres.';
   if (/email not confirmed/i.test(msg)) return 'Confirme seu e-mail antes de entrar (veja sua caixa de entrada).';
-  if (/provider is not enabled/i.test(msg)) return 'O login com Google ainda não foi ativado no Supabase.';
   return msg || 'Não deu certo. Tente de novo.';
 }
 
@@ -50,9 +59,12 @@ export function AuthPanel({ onSuccess, initialTab = 'entrar' }: AuthPanelProps) 
   const [error, setError] = useState('');
   const [info, setInfo] = useState('');
   const [loading, setLoading] = useState(false);
-  const demo = !isSupabaseConfigured();
+  const demo = !isFirebaseConfigured();
   const child = tab === 'crianca';
   const [saved, setSaved] = useState(() => listSavedProfiles());
+  /** Login com 2FA: falta o código do app autenticador */
+  const [twoFactor, setTwoFactor] = useState<MultiFactorResolver | null>(null);
+  const [code, setCode] = useState('');
 
   const run = async (fn: () => Promise<void>) => {
     setError('');
@@ -61,6 +73,11 @@ export function AuthPanel({ onSuccess, initialTab = 'entrar' }: AuthPanelProps) 
     try {
       await fn();
     } catch (err) {
+      if (err instanceof TwoFactorRequiredError) {
+        setCode('');
+        setTwoFactor(err.resolver);
+        return;
+      }
       setError(friendlyError(err));
     } finally {
       setLoading(false);
@@ -70,7 +87,7 @@ export function AuthPanel({ onSuccess, initialTab = 'entrar' }: AuthPanelProps) 
   const handleGoogle = () =>
     run(async () => {
       const { redirected } = await authService.signInWithGoogle();
-      if (!redirected) onSuccess(); // com Supabase o navegador vai para o Google e volta em /inicio
+      if (!redirected) onSuccess(); // janela bloqueada: o navegador vai para o Google e volta aqui
     });
 
   const handleSubmit = (e: FormEvent) => {
@@ -87,16 +104,61 @@ export function AuthPanel({ onSuccess, initialTab = 'entrar' }: AuthPanelProps) 
         return;
       }
       if (password.length < 6) throw new Error('password 6');
-      const data = (await authService.signUp(email, password, name.trim())) as { session?: unknown } | object;
-      // Supabase com confirmação de e-mail ligada: ainda não tem sessão
-      if (!demo && data && 'session' in data && !data.session) {
-        setInfo('Conta criada! Enviamos um e-mail para confirmar. Depois de confirmar, é só entrar.');
-        setTab('entrar');
-        return;
-      }
+      await authService.signUp(email, password, name.trim());
       onSuccess();
     });
   };
+
+  if (twoFactor) {
+    const submitCode = (e: FormEvent) => {
+      e.preventDefault();
+      run(async () => {
+        await authService.completeTwoFactor(twoFactor, code);
+        setTwoFactor(null);
+        onSuccess();
+      });
+    };
+    return (
+      <div className="p-6 sm:p-8">
+        <div className="text-center mb-5">
+          <div className="text-4xl mb-2" aria-hidden="true">🛡️</div>
+          <p className="font-minecraft text-base sm:text-lg text-gray-900">Verificação em duas etapas</p>
+          <p className="font-body text-sm text-gray-700 mt-1">Abra o app autenticador e digite o código de 6 números do StudyBlock.</p>
+        </div>
+        {error && <p role="alert" className="bg-red-100 border border-red-300 text-red-800 px-4 py-2 rounded-md mb-4 text-sm font-body">{error}</p>}
+        <form onSubmit={submitCode} className="space-y-4">
+          <label className="block">
+            <span className="sr-only">Código do app autenticador</span>
+            <div className="relative">
+              <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" aria-hidden="true" />
+              <input
+                className={`${input} tracking-[0.4em] text-center`}
+                value={code}
+                onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                placeholder="000000"
+                autoFocus
+              />
+            </div>
+          </label>
+          <MinecraftButton variant="success" size="lg" fullWidth disabled={loading || code.length !== 6}>
+            {loading ? '⏳ Conferindo…' : 'Entrar'}
+          </MinecraftButton>
+          <button
+            type="button"
+            onClick={() => {
+              setTwoFactor(null);
+              setError('');
+            }}
+            className="w-full font-body text-sm text-gray-700 underline"
+          >
+            Voltar
+          </button>
+        </form>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 sm:p-8">
@@ -176,7 +238,7 @@ export function AuthPanel({ onSuccess, initialTab = 'entrar' }: AuthPanelProps) 
                 <button
                   type="button"
                   onClick={() => {
-                    forgetProfile(p.id);
+                    void authService.forgetSavedProfile(p).finally(() => setSaved(listSavedProfiles()));
                     setSaved(listSavedProfiles());
                   }}
                   aria-label={`Esquecer ${p.name} neste aparelho`}
@@ -253,7 +315,7 @@ export function AuthPanel({ onSuccess, initialTab = 'entrar' }: AuthPanelProps) 
 
       {demo && (
         <p className="mt-4 p-3 bg-amber-50 border border-amber-300 rounded-md font-body text-xs text-center text-amber-900">
-          💡 <strong>Modo local</strong> (sem Supabase): as contas, as senhas e o progresso ficam salvos só neste aparelho. Crie a conta do responsável uma vez; o "Entrar com Google" é simulado.
+          💡 <strong>Modo local</strong> (sem Firebase): as contas, as senhas e o progresso ficam salvos só neste aparelho. Crie a conta do responsável uma vez; o "Entrar com Google" é simulado.
         </p>
       )}
     </div>

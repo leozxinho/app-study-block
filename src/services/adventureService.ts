@@ -4,7 +4,7 @@ import { progressService } from './progressService';
 import { progressStore } from '../lib/store';
 
 // Progresso da aventura da conta ativa, separado por faixa etária.
-// Fica no store único (navegador ou Supabase, conforme a conta): ver src/lib/store.
+// Fica no store único (navegador ou Firebase, conforme a conta): ver src/lib/store.
 
 const SLICE = 'adventure';
 const SETTINGS = 'settings';

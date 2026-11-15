@@ -1,11 +1,16 @@
 /**
  * Área dos Pais: crianças do responsável logado, cadastro, "liberar tudo" e "zerar".
- * Com Supabase, o servidor confere o vínculo responsável → criança (RLS, RPC e Edge Function);
- * sem Supabase (demonstração), os dados ficam neste navegador.
+ * Com Firebase (plano Spark, sem Cloud Functions), o firestore.rules confere o vínculo responsável → criança:
+ * a ficha children/{id} (gravada pela própria conta da criança) aponta o responsável, e o responsável
+ * confirma a criança em guardians/{id}.childIds (no máximo 2). Só vale quem está nos dois lugares.
+ * Sem Firebase (demonstração), os dados ficam neste navegador.
  */
-import { supabase, isSupabaseConfigured } from '../lib/supabase';
-import { emptyDoc, isAccountDoc, type AccountDoc } from '../lib/store/progressStore';
-import { createLocalAdapter } from '../lib/store/adapters';
+import { createUserWithEmailAndPassword, deleteUser, updateProfile } from 'firebase/auth';
+import { arrayUnion, doc, getDoc, runTransaction, serverTimestamp, setDoc, writeBatch } from 'firebase/firestore';
+import { activeDb, childEmail, createTempAccount, isFirebaseConfigured, readChildRecord } from '../lib/firebase';
+import { emptyDoc, type AccountDoc } from '../lib/store/progressStore';
+
+import { createLocalAdapter, docFromRecord, type ChildStateRecord } from '../lib/store/adapters';
 import { normalizeUsername, summarizeDoc, validateChildInput, MAX_CHILDREN, type ChildInput, type ChildSummary } from '../lib/family';
 import type { AgeGroup } from '../types';
 import { authService } from './authService';
@@ -28,29 +33,47 @@ export interface ChildAccount {
 
 const localDocs = createLocalAdapter();
 
+/** Crianças confirmadas pelo responsável (guardians/{id}.childIds). */
+async function confirmedChildIds(guardianId: string): Promise<string[]> {
+  const snap = await getDoc(doc(activeDb(), 'guardians', guardianId));
+  const ids = snap.exists() ? (snap.data() as { childIds?: unknown }).childIds : [];
+  return Array.isArray(ids) ? ids.filter((id): id is string => typeof id === 'string') : [];
+}
+
+/** Erros do Firebase em português (cadastro da criança). */
+function childCreateError(err: unknown): Error {
+  const code = (err as { code?: string })?.code ?? '';
+  if (code === 'auth/email-already-in-use') return new Error('Esse login já existe, escolha outro.');
+  if (code === 'auth/weak-password') return new Error('A senha precisa ter pelo menos 6 caracteres.');
+  if (code === 'auth/network-request-failed') return new Error('Sem internet. Confira a conexão e tente de novo.');
+  if (code === 'permission-denied') return new Error(`Limite de ${MAX_CHILDREN} crianças por responsável.`);
+  return err instanceof Error && !code ? err : new Error('Não foi possível criar a conta. Tente de novo.');
+}
+
+/** Grava no progresso da criança (como responsável): revisão + 1, para o aparelho dela recarregar. */
+async function updateChildState(childId: string, change: (current: Record<string, unknown>) => Record<string, unknown>): Promise<boolean> {
+  const db = activeDb();
+  const ref = doc(db, 'childState', childId);
+  return runTransaction(db, async (tx) => {
+    const snap = await tx.get(ref);
+    if (!snap.exists()) return false;
+    const current = snap.data() as Record<string, unknown>;
+    tx.update(ref, { ...change(current), revision: (Number(current.revision) || 0) + 1, updatedAt: serverTimestamp() });
+    return true;
+  });
+}
+
 async function requireGuardian(): Promise<string> {
   const user = await authService.getCurrentUser();
   if (!user || user.role === 'student') throw new Error('Entre na conta do responsável.');
   return user.id;
 }
 
-/** Mensagem de erro da Edge Function (vem no corpo da resposta). */
-async function functionError(error: unknown): Promise<Error> {
-  const context = (error as { context?: Response })?.context;
-  try {
-    const body = context ? await context.json() : null;
-    if (body?.error) return new Error(String(body.error));
-  } catch {
-    /* corpo sem JSON */
-  }
-  return new Error('Não deu certo. Tente de novo.');
-}
-
 export const familyService = {
   async listChildren(): Promise<ChildAccount[]> {
     const guardianId = await requireGuardian();
 
-    if (!isSupabaseConfigured()) {
+    if (!isFirebaseConfigured()) {
       const children = readFamily().children.filter((c) => c.guardianId === guardianId);
       return Promise.all(
         children.map(async (c) => ({
@@ -63,28 +86,25 @@ export const familyService = {
       );
     }
 
-    const { data: children, error } = await supabase
-      .from('children')
-      .select('id, name, username, age_group')
-      .eq('guardian_id', guardianId)
-      .order('created_at');
-    if (error) throw error;
-    const ids = (children ?? []).map((c) => c.id);
-    const { data: states, error: stateError } = ids.length
-      ? await supabase.from('child_state').select('child_id, state').in('child_id', ids)
-      : { data: [], error: null };
-    if (stateError) throw stateError;
-    const byId = new Map((states ?? []).map((s) => [s.child_id as string, s.state as unknown]));
-    return (children ?? []).map((c) => {
-      const state = byId.get(c.id);
-      return {
-        id: c.id,
-        name: c.name,
-        username: c.username,
-        ageGroup: c.age_group as AgeGroup,
-        summary: summarizeDoc(isAccountDoc(state) ? state : null),
-      };
-    });
+    const db = activeDb();
+    const ids = await confirmedChildIds(guardianId);
+    const rows = await Promise.all(
+      ids.map(async (id) => {
+        const [record, state] = await Promise.all([
+          readChildRecord(db, id).catch(() => null),
+          getDoc(doc(db, 'childState', id)).catch(() => null),
+        ]);
+        if (!record || record.guardianId !== guardianId) return null;
+        return {
+          id,
+          name: record.name,
+          username: record.username,
+          ageGroup: record.ageGroup as AgeGroup,
+          summary: summarizeDoc(docFromRecord(state?.data() as ChildStateRecord | undefined)),
+        };
+      })
+    );
+    return rows.filter((r): r is ChildAccount => r !== null);
   },
 
   async createChild(input: ChildInput): Promise<void> {
@@ -93,7 +113,7 @@ export const familyService = {
     const guardianId = await requireGuardian();
     const username = normalizeUsername(input.username);
 
-    if (!isSupabaseConfigured()) {
+    if (!isFirebaseConfigured()) {
       const family = readFamily();
       if (family.children.filter((c) => c.guardianId === guardianId).length >= MAX_CHILDREN)
         throw new Error(`Limite de ${MAX_CHILDREN} crianças por responsável.`);
@@ -112,10 +132,46 @@ export const familyService = {
       return;
     }
 
-    const { error } = await supabase.functions.invoke('create-child', {
-      body: { name: input.name.trim(), username, password: input.password, age_group: input.ageGroup },
-    });
-    if (error) throw await functionError(error);
+    const db = activeDb();
+    const confirmed = await confirmedChildIds(guardianId);
+    if (confirmed.length >= MAX_CHILDREN) throw new Error(`Limite de ${MAX_CHILDREN} crianças por responsável.`);
+
+    // A conta da criança nasce numa instância descartável: o responsável continua logado
+    const temp = createTempAccount();
+    try {
+      let created;
+      try {
+        created = await createUserWithEmailAndPassword(temp.auth, childEmail(username), input.password);
+      } catch (err) {
+        throw childCreateError(err);
+      }
+      const childId = created.user.uid;
+      try {
+        await updateProfile(created.user, { displayName: input.name.trim() });
+        // A própria conta da criança grava a ficha (apontando o responsável) e o progresso vazio
+        const batch = writeBatch(temp.db);
+        batch.set(doc(temp.db, 'children', childId), {
+          guardianId,
+          name: input.name.trim(),
+          username,
+          ageGroup: input.ageGroup,
+          createdAt: serverTimestamp(),
+        });
+        batch.set(doc(temp.db, 'childState', childId), {
+          state: JSON.stringify(emptyDoc()),
+          revision: 0,
+          updatedAt: serverTimestamp(),
+        });
+        await batch.commit();
+        // O responsável confirma a criança (as regras limitam a MAX_CHILDREN)
+        await setDoc(doc(db, 'guardians', guardianId), { childIds: arrayUnion(childId) }, { merge: true });
+      } catch (err) {
+        await deleteUser(created.user).catch(() => {}); // desfaz para não sobrar conta solta
+        throw childCreateError(err);
+      }
+    } finally {
+      await temp.dispose();
+    }
   },
 
   /** Zera (irreversível) as crianças escolhidas. Devolve quantas foram zeradas. */
@@ -123,16 +179,20 @@ export const familyService = {
     if (ids.length === 0) return 0;
     const guardianId = await requireGuardian();
 
-    if (!isSupabaseConfigured()) {
+    if (!isFirebaseConfigured()) {
       const mine = new Set(readFamily().children.filter((c) => c.guardianId === guardianId).map((c) => c.id));
       const targets = ids.filter((id) => mine.has(id));
       await Promise.all(targets.map((id) => localDocs.save(id, emptyDoc())));
       return targets.length;
     }
 
-    const { data, error } = await supabase.rpc('reset_children', { child_ids: ids });
-    if (error) throw error;
-    return Number(data) || 0;
+    const mine = new Set(await confirmedChildIds(guardianId));
+    let count = 0;
+    for (const id of new Set(ids)) {
+      if (!mine.has(id)) continue;
+      if (await updateChildState(id, () => ({ state: JSON.stringify(emptyDoc()), settings: {} }))) count++;
+    }
+    return count;
   },
 
   /** Muda ajustes da criança: liberar todos os mundos e/ou a meta do dia (1 a 10 fases). */
@@ -141,7 +201,7 @@ export const familyService = {
     if (patch.dailyGoal !== undefined && !(patch.dailyGoal >= 1 && patch.dailyGoal <= 10)) throw new Error('Meta inválida.');
     if (patch.screenTimeMin !== undefined && !(patch.screenTimeMin >= 0 && patch.screenTimeMin <= 600)) throw new Error('Tempo inválido.');
 
-    if (!isSupabaseConfigured()) {
+    if (!isFirebaseConfigured()) {
       if (!readFamily().children.some((c) => c.id === id && c.guardianId === guardianId)) throw new Error('Criança não encontrada.');
       const doc: AccountDoc = (await localDocs.load(id)) ?? emptyDoc();
       const settings = { ...((doc.slices.settings as object) ?? {}), ...patch };
@@ -149,9 +209,14 @@ export const familyService = {
       return;
     }
 
-    const { data, error } = await supabase.rpc('set_child_settings', { child: id, patch });
-    if (error) throw error;
-    if (!data) throw new Error('Criança não encontrada.');
+    const clean: ChildSettings = {};
+    if (patch.unlockAll !== undefined) clean.unlockAll = Boolean(patch.unlockAll);
+    if (patch.dailyGoal !== undefined) clean.dailyGoal = Math.round(patch.dailyGoal);
+    if (patch.screenTimeMin !== undefined) clean.screenTimeMin = Math.round(patch.screenTimeMin);
+    const done = await updateChildState(id, (current) => ({
+      settings: { ...((current.settings as ChildSettings | undefined) ?? {}), ...clean },
+    }));
+    if (!done) throw new Error('Criança não encontrada.');
   },
 
   setUnlockAll(id: string, unlocked: boolean): Promise<void> {

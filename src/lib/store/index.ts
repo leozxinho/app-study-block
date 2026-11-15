@@ -1,13 +1,13 @@
 import { useSyncExternalStore } from 'react';
-import { supabase, isSupabaseConfigured } from '../supabase';
+import { activeDb, isFirebaseConfigured } from '../firebase';
 import { createProgressStore, type StoreStatus } from './progressStore';
-import { createLocalAdapter, createSupabaseAdapter } from './adapters';
+import { createLocalAdapter, createFirestoreAdapter } from './adapters';
 import { importLegacyKeys } from './legacy';
 
 /** Store do progresso da conta ativa (uma instância para o app inteiro). */
 export const progressStore = createProgressStore({
   local: createLocalAdapter(),
-  remote: isSupabaseConfigured() ? createSupabaseAdapter(supabase) : null,
+  remote: isFirebaseConfigured() ? createFirestoreAdapter(activeDb) : null,
   importLegacy: () => importLegacyKeys(localStorage, localStorage.getItem('minecraft_edu_age_group') || 'maternal'),
   onError: (action, error) => console.error(`[progresso] erro ao ${action}:`, error),
 });

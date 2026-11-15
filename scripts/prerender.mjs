@@ -62,7 +62,7 @@ function seoFor(page) {
 // Shell das outras rotas: sem conteúdo e fora do buscador
 writeFileSync('dist/app.html', html.replace('<!--seo-->', '<meta name="robots" content="noindex" />').replace('<!--app-->', ''));
 
-// As páginas públicas não precisam do JavaScript do app: sem o script, não baixam React, router, Supabase etc.
+// As páginas públicas não precisam do JavaScript do app: sem o script, não baixam React, router, Firebase etc.
 const appScript = /\s*<script type="module"[^>]*src="\/assets\/[^"]+\.js"><\/script>/;
 if (!appScript.test(html)) throw new Error('script do app não encontrado no dist/index.html');
 

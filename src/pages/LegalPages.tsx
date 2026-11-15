@@ -120,7 +120,7 @@ export function PrivacyPage() {
       <h2>5. Com quem compartilhamos</h2>
       <p>Só com os fornecedores necessários para o serviço funcionar, que tratam os dados em nosso nome:</p>
       <ul>
-        <li><strong>Supabase</strong>: login e banco de dados das contas e do progresso.</li>
+        <li><strong>Firebase (Google)</strong>: login e banco de dados das contas e do progresso.</li>
         <li><strong>Stripe</strong>: pagamento da assinatura.</li>
         <li><strong>Vercel</strong>: hospedagem do site.</li>
         <li><strong>Google</strong>: login com Google (se você escolher) e as fontes de letra do site.</li>

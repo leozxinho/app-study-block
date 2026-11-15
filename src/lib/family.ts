@@ -1,7 +1,7 @@
 /**
  * Regras das contas de família (responsável → crianças), sem dependências:
  * validação do cadastro da criança e resumo do progresso a partir do documento dela.
- * As mesmas regras valem na Edge Function create-child e no SQL (supabase/).
+ * As mesmas regras valem na Cloud Function createChild (functions/) e no firestore.rules.
  */
 import type { AccountDoc } from './store/progressStore';
 import { addDays, dailyStreak, dayKey } from './days';

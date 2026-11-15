@@ -3,7 +3,7 @@ import { XP_PER_ACTIVITY, XP_BONUS_FIRST_TRY, LEVELS } from '../lib/constants';
 import { progressStore } from '../lib/store';
 
 // XP, nível e atividades concluídas da conta ativa.
-// Fica no store único (navegador ou Supabase, conforme a conta): ver src/lib/store.
+// Fica no store único (navegador ou Firebase, conforme a conta): ver src/lib/store.
 
 const SLICE = 'progress';
 /** Limite do histórico de atividades concluídas (evita documento gigante). */

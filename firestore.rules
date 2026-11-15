@@ -1,0 +1,148 @@
+rules_version = '2';
+
+// StudyBlock: contas responsável → criança e progresso da criança (plano Spark, sem Cloud Functions).
+// Deploy: firebase deploy --only firestore
+//
+// Vínculo responsável → criança vale só com os DOIS lados:
+// - children/{criança}: gravada pela própria conta da criança na hora do cadastro (o responsável cria
+//   a conta numa instância descartável do app), apontando guardianId;
+// - guardians/{responsável}.childIds: o responsável confirma a criança (no máximo 2).
+// Assim ninguém vira "criança" de outro responsável sem ele confirmar.
+// Contas de criança usam e-mail no domínio interno (igual a VITE_CHILD_EMAIL_DOMAIN).
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    // Igual a VITE_CHILD_EMAIL_DOMAIN (se mudar o domínio, mude aqui e na expressão de hasChildEmail)
+    function childDomain() {
+      return 'crianca.minelearn.app';
+    }
+
+    function hasChildEmail() {
+      return signedIn()
+        && request.auth.token.email is string
+        && request.auth.token.email.matches('^[a-z0-9._-]{3,20}@crianca[.]minelearn[.]app$');
+    }
+
+    function childPath(childId) {
+      return /databases/$(database)/documents/children/$(childId);
+    }
+
+    function guardianPath(guardianId) {
+      return /databases/$(database)/documents/guardians/$(guardianId);
+    }
+
+    // Responsável com e-mail confirmado (Google já vem confirmado). Exigido para gravar.
+    function isVerifiedGuardian() {
+      return signedIn() && !hasChildEmail() && request.auth.token.email_verified == true;
+    }
+
+    // Criança cadastrada (tem ficha)
+    function isChild() {
+      return hasChildEmail() && exists(childPath(request.auth.uid));
+    }
+
+    // O responsável logado tem esta criança, confirmada dos dois lados
+    function isGuardianOf(childId) {
+      return signedIn()
+        && !hasChildEmail()
+        && exists(childPath(childId))
+        && get(childPath(childId)).data.guardianId == request.auth.uid
+        && exists(guardianPath(request.auth.uid))
+        && childId in get(guardianPath(request.auth.uid)).data.childIds;
+    }
+
+    function validProgress(data) {
+      return data.state is string
+        && data.state.size() < 900000
+        && data.revision is int
+        && data.updatedAt == request.time;
+    }
+
+    // Ajustes que só o responsável muda
+    function validSettings(s) {
+      return s is map
+        && s.keys().hasOnly(['unlockAll', 'dailyGoal', 'screenTimeMin'])
+        && (!('unlockAll' in s) || s.unlockAll is bool)
+        && (!('dailyGoal' in s) || (s.dailyGoal is int && s.dailyGoal >= 1 && s.dailyGoal <= 10))
+        && (!('screenTimeMin' in s) || (s.screenTimeMin is int && s.screenTimeMin >= 0 && s.screenTimeMin <= 600));
+    }
+
+    // Responsável: lista das crianças confirmadas
+    match /guardians/{guardianId} {
+      allow read: if signedIn() && guardianId == request.auth.uid;
+      allow create, update: if isVerifiedGuardian()
+        && guardianId == request.auth.uid
+        && request.resource.data.keys().hasOnly(['childIds'])
+        && request.resource.data.childIds is list
+        && request.resource.data.childIds.size() <= 2;
+      allow delete: if false;
+    }
+
+    // Ficha da criança: a própria conta grava uma vez, no cadastro; o login tem que bater com o e-mail.
+    match /children/{childId} {
+      allow read: if signedIn() && (childId == request.auth.uid || isGuardianOf(childId));
+      allow create: if hasChildEmail()
+        && childId == request.auth.uid
+        && request.resource.data.keys().hasOnly(['guardianId', 'name', 'username', 'ageGroup', 'createdAt'])
+        && request.resource.data.guardianId is string
+        && request.resource.data.guardianId != request.auth.uid
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 1
+        && request.resource.data.name.size() <= 40
+        && request.auth.token.email == request.resource.data.username + '@' + childDomain()
+        && request.resource.data.ageGroup in ['bercario', 'maternal', 'pre-escola-1', 'pre-escola-2', 'fundamental-1', 'fundamental-2']
+        && request.resource.data.createdAt == request.time;
+      allow update, delete: if false;
+    }
+
+    match /childState/{childId} {
+      allow read: if signedIn() && (childId == request.auth.uid || isGuardianOf(childId));
+
+      // Criada no cadastro (revisão 0) pela própria conta da criança, sem ajustes
+      allow create: if hasChildEmail()
+        && childId == request.auth.uid
+        && request.resource.data.keys().hasOnly(['state', 'revision', 'updatedAt'])
+        && request.resource.data.revision in [0, 1]
+        && validProgress(request.resource.data);
+
+      // Criança: só o próprio progresso (não mexe nos ajustes), revisão + 1.
+      // Responsável: zerar e ajustes, revisão + 1 (o aparelho da criança recarrega em vez de sobrescrever).
+      allow update: if request.resource.data.revision == resource.data.revision + 1
+        && validProgress(request.resource.data)
+        && (
+          (isChild()
+            && childId == request.auth.uid
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['state', 'revision', 'updatedAt']))
+          ||
+          (isGuardianOf(childId)
+            && isVerifiedGuardian()
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['state', 'settings', 'revision', 'updatedAt'])
+            && validSettings(request.resource.data.get('settings', {})))
+        );
+
+      allow delete: if false;
+    }
+
+    // Assinatura (Stripe, quando o projeto for para o Blaze): só o servidor grava.
+    match /subscriptions/{guardianId} {
+      allow read: if signedIn()
+        && (guardianId == request.auth.uid
+          || (isChild() && get(childPath(request.auth.uid)).data.guardianId == guardianId));
+      allow write: if false;
+    }
+
+    // Atividades extras (opcional): leitura pública, escrita só pelo console.
+    match /activities/{activityId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

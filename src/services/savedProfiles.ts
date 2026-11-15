@@ -1,7 +1,7 @@
 /**
  * Perfis de criança lembrados neste aparelho: depois do 1º login, a criança entra tocando
  * no personagem dela (sem digitar a senha). Só contas de criança; o responsável nunca fica salvo.
- * Com Supabase, guarda a sessão da criança (tokens) para trocar com setSession.
+ * Com Firebase, a sessão de cada criança fica na instância própria dela (ver src/lib/firebase.ts).
  */
 import { readJSON, writeJSON } from '../lib/storage';
 
@@ -15,8 +15,6 @@ export interface SavedProfile {
   ageGroup?: string;
   /** Roupa do personagem (para o botão de escolher) */
   skin?: Record<string, string>;
-  /** Supabase: sessão da criança (renovada a cada uso) */
-  session?: { access_token: string; refresh_token: string };
   lastUsed: string;
 }
 

@@ -15,11 +15,12 @@
     "vozes:listar": "python3 scripts/gerar_vozes_elevenlabs.py --listar-vozes"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.110.8",
     "autoprefixer": "^10.5.4",
+    "firebase": "^13.3.0",
     "framer-motion": "^12.42.2",
     "lucide-react": "^1.26.0",
     "postcss": "^8.5.22",
+    "qrcode": "^1.5.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.18.1",
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
+    "@types/qrcode": "^1.5.6",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.3",

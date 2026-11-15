@@ -14,6 +14,8 @@ interface MinecraftButtonProps {
   fullWidth?: boolean;
   /** Fonte de leitura fácil (Nunito) no lugar da pixel: para textos longos e para os pais. */
   plain?: boolean;
+  /** "button" dentro de formulário não envia o formulário (sem type, o navegador trata como submit). */
+  type?: 'button' | 'submit';
 }
 
 // Cor do texto por fundo (contraste): fundos claros (dourado, esmeralda) usam texto escuro
@@ -38,6 +40,7 @@ const plainSizes = { sm: 'text-sm', md: 'text-base', lg: 'text-lg', xl: 'text-xl
 export function MinecraftButton({
   children,
   onClick,
+  type,
   variant = 'primary',
   size = 'md',
   disabled = false,
@@ -72,6 +75,7 @@ export function MinecraftButton({
       whileHover={{ scale: disabled ? 1 : 1.05 }}
       whileTap={{ scale: disabled ? 1 : 0.95 }}
       onClick={onClick}
+      type={type}
       disabled={disabled}
       className={look}
     >

@@ -267,7 +267,7 @@ function auditAdventure(allIds: Map<string, Activity>): Issue[] {
 }
 
 // ---------------------------------------------------------------------------
-// Supabase (opcional, só leitura)
+// Firestore (opcional, só leitura)
 // ---------------------------------------------------------------------------
 
 function readEnv(): Record<string, string> {
@@ -282,20 +282,22 @@ function readEnv(): Record<string, string> {
   return env;
 }
 
-async function loadSupabase(): Promise<{ list: Activity[]; note: string }> {
+async function loadFirestore(): Promise<{ list: Activity[]; note: string }> {
   const env = readEnv();
-  const url = env.VITE_SUPABASE_URL;
-  const key = env.VITE_SUPABASE_ANON_KEY;
-  if (!url || !key || url.includes('placeholder') || url.includes('your-supabase')) {
-    return { list: [], note: 'Supabase não configurado (.env sem VITE_SUPABASE_URL/ANON_KEY): pulado.' };
+  const apiKey = env.VITE_FIREBASE_API_KEY;
+  const projectId = env.VITE_FIREBASE_PROJECT_ID;
+  if (!apiKey || !projectId || apiKey.startsWith('your-')) {
+    return { list: [], note: 'Firebase não configurado (.env sem VITE_FIREBASE_API_KEY/PROJECT_ID): pulado.' };
   }
   try {
-    const { createClient } = await import('@supabase/supabase-js');
-    const { data, error } = await createClient(url, key).from('activities').select('*');
-    if (error) return { list: [], note: `Supabase: erro ao ler "activities": ${error.message}` };
-    return { list: (data ?? []) as Activity[], note: `Supabase: ${data?.length ?? 0} atividades lidas.` };
+    const { initializeApp } = await import('firebase/app');
+    const { getFirestore, collection, getDocs } = await import('firebase/firestore');
+    const app = initializeApp({ apiKey, projectId, appId: env.VITE_FIREBASE_APP_ID }, 'auditoria');
+    const snap = await getDocs(collection(getFirestore(app), 'activities'));
+    const list = snap.docs.map((d) => ({ ...d.data(), id: d.id }) as Activity);
+    return { list, note: `Firestore: ${list.length} atividades lidas.` };
   } catch (e) {
-    return { list: [], note: `Supabase: falhou (${(e as Error).message})` };
+    return { list: [], note: `Firestore: falhou (${(e as Error).message})` };
   }
 }
 
@@ -340,8 +342,8 @@ async function main() {
     ...EXTRA_CONTENT.map((a) => ({ a, source: 'extraContent (fora do jogo)' })),
     ...Object.values(ADVENTURE_ACTIVITIES).flat().map((a) => ({ a, source: 'adventureActivities' })),
   ];
-  const supa = await loadSupabase();
-  list.push(...supa.list.map((a) => ({ a, source: 'supabase' })));
+  const supa = await loadFirestore();
+  list.push(...supa.list.map((a) => ({ a, source: 'firestore' })));
 
   const rows = auditAll(list);
   const adventure = auditAdventure(new Map(list.map(({ a }) => [a.id, a])));

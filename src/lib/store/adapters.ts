@@ -1,4 +1,4 @@
-import type { SupabaseClient } from '@supabase/supabase-js';
+import { doc, getDoc, runTransaction, serverTimestamp, type Firestore } from 'firebase/firestore';
 import { isAccountDoc, StoreConflictError, type AccountDoc, type StoreAdapter } from './progressStore';
 
 export const LOCAL_DOC_PREFIX = 'minelearn_state:';
@@ -35,50 +35,67 @@ export function removeLocalDoc(accountId: string, storage: Storage = localStorag
   }
 }
 
+/** Linha do progresso no Firestore (coleção childState, um documento por criança). */
+export interface ChildStateRecord {
+  /** Documento da conta em JSON, sem a fatia "settings" (o Firestore não aceita listas dentro de listas). */
+  state?: string;
+  /** Ajustes que só o responsável muda (pelas Cloud Functions): liberar tudo, meta do dia, tempo de tela. */
+  settings?: Record<string, unknown>;
+  revision?: number;
+}
+
+/** Monta o documento da conta a partir da linha do Firestore (null = vazia ou inválida). */
+export function docFromRecord(record: ChildStateRecord | undefined): AccountDoc | null {
+  if (!record || typeof record.state !== 'string') return null;
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(record.state);
+  } catch {
+    return null;
+  }
+  if (!isAccountDoc(parsed)) return null;
+  return { ...parsed, slices: { ...parsed.slices, settings: { ...(record.settings ?? {}) } } };
+}
+
 /**
- * Documento da conta no Supabase: tabela child_state (uma linha por criança).
- * As regras de acesso (RLS) ficam em supabase/migrations: a criança só lê e grava a própria linha.
+ * Documento da conta no Firestore: childState/{id da criança}.
+ * As regras (firestore.rules) deixam a criança gravar só a própria linha, só os campos
+ * state/revision/updatedAt e só com a revisão + 1. Os ajustes do responsável ficam no campo
+ * settings, que a criança não consegue mudar.
  * Grava só se a revisão não mudou desde a leitura; se mudou (responsável zerou, outro aparelho
  * gravou), lança StoreConflictError e o store recarrega a versão do servidor.
  */
-export function createSupabaseAdapter(client: SupabaseClient): StoreAdapter {
+export function createFirestoreAdapter(getDb: () => Firestore): StoreAdapter {
   const revisions = new Map<string, number>();
   return {
     async load(accountId) {
-      const { data, error } = await client
-        .from('child_state')
-        .select('state, revision')
-        .eq('child_id', accountId)
-        .maybeSingle();
-      if (error) throw error;
-      if (!data) {
+      const snap = await getDoc(doc(getDb(), 'childState', accountId));
+      if (!snap.exists()) {
         revisions.delete(accountId);
         return null;
       }
-      revisions.set(accountId, data.revision ?? 0);
-      const state: unknown = data.state;
-      return isAccountDoc(state) ? state : null;
+      const record = snap.data() as ChildStateRecord;
+      revisions.set(accountId, record.revision ?? 0);
+      return docFromRecord(record);
     },
-    async save(accountId, doc: AccountDoc) {
+    async save(accountId, accountDoc: AccountDoc) {
       const known = revisions.get(accountId);
-      if (known === undefined) {
-        const { error } = await client.from('child_state').insert({ child_id: accountId, state: doc, revision: 1 });
-        if (error) {
-          if (error.code === '23505') throw new StoreConflictError(); // alguém criou a linha antes
-          throw error;
-        }
-        revisions.set(accountId, 1);
-        return;
-      }
-      const { data, error } = await client
-        .from('child_state')
-        .update({ state: doc, revision: known + 1, updated_at: doc.updatedAt })
-        .eq('child_id', accountId)
-        .eq('revision', known)
-        .select('revision');
-      if (error) throw error;
-      if (!data || data.length === 0) throw new StoreConflictError();
-      revisions.set(accountId, known + 1);
+      const db = getDb();
+      const ref = doc(db, 'childState', accountId);
+      // A fatia settings é do responsável: não vai junto (o servidor guarda à parte)
+      const { settings: _settings, ...slices } = accountDoc.slices;
+      void _settings;
+      const state = JSON.stringify({ ...accountDoc, slices });
+      const next = (known ?? 0) + 1;
+      await runTransaction(db, async (tx) => {
+        const snap = await tx.get(ref);
+        const current = snap.exists() ? ((snap.data() as ChildStateRecord).revision ?? 0) : undefined;
+        if (current !== known) throw new StoreConflictError();
+        const fields = { state, revision: next, updatedAt: serverTimestamp() };
+        if (snap.exists()) tx.update(ref, fields);
+        else tx.set(ref, fields);
+      });
+      revisions.set(accountId, next);
     },
   };
 }

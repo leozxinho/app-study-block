@@ -25,3 +25,13 @@ dist-ssr
 
 # Áudio original (masters), fica fora do site e do repositório
 audio-masters/
+
+# Ambiente e Firebase
+.env
+functions/.env
+.firebase/
+# Chave de conta de serviço do Firebase (nunca no repositório)
+*firebase-adminsdk*.json
+
+# Prints de tela soltos
+image*.png

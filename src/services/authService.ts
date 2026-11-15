@@ -1,14 +1,49 @@
-import { supabase, isSupabaseConfigured } from '../lib/supabase';
+import {
+  createUserWithEmailAndPassword,
+  getMultiFactorResolver,
+  GoogleAuthProvider,
+  sendEmailVerification,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signInWithRedirect,
+  signOut,
+  TotpMultiFactorGenerator,
+  updateProfile,
+  type Auth,
+  type MultiFactorError,
+  type MultiFactorResolver,
+  type User as FirebaseUser,
+} from 'firebase/auth';
+import {
+  activeAuth,
+  authOf,
+  childAppName,
+  childEmail,
+  dbOf,
+  getActiveAccountName,
+  GUARDIAN_APP,
+  isChildEmail,
+  isFirebaseConfigured,
+  onActiveAuthChange,
+  readChildRecord,
+  setActiveAccount,
+  signOutAccount,
+} from '../lib/firebase';
 import { progressStore } from '../lib/store';
 import { normalizeUsername } from '../lib/family';
 import { User, AgeGroup } from '../types';
 import { readJSON, writeJSON } from '../lib/storage';
 import { checkGuardianPassword, createGuardian, findGuardian, findOrCreateGuardian, hashPassword, readFamily, type DemoGuardian } from './familyDemo';
 import { forgetProfile, listSavedProfiles, saveProfile, updateProfileSkin, type SavedProfile } from './savedProfiles';
-import type { Session } from '@supabase/supabase-js';
 
-/** Lembra a criança neste aparelho (e a sessão dela, no Supabase). */
-function rememberChild(user: User, session?: Session | null): void {
+// Contas: o responsável entra com e-mail ou Google; a criança entra com login e senha
+// criados pelo responsável. Ao trocar de conta, o progresso da conta certa é carregado.
+
+const LOCAL_AUTH_KEY = 'minecraft_edu_auth';
+const AGE_KEY = 'minecraft_edu_age_group';
+
+/** Lembra a criança neste aparelho (a sessão dela fica na instância própria do Firebase). */
+function rememberChild(user: User): void {
   const game = progressStore.read<{ skin?: Record<string, string> }>('game', {});
   saveProfile({
     id: user.id,
@@ -16,30 +51,30 @@ function rememberChild(user: User, session?: Session | null): void {
     username: user.username ?? '',
     ageGroup: user.age_group,
     skin: game?.skin,
-    session: session ? { access_token: session.access_token, refresh_token: session.refresh_token } : undefined,
   });
 }
-import type { User as SupabaseUser } from '@supabase/supabase-js';
 
-// Contas: o responsável entra com e-mail ou Google; a criança entra com login e senha
-// criados pelo responsável. Ao trocar de conta, o progresso da conta certa é carregado.
+/** Instância do Firebase em que cada conta vive (ver src/lib/firebase.ts). */
+function appNameFor(user: FirebaseUser): string {
+  return isChildEmail(user.email) ? childAppName(user.email!.split('@')[0]) : GUARDIAN_APP;
+}
 
-const LOCAL_AUTH_KEY = 'minecraft_edu_auth';
-const AGE_KEY = 'minecraft_edu_age_group';
-/** Domínio interno do e-mail das contas de criança (nenhum e-mail é enviado). Igual ao da Edge Function. */
-const CHILD_EMAIL_DOMAIN = import.meta.env.VITE_CHILD_EMAIL_DOMAIN || 'crianca.minelearn.app';
-
-function fromSupabase(user: SupabaseUser): User {
-  // Papel de criança vem do app_metadata (só o servidor altera); o resto é responsável
-  const isChild = user.app_metadata?.role === 'student';
+/**
+ * Usuário do app a partir do Firebase. Conta de criança = e-mail no domínio interno
+ * (só o responsável cria, na Área dos Pais); nome e faixa etária vêm da ficha children/{uid}.
+ * Quem libera o quê é o firestore.rules, não esta função.
+ */
+async function fromFirebase(user: FirebaseUser): Promise<User> {
+  const isChild = isChildEmail(user.email);
+  const record = isChild ? await readChildRecord(dbOf(appNameFor(user)), user.uid).catch(() => null) : null;
   return {
-    id: user.id,
-    name: user.user_metadata?.name || user.user_metadata?.full_name || '',
+    id: user.uid,
+    name: user.displayName || record?.name || '',
     email: isChild ? '' : user.email || '',
     role: isChild ? 'student' : 'parent',
-    created_at: user.created_at,
-    username: isChild ? user.user_metadata?.username : undefined,
-    age_group: isChild ? user.user_metadata?.age_group : undefined,
+    created_at: user.metadata.creationTime ? new Date(user.metadata.creationTime).toISOString() : '',
+    username: isChild ? (record?.username ?? user.email!.split('@')[0]) : undefined,
+    age_group: isChild ? (record?.ageGroup as AgeGroup | undefined) : undefined,
   };
 }
 
@@ -66,6 +101,25 @@ function saveDemoSession(user: User): User {
   return user;
 }
 
+/** A conta tem verificação em duas etapas: falta o código do app autenticador (ver completeTwoFactor). */
+export class TwoFactorRequiredError extends Error {
+  constructor(readonly resolver: MultiFactorResolver) {
+    super('Digite o código do app autenticador.');
+    this.name = 'TwoFactorRequiredError';
+  }
+}
+
+/** Troca o erro "falta o 2º fator" do Firebase por TwoFactorRequiredError; os outros seguem iguais. */
+function rethrowTwoFactor(auth: Auth, err: unknown): never {
+  if ((err as { code?: string })?.code === 'auth/multi-factor-auth-required') {
+    throw new TwoFactorRequiredError(getMultiFactorResolver(auth, err as MultiFactorError));
+  }
+  throw err;
+}
+
+/** Erro com a mesma mensagem do modo local, para a tela mostrar "Login ou senha incorretos". */
+const invalidLogin = () => new Error('Invalid login credentials');
+
 let started = false;
 
 export const authService = {
@@ -73,70 +127,93 @@ export const authService = {
   start(): void {
     if (started) return;
     started = true;
-    void this.getCurrentUser().then(switchAccount);
-    if (isSupabaseConfigured()) {
-      supabase.auth.onAuthStateChange((_event, session) => {
-        void switchAccount(session?.user ? fromSupabase(session.user) : null);
-      });
+    if (!isFirebaseConfigured()) {
+      void this.getCurrentUser().then(switchAccount);
+      return;
     }
+    // Chama na hora com a conta salva e depois a cada login, logout ou troca de conta
+    onActiveAuthChange((user) => {
+      void (user ? fromFirebase(user) : Promise.resolve(null)).then(switchAccount);
+    });
   },
 
-  /** Cria a conta do responsável. */
-  async signUp(email: string, password: string, name: string) {
-    if (!isSupabaseConfigured()) {
+  /** Cria a conta do responsável (já entra; o e-mail de confirmação vai em seguida). */
+  async signUp(email: string, password: string, name: string): Promise<User | null> {
+    if (!isFirebaseConfigured()) {
       const guardian = await createGuardian(email, name, password);
       return switchAccount(saveDemoSession(guardianUser(guardian)));
     }
 
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { data: { name, role: 'parent' }, emailRedirectTo: `${window.location.origin}/inicio` },
-    });
-    if (error) throw error;
-    return data;
+    const { user } = await createUserWithEmailAndPassword(authOf(GUARDIAN_APP), email, password);
+    await updateProfile(user, { displayName: name });
+    await sendEmailVerification(user, { url: `${window.location.origin}/responsavel` }).catch(() => {});
+    await setActiveAccount(GUARDIAN_APP);
+    return switchAccount(await fromFirebase(user));
   },
 
   /**
    * Entrar com Google.
-   * Com Supabase: abre o Google (OAuth) e volta para /inicio (o provedor Google precisa estar ativo no painel do Supabase).
-   * Sem Supabase (modo demonstração): cria um responsável de teste na hora.
+   * Com Firebase: abre a janela do Google (o provedor Google precisa estar ativo em
+   * Authentication > Sign-in method). Se o navegador bloquear a janela, vai para o Google e volta.
+   * Sem Firebase (modo demonstração): cria um responsável de teste na hora.
    */
   async signInWithGoogle(): Promise<{ redirected: boolean }> {
-    if (!isSupabaseConfigured()) {
+    if (!isFirebaseConfigured()) {
       const guardian = findOrCreateGuardian('demo@gmail.com', 'Conta Google (demonstração)');
       await switchAccount(saveDemoSession({ ...guardian, role: 'parent' }));
       return { redirected: false };
     }
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: `${window.location.origin}/inicio` },
-    });
-    if (error) throw error;
-    return { redirected: true };
+    const auth = authOf(GUARDIAN_APP);
+    const provider = new GoogleAuthProvider();
+    try {
+      const { user } = await signInWithPopup(auth, provider);
+      await setActiveAccount(GUARDIAN_APP);
+      await switchAccount(await fromFirebase(user));
+      return { redirected: false };
+    } catch (err) {
+      if ((err as { code?: string })?.code !== 'auth/popup-blocked') rethrowTwoFactor(auth, err);
+      await setActiveAccount(GUARDIAN_APP); // na volta do Google, a sessão aparece nesta instância
+      await signInWithRedirect(auth, provider);
+      return { redirected: true };
+    }
   },
 
   /** Responsável entra com e-mail e senha. */
-  async signIn(email: string, password: string) {
-    if (!isSupabaseConfigured()) {
+  async signIn(email: string, password: string): Promise<User | null> {
+    if (!isFirebaseConfigured()) {
       // Modo local: a conta e a senha ficam neste navegador
       const found = findGuardian(email);
-      if (!found || !(await checkGuardianPassword(found, password))) throw new Error('Invalid login credentials');
+      if (!found || !(await checkGuardianPassword(found, password))) throw invalidLogin();
       return switchAccount(saveDemoSession(guardianUser(found)));
     }
 
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) throw error;
-    return switchAccount(fromSupabase(data.user));
+    const auth = authOf(GUARDIAN_APP);
+    let user: FirebaseUser;
+    try {
+      ({ user } = await signInWithEmailAndPassword(auth, email, password));
+    } catch (err) {
+      rethrowTwoFactor(auth, err);
+    }
+    await setActiveAccount(GUARDIAN_APP);
+    return switchAccount(await fromFirebase(user));
+  },
+
+  /** 2º passo do login com 2FA: confere o código de 6 dígitos do app autenticador. */
+  async completeTwoFactor(resolver: MultiFactorResolver, code: string): Promise<User | null> {
+    const hint = resolver.hints.find((h) => h.factorId === TotpMultiFactorGenerator.FACTOR_ID);
+    if (!hint) throw new Error('Esta conta usa um tipo de verificação que o app ainda não aceita.');
+    const { user } = await resolver.resolveSignIn(TotpMultiFactorGenerator.assertionForSignIn(hint.uid, code.trim()));
+    await setActiveAccount(GUARDIAN_APP);
+    return switchAccount(await fromFirebase(user));
   },
 
   /** Criança entra com o login e a senha que o responsável criou. */
   async signInChild(username: string, password: string): Promise<User> {
     const login = normalizeUsername(username);
-    if (!isSupabaseConfigured()) {
+    if (!isFirebaseConfigured()) {
       const child = readFamily().children.find((c) => c.username === login);
       if (!child || child.passwordHash !== (await hashPassword(password, child.id))) {
-        throw new Error('Invalid login credentials');
+        throw invalidLogin();
       }
       const user: User = {
         id: child.id,
@@ -152,33 +229,33 @@ export const authService = {
       return user;
     }
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: `${login}@${CHILD_EMAIL_DOMAIN}`,
-      password,
-    });
-    if (error) throw error;
-    const user = fromSupabase(data.user);
+    // Entra na instância da criança antes de ativá-la: se a senha errar, a conta atual continua
+    const name = childAppName(login);
+    const auth = authOf(name);
+    const { user: fbUser } = await signInWithEmailAndPassword(auth, childEmail(login), password);
+    const user = await fromFirebase(fbUser);
     if (user.role !== 'student') {
-      await supabase.auth.signOut();
-      throw new Error('Invalid login credentials');
+      await signOut(auth);
+      throw invalidLogin();
     }
+    await setActiveAccount(name);
     await switchAccount(user);
-    rememberChild(user, data.session);
+    rememberChild(user);
     return user;
   },
 
   /** Entra num perfil de criança lembrado neste aparelho (sem senha). */
   async signInSaved(profile: SavedProfile): Promise<User> {
-    const user: User = {
-      id: profile.id,
-      name: profile.name,
-      email: '',
-      role: 'student',
-      created_at: '',
-      username: profile.username,
-      age_group: profile.ageGroup as AgeGroup | undefined,
-    };
-    if (!isSupabaseConfigured()) {
+    if (!isFirebaseConfigured()) {
+      const user: User = {
+        id: profile.id,
+        name: profile.name,
+        email: '',
+        role: 'student',
+        created_at: '',
+        username: profile.username,
+        age_group: profile.ageGroup as AgeGroup | undefined,
+      };
       // a criança precisa existir ainda na família deste aparelho
       if (!readFamily().children.some((c) => c.id === profile.id)) {
         forgetProfile(profile.id);
@@ -188,16 +265,31 @@ export const authService = {
       saveProfile({ ...profile });
       return user;
     }
-    if (!profile.session) throw new Error('Entre com o login e a senha uma vez.');
-    const { data, error } = await supabase.auth.setSession(profile.session);
-    if (error || !data.user) {
-      saveProfile({ ...profile, session: undefined });
+    if (!profile.username) throw new Error('Entre com o login e a senha uma vez.');
+    const name = childAppName(profile.username);
+    const auth = authOf(name);
+    await auth.authStateReady();
+    const fbUser = auth.currentUser;
+    if (!fbUser || fbUser.uid !== profile.id) throw new Error('Esse acesso venceu. Entre com o login e a senha de novo.');
+    let user: User;
+    try {
+      user = await fromFirebase(fbUser); // renova o token: falha se a conta foi apagada ou desativada
+    } catch {
+      await signOut(auth).catch(() => {});
       throw new Error('Esse acesso venceu. Entre com o login e a senha de novo.');
     }
-    const real = fromSupabase(data.user);
-    await switchAccount(real);
-    rememberChild(real, data.session);
-    return real;
+    await setActiveAccount(name);
+    await switchAccount(user);
+    rememberChild(user);
+    return user;
+  },
+
+  /** Esquece um perfil de criança neste aparelho (e apaga a sessão guardada dele). */
+  async forgetSavedProfile(profile: SavedProfile): Promise<void> {
+    forgetProfile(profile.id);
+    if (!isFirebaseConfigured() || !profile.username) return;
+    const name = childAppName(profile.username);
+    if (getActiveAccountName() !== name) await signOutAccount(name);
   },
 
   async signOut() {
@@ -208,31 +300,56 @@ export const authService = {
       const game = progressStore.read<{ skin?: Record<string, string> }>('game', {});
       if (game?.skin) updateProfileSkin(current.id, game.skin);
     }
-    if (isSupabaseConfigured() && current?.role === 'student' && listSavedProfiles().some((p) => p.id === current.id)) {
-      // Perfil lembrado: guarda a sessão atual e limpa só este aparelho (sem invalidar no servidor),
-      // para a criança entrar de novo tocando no personagem.
-      const { data } = await supabase.auth.getSession();
-      if (data.session) rememberChild(current, data.session);
-      Object.keys(localStorage).filter((k) => k.startsWith('sb-')).forEach((k) => localStorage.removeItem(k));
-      window.location.assign('/');
+    if (!isFirebaseConfigured()) {
+      localStorage.removeItem(LOCAL_AUTH_KEY);
+      await switchAccount(null);
       return;
     }
-    if (!isSupabaseConfigured()) {
-      localStorage.removeItem(LOCAL_AUTH_KEY);
-    } else {
-      await supabase.auth.signOut();
-    }
+    const remembered = current?.role === 'student' && listSavedProfiles().some((p) => p.id === current.id);
+    // Perfil lembrado: a sessão da criança fica guardada na instância dela, para entrar
+    // de novo tocando no personagem. Qualquer outra conta sai de verdade.
+    const auth = activeAuth();
+    if (auth && !remembered) await signOut(auth).catch(() => {});
+    await setActiveAccount(null);
     await switchAccount(null);
   },
 
+  /** E-mail do responsável confirmado? (Google já vem confirmado; modo local não confere.) */
+  async isEmailVerified(): Promise<boolean> {
+    if (!isFirebaseConfigured()) return true;
+    const user = activeAuth()?.currentUser;
+    return !!user && (user.emailVerified || isChildEmail(user.email));
+  },
+
+  /** Reenvia o link de confirmação para o e-mail do responsável. */
+  async resendVerification(): Promise<void> {
+    const user = activeAuth()?.currentUser;
+    if (!user) throw new Error('Entre na conta do responsável.');
+    await sendEmailVerification(user, { url: `${window.location.origin}/responsavel` });
+  },
+
+  /**
+   * Depois de clicar no link: busca o estado novo no Firebase e renova o token
+   * (as regras do banco leem email_verified do token). Devolve se já está confirmado.
+   */
+  async refreshVerification(): Promise<boolean> {
+    const user = activeAuth()?.currentUser;
+    if (!user) return false;
+    await user.reload();
+    if (user.emailVerified) await user.getIdToken(true);
+    return user.emailVerified;
+  },
+
   async getCurrentUser(): Promise<User | null> {
-    if (!isSupabaseConfigured()) {
+    if (!isFirebaseConfigured()) {
       const saved = readJSON<User | null>(LOCAL_AUTH_KEY, null);
       // Sessões antigas (antes das contas de família) eram de professor/responsável
       return saved && saved.role !== 'student' ? { ...saved, role: 'parent' } : saved;
     }
 
-    const { data: { user } } = await supabase.auth.getUser();
-    return user ? fromSupabase(user) : null;
+    const auth = activeAuth();
+    if (!auth) return null;
+    await auth.authStateReady();
+    return auth.currentUser ? fromFirebase(auth.currentUser) : null;
   },
 };
