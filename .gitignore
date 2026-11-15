@@ -39,3 +39,6 @@ image*.png
 # Python
 __pycache__/
 *.pyc
+
+# Relatórios e histórico do Sentinela (só no computador)
+.sentinela/
