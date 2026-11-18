@@ -59,6 +59,8 @@ export function twoFactorError(err: unknown): string {
     return 'A verificação em duas etapas ainda não foi ativada no Firebase deste projeto.';
   if (code === 'auth/unverified-email') return 'Confirme seu e-mail antes de ativar.';
   if (code === 'auth/popup-closed-by-user') return 'A janela do Google foi fechada antes de terminar.';
+  if (code === 'auth/unauthorized-domain')
+    return 'Este endereço do site não está autorizado no Firebase (Authentication > Settings > Domínios autorizados).';
   if (err instanceof RecentLoginRequiredError) return err.message;
   return 'Não deu certo. Tente de novo.';
 }

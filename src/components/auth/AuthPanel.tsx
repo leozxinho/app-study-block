@@ -26,6 +26,8 @@ function friendlyError(err: unknown): string {
   if (code === 'auth/too-many-requests') return 'Muitas tentativas. Espere um pouco e tente de novo.';
   if (code === 'auth/invalid-verification-code' || code === 'auth/missing-code')
     return 'Código incorreto. Digite o código que aparece agora no app autenticador.';
+  if (code === 'auth/unauthorized-domain')
+    return 'Este endereço do site não está autorizado no Firebase (Authentication > Settings > Domínios autorizados).';
   if (code === 'auth/network-request-failed') return 'Sem internet. Confira a conexão e tente de novo.';
   if (/invalid login credentials/i.test(msg)) return 'Login ou senha incorretos.';
   if (/already registered|already exists/i.test(msg)) return 'Esse e-mail já tem acesso. Use a aba "Entrar".';
