@@ -24,6 +24,8 @@ export function DiamondRush({ onFinish, seconds = 8 }: DiamondRushProps) {
   const [collected, setCollected] = useState(0);
   const [left, setLeft] = useState(seconds);
   const nextId = useRef(0);
+  /** Já pegos: dois dedos no mesmo diamante contam uma vez só */
+  const grabbed = useRef(new Set<number>());
 
   // Aviso "Prepare-se!" e depois começa
   useEffect(() => {
@@ -42,7 +44,7 @@ export function DiamondRush({ onFinish, seconds = 8 }: DiamondRushProps) {
     if (phase !== 'play') return;
     const spawn = setInterval(() => {
       const id = nextId.current++;
-      setDrops((d) => [...d, { id, x: 5 + Math.random() * 85, fall: 2.6 + Math.random() * 1.4, icon: id % 7 === 6 ? '⭐' : '💎' }]);
+      setDrops((d) => [...d, { id, x: 5 + Math.random() * 85, fall: 3.2 + Math.random() * 1.4, icon: id % 7 === 6 ? '⭐' : '💎' }]);
     }, 420);
     const clock = setInterval(() => setLeft((s) => s - 1), 1000);
     return () => {
@@ -68,6 +70,8 @@ export function DiamondRush({ onFinish, seconds = 8 }: DiamondRushProps) {
   }, [phase, collected, onFinish]);
 
   const grab = (drop: Drop) => {
+    if (grabbed.current.has(drop.id)) return;
+    grabbed.current.add(drop.id);
     setDrops((d) => d.filter((x) => x.id !== drop.id));
     setCollected((c) => c + (drop.icon === '⭐' ? 3 : 1));
     if (drop.icon === '⭐') playSfx('estrela-pega', 'star');
@@ -76,7 +80,8 @@ export function DiamondRush({ onFinish, seconds = 8 }: DiamondRushProps) {
 
   return (
     <div className="fixed inset-0 z-50 bg-gradient-to-b from-gray-800 to-stone-900 overflow-hidden" role="dialog" aria-modal="true" aria-label="Minijogo: pegue os diamantes">
-      <div className="absolute top-3 inset-x-0 flex justify-between px-4 font-minecraft text-white text-sm z-10">
+      {/* pointer-events-none: o placar fica por cima da faixa de cima e não pode engolir os toques nos diamantes */}
+      <div className="absolute top-3 inset-x-0 flex justify-between px-4 font-minecraft text-white text-sm z-10 pointer-events-none">
         <span>💎 {collected}</span>
         <span>⏱️ {Math.max(left, 0)}s</span>
       </div>
@@ -97,6 +102,7 @@ export function DiamondRush({ onFinish, seconds = 8 }: DiamondRushProps) {
         )}
       </AnimatePresence>
 
+      {/* Área de toque (96 px) maior que o desenho: dedo de criança erra por pouco */}
       {drops.map((drop) => (
         <motion.button
           key={drop.id}
@@ -107,7 +113,7 @@ export function DiamondRush({ onFinish, seconds = 8 }: DiamondRushProps) {
           transition={{ duration: drop.fall, ease: 'linear' }}
           onAnimationComplete={() => setDrops((d) => d.filter((x) => x.id !== drop.id))}
           onPointerDown={() => grab(drop)}
-          className="absolute top-0 w-16 h-16 -ml-8 text-5xl flex items-center justify-center select-none touch-none"
+          className="absolute top-0 w-24 h-24 -ml-12 text-5xl flex items-center justify-center select-none touch-none"
           style={{ left: `${drop.x}%` }}
         >
           <span aria-hidden="true">{drop.icon}</span>
